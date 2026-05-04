@@ -1,0 +1,158 @@
+@page "/login"
+@model contactabilidad_inteligente.mcv.Pages.Auth.LoginModel
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Data Smart Hub</title>
+
+    <!-- Preconnect para cargar Google Fonts sin latencia -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Google Fonts: Inter + Sora (una sola petición) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+    <!-- Design System Tokens -->
+    <link href="~/css/variables.css" rel="stylesheet" />
+
+    <!-- Login Styles -->
+    <link href="~/css/login.css" rel="stylesheet" />
+</head>
+<body class="lp-body">
+
+    <!-- ─── Header ─────────────────────────────────────────── -->
+    <header class="lp-header">
+        <div class="lp-header__brand">
+            <div class="lp-header__logo" aria-hidden="true">
+                <span class="material-icons">hub</span>
+            </div>
+            <span class="lp-header__name">Data Smart hub</span>
+        </div>
+    </header>
+
+    <!-- ─── Main Content ───────────────────────────────────── -->
+    <main class="lp-main">
+        <div class="lp-card">
+
+            <!-- Card: top -->
+            <div class="lp-card__top">
+                <div class="lp-card__icon" aria-hidden="true">
+                    <span class="material-icons">verified_user</span>
+                </div>
+                <h1 class="lp-card__title">Bienvenido de nuevo</h1>
+                <p class="lp-card__subtitle">Ingresa tus credenciales para acceder al panel seguro.</p>
+            </div>
+
+            <!-- Card: form -->
+            <form method="post" novalidate class="lp-card__form">
+                @Html.AntiForgeryToken()
+
+                @if (Model.ShowError)
+                {
+                    <div class="lp-alert" role="alert" aria-live="assertive">
+                        <span class="material-icons" aria-hidden="true">error_outline</span>
+                        <span>@Model.ErrorMessage</span>
+                    </div>
+                }
+
+                <!-- Usuario -->
+                <div class="lp-field">
+                    <label for="Username" class="lp-label">Usuario</label>
+                    <div class="lp-input-wrap">
+                        <span class="lp-input-icon" aria-hidden="true">
+                            <span class="material-icons">person_outline</span>
+                        </span>
+                        <input
+                            type="email"
+                            class="lp-input"
+                            id="Username"
+                            name="Username"
+                            placeholder="nombre@empresa.com"
+                            asp-for="Username"
+                            autocomplete="email"
+                            required
+                        />
+                    </div>
+                    <div class="lp-error" asp-validation-for="Username"></div>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="lp-field">
+                    <label for="passwordInput" class="lp-label">Contrase&ntilde;a</label>
+                    <div class="lp-input-wrap">
+                        <span class="lp-input-icon" aria-hidden="true">
+                            <span class="material-icons">lock_outline</span>
+                        </span>
+                        <input
+                            type="password"
+                            class="lp-input"
+                            id="passwordInput"
+                            name="Password"
+                            placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                            asp-for="Password"
+                            autocomplete="current-password"
+                            required
+                        />
+                        <button
+                            type="button"
+                            class="lp-password-toggle"
+                            id="togglePasswordBtn"
+                            aria-label="Mostrar contrase&ntilde;a"
+                        >
+                            <span class="material-icons">visibility</span>
+                        </button>
+                    </div>
+                    <div class="lp-error" asp-validation-for="Password"></div>
+                </div>
+
+                <!-- CTA -->
+                <div class="lp-cta">
+                    <button type="submit" class="lp-btn">
+                        <span id="buttonText">Ingresar</span>
+                    </button>
+                </div>
+
+                <!-- Forgot password -->
+                <div class="lp-forgot">
+                    <a href="#">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+                </div>
+
+            </form>
+
+            <!-- Card: footer -->
+            <footer class="lp-card__footer">
+                <span class="lp-card__version">Versi&oacute;n 1.0.0-RC</span>
+                <span class="lp-card__ssl">
+                    <span class="material-icons" aria-hidden="true">lock</span>
+                    Acceso Seguro SSL
+                </span>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- ─── Page Footer ────────────────────────────────────── -->
+    <footer class="lp-footer">
+        <span class="lp-footer__copy">Data Smart Hub &copy; 2026</span>
+        <nav class="lp-footer__links" aria-label="Links de pie de página">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Help Center</a>
+        </nav>
+    </footer>
+
+    <!-- Login Script -->
+    <script src="~/js/pages/login.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+/* =====================================================
+   Design System — Tokens centralizados
+   Smart Hub Enterprise | v1.0
+   ===================================================== */
+
+:root {
+    /* ─── Paleta principal ───────────────────────────── */
+    --color-primary:       #446942;
+    --color-primary-light: #7F9787;
+    --color-primary-dark:  #295136;
+    --color-primary-50:    rgba(68, 105, 66, 0.05);
+    --color-primary-10:    rgba(68, 105, 66, 0.10);
+
+    /* Opacidades de primary-dark (#295136 = rgb(41,81,54)) */
+    --color-pd-04:  rgba(41, 81, 54, 0.04);
+    --color-pd-05:  rgba(41, 81, 54, 0.05);
+    --color-pd-10:  rgba(41, 81, 54, 0.10);
+    --color-pd-18:  rgba(41, 81, 54, 0.18);
+    --color-pd-20:  rgba(41, 81, 54, 0.20);
+    --color-pd-60:  rgba(41, 81, 54, 0.60);
+
+    /* ─── Fondos ─────────────────────────────────────── */
+    --color-bg-light:    #DBE4DD;
+    --color-bg-dark:     #171b17;
+    --color-bg-page:     #f5f7f5;
+    --color-bg-surface:  #ffffff;
+    --color-bg-subtle:   #eef2ee;
+    --color-bg-selected: #ebf2ee;   /* fila activa en listas de clientes */
+
+    /* Grises neutros */
+    --color-neutral-100: #F3F4F6;
+
+    /* Overlay */
+    --color-overlay:     rgba(0, 0, 0, 0.35);
+
+    /* ─── Estados ────────────────────────────────────── */
+    --color-alert:    #CB801B;
+    --color-success:  #28a745;
+    --color-warning:  #ffc107;
+    --color-danger:   #dc3545;
+    --color-info:     #0dcaf0;
+
+    /* ─── Estado bg (para badges/pills) ─────────────── */
+    --color-success-bg:  rgba(40, 167, 69, 0.12);
+    --color-success-20: rgba(40, 167, 69, 0.20);
+    --color-success-25: rgba(40, 167, 69, 0.25);
+    --color-warning-bg:  rgba(255, 193, 7, 0.15);
+    --color-danger-bg:   rgba(220, 53, 69, 0.12);
+    --color-danger-3:  rgba(220, 53, 69, 0.03);
+    --color-danger-6:  rgba(220, 53, 69, 0.06);
+    --color-danger-10: rgba(220, 53, 69, 0.10);
+    --color-danger-20: rgba(220, 53, 69, 0.20);
+    --color-danger-30: rgba(220, 53, 69, 0.30);
+    --color-danger-40: rgba(220, 53, 69, 0.40);
+    --color-info-bg:     rgba(13, 202, 240, 0.12);
+    --color-alert-bg:    rgba(203, 128, 27, 0.12);
+
+    /* ─── Textos ──────────────────────────────────────  */
+    --color-text-primary:   #295136;
+    --color-text-secondary: rgba(41, 81, 54, 0.70);
+    --color-text-muted:     rgba(41, 81, 54, 0.50);
+    --color-text-disabled:  rgba(41, 81, 54, 0.30);
+    --color-text-inverse:   #ffffff;
+
+    /* ─── Bordes ─────────────────────────────────────── */
+    --color-border:        rgba(41, 81, 54, 0.12);
+    --color-border-strong: rgba(41, 81, 54, 0.25);
+    --color-border-focus:  var(--color-primary);
+    --color-border-list:   rgba(41, 81, 54, 0.05);  /* separador suave en lista */
+
+    /* ─── Sombras ────────────────────────────────────── */
+    --shadow-xs:    0 1px 3px rgba(41, 81, 54, 0.06);
+    --shadow-soft:  0 4px 20px -2px rgba(41, 81, 54, 0.08);
+    --shadow-card:  0 2px 12px rgba(41, 81, 54, 0.04);
+    --shadow-hover: 0 8px 24px rgba(41, 81, 54, 0.12);
+    --shadow-modal: 0 20px 60px rgba(41, 81, 54, 0.20);
+
+    /* Sombras neutras (sin tinte de color) */
+    --shadow-sm:     0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-btn:    0 2px 4px -2px rgba(0,0,0,.10), 0 4px 6px -1px rgba(0,0,0,.10);
+    --shadow-action: 0 2px 4px rgba(0,0,0,0.08);
+
+    /* ─── Border Radius ──────────────────────────────── */
+    --radius-xs:   0.125rem;
+    --radius-sm:   0.25rem;
+    --radius-md:   0.5rem;
+    --radius-lg:   0.75rem;
+    --radius-xl:   1rem;
+    --radius-2xl:  1.5rem;
+    --radius-full: 9999px;
+
+    /* ─── Espaciado ──────────────────────────────────── */
+    --spacing-1:  0.25rem;   /*  4px */
+    --spacing-2:  0.5rem;    /*  8px */
+    --spacing-3:  0.75rem;   /* 12px */
+    --spacing-4:  1rem;      /* 16px */
+    --spacing-5:  1.25rem;   /* 20px */
+    --spacing-6:  1.5rem;    /* 24px */
+    --spacing-8:  2rem;      /* 32px */
+    --spacing-10: 2.5rem;    /* 40px */
+    --spacing-12: 3rem;      /* 48px */
+
+    /* Aliases semánticos (compatibilidad hacia atrás) */
+    --spacing-xs:  var(--spacing-1);
+    --spacing-sm:  var(--spacing-2);
+    --spacing-md:  var(--spacing-4);
+    --spacing-lg:  var(--spacing-6);
+    --spacing-xl:  var(--spacing-8);
+    --spacing-2xl: var(--spacing-12);
+
+    /* ─── Tipografía ─────────────────────────────────── */
+    --font-family-base:     'Inter', system-ui, sans-serif;
+    --font-family-display:  'Sora', 'Inter', system-ui, sans-serif;
+    --font-family-ui:       'Inter', system-ui, sans-serif;
+    --font-family-mono:     'Liberation Mono', 'Courier New', monospace;
+
+    --font-size-xs:   0.75rem;   /* 12px */
+    --font-size-sm:   0.875rem;  /* 14px */
+    --font-size-base: 1rem;      /* 16px */
+    --font-size-lg:   1.125rem;  /* 18px */
+    --font-size-xl:   1.25rem;   /* 20px */
+    --font-size-2xl:  1.5rem;    /* 24px */
+    --font-size-3xl:  1.875rem;  /* 30px */
+    --font-size-4xl:  3.5rem;     /* 56px — iconos decorativos */
+
+    /* Tallas extras para componentes pequeños */
+    --font-size-13: 0.8125rem;  /* 13px */
+    --font-size-11: 0.6875rem;  /* 11px */
+    --font-size-10: 0.625rem;   /* 10px */
+    --font-size-9:  0.5625rem;  /*  9px */
+
+    --font-weight-light:    300;
+    --font-weight-regular:  400;
+    --font-weight-medium:   500;
+    --font-weight-semibold: 600;
+    --font-weight-bold:     700;
+
+    --line-height-tight:  1.25;
+    --line-height-normal: 1.5;
+    --line-height-loose:  1.75;
+
+    /* ─── Transiciones ───────────────────────────────── */
+    --transition-quick:  100ms ease;
+    --transition-fast:   150ms ease;
+    --transition-base:   250ms ease;
+    --transition-slow:   400ms ease;
+    --transition-medium: 600ms ease;
+    --transition-bounce: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* ─── Z-Index ─────────────────────────────────────  */
+    --z-base:     0;
+    --z-raised:   10;
+    --z-dropdown: 100;
+    --z-sticky:   200;
+    --z-overlay:  300;
+    --z-modal:    400;
+    --z-toast:    500;
+    --z-top:      1000;
+
+    /* ─── Dimensiones de layout ─────────────────────── */
+    --navbar-height: 64px;
+    --aside-width:   426px;
+
+    /* ─── Componentes: Botones ─────────────────────────  */
+    --btn-height-sm:  1.875rem;  /* 30px */
+    --btn-height-md:  2.25rem;   /* 36px */
+    --btn-height-lg:  2.75rem;   /* 44px */
+    --btn-padding-x:  var(--spacing-4);
+    --btn-radius:     var(--radius-full);
+    --btn-font-size:  var(--font-size-sm);
+    --btn-font-weight: var(--font-weight-semibold);
+
+    /* ─── Componentes: Cards ──────────────────────────── */
+    --card-padding:  var(--spacing-6);
+    --card-radius:   var(--radius-xl);
+    --card-shadow:   var(--shadow-card);
+    --card-border:   var(--color-border);
+
+    /* ─── Componentes: Inputs ─────────────────────────── */
+    --input-height:              2.5rem;
+    --input-padding-x:           var(--spacing-4);
+    --input-radius:              var(--radius-lg);
+    --input-border:              var(--color-border-strong);
+    --input-border-neutral:      #D1D5DB;
+    --input-border-focus:        var(--color-primary-dark);
+    --input-font-size:           var(--font-size-sm);
+    --input-placeholder-color:   #6B7280;
+
+    /* ─── Tipografía: Mono ────────────────────────────── */
+    --font-family-mono: 'Liberation Mono', 'Courier New', monospace;
+
+    /* ─── Estado: Verificado ─────────────────────────── */
+    --color-verified-bg:     #F0FDF4;
+    --color-verified-border: #BBF7D0;
+    --color-verified-text:   #166534;
+
+    /* ─── Estado: Activo ─────────────────────────────── */
+    --color-active-bg:     #DCFCE7;
+    --color-active-border: #BBF7D0;
+    --color-active-text:   #166534;
+
+    /* ─── Estado: Pendiente ──────────────────────────── */
+    --color-pending-bg:     #FEF7E0;
+    --color-pending-border: #FEF08A;
+    --color-pending-text:   #B06000;
+
+    /* ─── Estado: No verificado / Rechazo ───────────── */
+    --color-unverified-bg: #fef2f2;
+    --color-rejection:     #dc2626;
+
+    /* Estado "Validado" — badge verde verificado */
+    --color-validated-bg:   var(--color-active-bg);    /* #DCFCE7 */
+    --color-validated-text: var(--color-active-text);  /* #166534 */
+
+    /* Borde acentuado visible (sage green) */
+    --color-border-accent:  var(--color-primary-light);
+
+    /* ─── Aliases legacy (migración) ────────────────────
+       Permiten que CSS de página antiguo siga funcionando
+       sin `:root` local. Eliminar cuando cada página esté
+       migrada completamente al DS.
+       ─────────────────────────────────────────────────── */
+    --forest-green:      var(--color-primary-dark);
+    --background-light:  var(--color-bg-light);
+    --verde-musgo:       var(--color-primary-light);
+    --ocre-intenso:      var(--color-alert);
+    --ocre-hover:        #A86915;
+    --alert-ochre:       var(--color-alert);
+    --success-green:     var(--color-success);
+    --danger-red:        var(--color-danger);
+    --modal-bg:          var(--color-bg-subtle);
+    --bs-body-font-family: var(--font-family-base);
+}
+
+/* =====================================================
+   Utility Classes
+   ===================================================== */
+
+.bg-glass {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(0.5rem);
+}
+
+.text-primary {
+    color: var(--color-text-primary);
+}
+
+.text-secondary {
+    color: var(--color-text-secondary);
+}
+
+.text-muted {
+    color: var(--color-text-muted);
+}
+
+.border-subtle {
+    border-color: var(--color-border);
+}
+
+.shadow-soft {
+    box-shadow: var(--shadow-soft);
+}
+
+.shadow-card {
+    box-shadow: var(--shadow-card);
+}
+
+.shadow-hover {
+    box-shadow: var(--shadow-hover);
+}
+
+/* =====================================================
+   Font Family
+   ===================================================== */
+
+html,
+body {
+    font-family: var(--font-family-base);
+}
+
+/* Browsers do not reliably inherit font-family on contenteditable elements;
+   this rule ensures Inter is applied consistently in all edit modes. */
+[contenteditable] {
+    font-family: var(--font-family-ui);
+}

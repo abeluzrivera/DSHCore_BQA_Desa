@@ -1,0 +1,19 @@
+/* =====================================================================
+   Tailwind CSS — Entry point
+   Smart Hub Enterprise
+
+   CONVENCIÓN DE MIGRACIÓN
+   ─────────────────────────────────────────────────────────────────────
+   Mientras coexistimos con Bootstrap, todas las clases Tailwind
+   llevan el prefijo "tw-" (configurado en tailwind.config.js).
+   Ejemplos:
+     Bootstrap:  d-flex, btn, navbar-expand-lg
+     Tailwind:   tw-flex, tw-bg-primary-dark, tw-rounded-lg
+
+   Al migrar una página, reemplaza las clases Bootstrap por clases tw-*
+   y elimina los include de bootstrap.min.css en ese layout/page.
+   ===================================================================== */
+
+@tailwind base;       /* preflight desactivado en config → no interfiere con Bootstrap */
+@tailwind components;
+@tailwind utilities;

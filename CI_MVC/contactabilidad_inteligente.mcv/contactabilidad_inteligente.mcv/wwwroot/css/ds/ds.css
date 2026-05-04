@@ -1,0 +1,15 @@
+/* =====================================================
+   DS — Punto de entrada único de estilos
+   Importar SOLO ESTE archivo en _Layout.cshtml
+   (después de variables.css)
+   ===================================================== */
+
+@import 'components/_buttons.css';
+@import 'components/_cards.css';
+@import 'components/_badges.css';
+@import 'components/_tables.css';
+@import 'components/_forms.css';
+@import 'components/_feedback.css';
+@import 'components/_layout.css';
+@import 'components/_search.css';
+@import 'components/_contact-filter.css';

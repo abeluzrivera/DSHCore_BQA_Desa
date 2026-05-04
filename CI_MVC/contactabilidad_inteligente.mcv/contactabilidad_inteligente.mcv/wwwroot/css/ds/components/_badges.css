@@ -1,0 +1,77 @@
+/* =====================================================
+   DS Component: Badges & Pills
+   Uso: class="ds-badge ds-badge--success"
+   ===================================================== */
+
+.ds-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding: 0.2em var(--spacing-2);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    white-space: nowrap;
+}
+
+.ds-badge--dot::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* ─── Variantes de estado ────────────────────────────── */
+.ds-badge--success {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+.ds-badge--warning {
+    background: var(--color-warning-bg);
+    color: #856404;
+}
+.ds-badge--danger {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+}
+.ds-badge--info {
+    background: var(--color-info-bg);
+    color: #0a7397;
+}
+.ds-badge--alert {
+    background: var(--color-alert-bg);
+    color: var(--color-alert);
+}
+.ds-badge--primary {
+    background: var(--color-primary-10);
+    color: var(--color-primary-dark);
+}
+.ds-badge--neutral {
+    background: var(--color-bg-subtle);
+    color: var(--color-text-secondary);
+}
+
+/* ─── Tamaños ─────────────────────────────────────────── */
+.ds-badge--sm {
+    font-size: 0.65rem;
+    padding: 0.15em var(--spacing-1);
+}
+.ds-badge--lg {
+    font-size: var(--font-size-sm);
+    padding: 0.35em var(--spacing-3);
+}
+
+/* ─── Contador numérico ───────────────────────────────── */
+.ds-badge--count {
+    min-width: 1.3em;
+    height: 1.3em;
+    padding: 0;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    color: white;
+    font-size: var(--font-size-xs);
+}

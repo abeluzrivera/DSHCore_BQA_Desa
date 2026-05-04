@@ -1,0 +1,130 @@
+/* =====================================================
+   Bootstrap Overrides - Custom Styling
+   Variables: ver variables.css
+   ===================================================== */
+
+/* Body */
+body {
+    background-color: var(--background-light);
+}
+
+/* Buttons */
+.btn-forest-green {
+    background-color: var(--forest-green);
+    border-color: var(--forest-green);
+    color: white;
+}
+
+.btn-forest-green:hover {
+    background-color: #1e3a2a;
+    border-color: #1e3a2a;
+    color: white;
+}
+
+.btn-forest-green:focus {
+    background-color: #1e3a2a;
+    border-color: #1e3a2a;
+    box-shadow: 0 0 0 0.25rem rgba(41, 81, 54, 0.25);
+}
+
+/* Form Controls */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--forest-green);
+    box-shadow: 0 0 0 0.25rem rgba(41, 81, 54, 0.25);
+}
+
+/* Cards */
+.card {
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+    border-radius: 9999px;
+}
+
+/* Text utilities */
+.text-forest-green {
+    color: var(--forest-green) !important;
+}
+
+.bg-forest-green {
+    background-color: var(--forest-green) !important;
+}
+
+.border-forest-green {
+    border-color: var(--forest-green) !important;
+}
+
+/* Utility classes */
+.bg-light-subtle {
+    background-color: rgba(41, 81, 54, 0.05);
+}
+
+.border-subtle {
+    border-color: rgba(41, 81, 54, 0.1) !important;
+}
+
+/* Responsive spacing */
+.gap-custom {
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .gap-custom {
+        gap: 1rem;
+    }
+}
+
+/* Container utilities */
+.container-custom {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+@media (max-width: 576px) {
+    .container-custom {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Responsive text sizes */
+@media (max-width: 768px) {
+    .display-5 {
+        font-size: 1.75rem !important;
+    }
+    
+    h1, .h1 {
+        font-size: 1.75rem !important;
+    }
+    
+    h2, .h2 {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(41, 81, 54, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(41, 81, 54, 0.5);
+}

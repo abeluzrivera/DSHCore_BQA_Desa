@@ -1,0 +1,81 @@
+# Build results
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# IDE specific files
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.iml
+.idea/
+
+# Visual Studio Cache
+.vs/
+.vscode/
+*.sw*
+*~
+
+# Rider
+.idea/
+*.sln.iml
+riderModule.iml
+_ReSharper*/
+*.resharper
+
+# Output files
+dist/
+build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# IDE generated code
+*.ide.g.cs
+
+# Node/NPM (Tailwind build pipeline)
+node_modules/
+package-lock.json
+
+# Tailwind compiled output (generado en build, no se versiona)
+wwwroot/css/tailwind.output.css
+
+# ====================================
+# Database Configuration
+# ====================================
+
+# IMPORTANT: NO ignorar archivos de configuraci�n de producci�n
+# Estos deben estar en Git para documentaci�n
+# !appsettings.Production.json
+
+# IMPORTANT: Scripts SQL de migraci�n deben estar en Git
+# para trazabilidad y control de versiones
+!Data/Migrations/Scripts/*.sql
+!Data/Migrations/Scripts/README.md
+
+# NO ignorar archivos de migraci�n de EF Core
+!Data/Migrations/*.cs
+!Data/Migrations/*.Designer.cs

@@ -1,0 +1,135 @@
+/* =====================================================
+   DS Component: Buttons
+   Uso: class="ds-btn ds-btn--primary"
+   ===================================================== */
+
+.ds-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    height: var(--btn-height-md);
+    padding: 0 var(--btn-padding-x);
+    border: 1.5px solid transparent;
+    border-radius: var(--btn-radius);
+    font-family: var(--font-family-base);
+    font-size: var(--btn-font-size);
+    font-weight: var(--btn-font-weight);
+    line-height: 1;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color var(--transition-fast),
+                border-color var(--transition-fast),
+                box-shadow var(--transition-fast),
+                transform var(--transition-bounce);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.ds-btn:active { transform: scale(0.97); }
+.ds-btn:disabled,
+.ds-btn[aria-disabled="true"] {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+/* ─── Variantes ──────────────────────────────────────── */
+.ds-btn--primary {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    border-color: var(--color-primary);
+}
+.ds-btn--primary:hover {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-hover);
+}
+.ds-btn--primary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.ds-btn--secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+.ds-btn--secondary:hover {
+    background: var(--color-primary-10);
+}
+
+.ds-btn--ghost {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border-color: var(--color-border);
+}
+.ds-btn--ghost:hover {
+    background: var(--color-bg-subtle);
+    color: var(--color-text-primary);
+}
+
+.ds-btn--danger {
+    background: var(--color-danger);
+    color: var(--color-text-inverse);
+    border-color: var(--color-danger);
+}
+.ds-btn--danger:hover {
+    background: #b02a37;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
+}
+
+.ds-btn--success {
+    background: var(--color-success);
+    color: var(--color-text-inverse);
+    border-color: var(--color-success);
+}
+
+/* ─── Tamaños ─────────────────────────────────────────── */
+.ds-btn--sm {
+    height: var(--btn-height-sm);
+    padding: 0 var(--spacing-3);
+    font-size: var(--font-size-xs);
+}
+.ds-btn--lg {
+    height: var(--btn-height-lg);
+    padding: 0 var(--spacing-6);
+    font-size: var(--font-size-base);
+}
+
+/* ─── Con icono ────────────────────────────────────────── */
+.ds-btn .material-symbols-outlined,
+.ds-btn .material-icons {
+    font-size: 1.1em;
+    line-height: 1;
+}
+.ds-btn--icon {
+    width: var(--btn-height-md);
+    height: var(--btn-height-md);
+    padding: 0;
+    border-radius: var(--radius-lg);
+}
+.ds-btn--icon.ds-btn--sm {
+    width: var(--btn-height-sm);
+    height: var(--btn-height-sm);
+}
+
+/* ─── Loading state (agrega clase .is-loading via JS) ──── */
+.ds-btn.is-loading {
+    pointer-events: none;
+    position: relative;
+    color: transparent;
+}
+.ds-btn.is-loading::after {
+    content: '';
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: ds-spin 0.6s linear infinite;
+    color: white;
+}
+@keyframes ds-spin {
+    to { transform: rotate(360deg); }
+}

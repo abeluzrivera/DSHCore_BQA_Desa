@@ -1,0 +1,79 @@
+@*  _DsClientSearch — Barra de búsqueda global con dropdown de sugerencias
+    ────────────────────────────────────────────────────────────────────────
+    Figma:   node 110:3991  (dash_client_Searching — zona superior)
+    Uso:     <partial name="Shared/Components/_DsClientSearch" model="@Model.SearchParams" />
+    Requiere: ds-search.js, _search.css
+    ─────────────────────────────────────────────────────────────────────── *@
+
+@{
+    // Parámetros opcionales (pasados via ViewData o model)
+    var filtroActivo   = ViewData["SearchFilter"]   as string ?? "todos";
+    var totalTodos     = ViewData["TotalTodos"]     as int? ?? 0;
+    var totalPorVerif  = ViewData["TotalPorVerif"]  as int? ?? 0;
+    var totalVerif     = ViewData["TotalVerif"]     as int? ?? 0;
+    var placeholder    = ViewData["SearchPlaceholder"] as string ?? "Búsqueda Global...";
+}
+
+<div id="ds-search-widget"
+     class="ds-search-widget"
+     role="search"
+     aria-label="Búsqueda global de clientes">
+
+    @* ── Barra de búsqueda ─────────────────────────────── *@
+    <div class="ds-search-bar ds-search-bar--lg">
+        <img src="~/icons/search.svg" class="ds-icon ds-search-bar__icon" aria-hidden="true" alt="" />
+
+        <input id="ds-search-input"
+               type="search"
+               class="ds-search-bar__input"
+               placeholder="@placeholder"
+               autocomplete="off"
+               spellcheck="false"
+               aria-label="Buscar clientes por nombre, identificación o email"
+               aria-haspopup="listbox"
+               aria-expanded="false"
+               aria-controls="ds-search-dropdown"
+               aria-autocomplete="list" />
+
+        <button id="ds-search-clear"
+                class="ds-search-bar__clear"
+                type="button"
+                aria-label="Limpiar búsqueda"
+                style="display:none">
+            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+    </div>
+
+    @* ── Dropdown de sugerencias ─────────────────────────── *@
+    <div id="ds-search-dropdown"
+         class="ds-search-dropdown"
+         role="listbox"
+         aria-label="Resultados sugeridos"
+         hidden>
+
+        <div class="ds-search-dropdown__header">
+            <span class="ds-search-dropdown__label">Resultados sugeridos</span>
+            <span class="ds-search-dropdown__hint">
+                Presiona <kbd>Enter</kbd> para agregar el primero
+            </span>
+        </div>
+
+        <ul id="ds-search-results"
+            class="ds-search-dropdown__list"
+            role="presentation"
+            aria-live="polite"
+            aria-atomic="true">
+            @* Renderizado dinámico por ds-search.js *@
+        </ul>
+
+        <div id="ds-search-empty"
+             class="ds-search-dropdown__empty"
+             role="status"
+             aria-live="polite"
+             hidden>
+            <span class="material-symbols-outlined" aria-hidden="true">search_off</span>
+            Sin resultados para esta búsqueda
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,19 @@
+@* =====================================================
+   DS Partial: Badge / Pill de estado
+   
+   Uso:
+   @await Html.PartialAsync("Components/_DsBadge", new {
+       Text    = "Activo",
+       Variant = "success",   // success|warning|danger|info|primary|neutral|alert
+       Dot     = true,        // muestra punto de color
+       Size    = "sm"         // sm | (vacío=normal) | lg
+   })
+   ===================================================== *@
+@{
+    var text    = (string)(ViewData["_DsBadge_Text"]    ?? Model?.Text    ?? "");
+    var variant = (string)(ViewData["_DsBadge_Variant"] ?? Model?.Variant ?? "neutral");
+    var dot     = (bool?)  (ViewData["_DsBadge_Dot"]    ?? Model?.Dot)    ?? false;
+    var size    = (string)(ViewData["_DsBadge_Size"]    ?? Model?.Size    ?? "");
+}
+
+<span class="ds-badge ds-badge--@variant @(dot ? "ds-badge--dot" : "") @(!string.IsNullOrEmpty(size) ? $"ds-badge--{size}" : "")">@text</span>

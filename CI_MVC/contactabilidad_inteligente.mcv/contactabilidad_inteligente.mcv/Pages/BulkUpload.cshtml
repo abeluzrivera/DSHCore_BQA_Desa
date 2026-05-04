@@ -1,0 +1,262 @@
+﻿@page "/bulkupload"
+@using contactabilidad_inteligente.mcv.Pages
+@model BulkUploadModel
+@{
+    ViewData["Title"] = "Carga Masiva";
+}
+
+@section Styles {
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/bulkupload.css" rel="stylesheet" />
+}
+
+<main class="bulk-upload-main">
+    <!-- Step Indicator -->
+    <div class="step-indicator-container">
+        <div class="step-indicator">
+            <div class="step-item active" data-step="1">
+                <div class="step-number">1</div>
+                <span class="step-label">Subir Archivo</span>
+            </div>
+            <div class="step-item" data-step="2">
+                <div class="step-number">2</div>
+                <span class="step-label">Procesando</span>
+            </div>
+            <div class="step-item" data-step="3">
+                <div class="step-number">3</div>
+                <span class="step-label">Resultado</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Decoration -->
+    <div class="background-decoration">
+        <div class="decoration-circle decoration-circle-1"></div>
+        <div class="decoration-circle decoration-circle-2"></div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="upload-card">
+        <div class="row g-0 h-100">
+            <!-- Left Panel - Info & Resources -->
+            <div class="col-12 col-md-4 upload-sidebar">
+                <div class="sidebar-content">
+                    <div class="sidebar-header">
+                        <div class="icon-container">
+                            <span class="material-icons">cloud_upload</span>
+                        </div>
+                        <h1 class="sidebar-title">Carga Masiva</h1>
+                        <p class="sidebar-description" id="sidebarDescription">
+                            Actualice su base de datos importando archivos Excel (.xlsx, .csv). 
+                            Aseg�rese de usar la plantilla oficial para evitar errores de formato.
+                        </p>
+                    </div>
+
+                    <div class="sidebar-resources">
+                        <h3 class="resources-title">Recursos</h3>
+                        <a href="/bulkupload?handler=DownloadTemplate" class="resource-link" id="downloadTemplateBtn">
+                            <div class="resource-icon">
+                                <span class="material-icons">download</span>
+                            </div>
+                            <div class="resource-info">
+                                <span class="resource-name">Descargar Plantilla</span>
+                                <span class="resource-version">v2.4 Updated</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Upload Area -->
+            <div class="col-12 col-md-8">
+                <!-- Step 1: Upload -->
+                <div class="upload-content" id="step1Content">
+                    <div class="upload-area-wrapper">
+                        <vc:section-light-green-form-area model="Model.FileUploadViewModel" />
+                    </div>
+                </div>
+
+                <!-- Step 2: Processing -->
+                <div class="upload-content d-none" id="step2Content">
+                    <div class="processing-area">
+                        <!-- File Info Card -->
+                        <div class="file-info-card">
+                            <div class="file-info-icon">
+                                <span class="material-icons">description</span>
+                            </div>
+                            <div class="file-info-details">
+                                <h4 class="file-info-name" id="processingFileName">archivo.xlsx</h4>
+                                <p class="file-info-size" id="processingFileSize">0 MB</p>
+                            </div>
+                            <div class="file-info-spinner">
+                                <span class="material-icons spinning">sync</span>
+                            </div>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section">
+                            <div class="progress-header">
+                                <span class="progress-label">Procesando registros...</span>
+                                <span class="progress-percentage">
+                                    <span id="progressPercentage">0</span>
+                                    <span class="percentage-symbol">%</span>
+                                </span>
+                            </div>
+                            
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" id="progressBarFill"></div>
+                            </div>
+
+                            <div class="progress-info">
+                                <p class="progress-status" id="progressStatus">
+                                    Validando l�neas de datos: <span id="currentRecords">0</span> de <span id="totalRecords">0</span> completados
+                                </p>
+                                <div class="progress-time">
+                                    <span class="material-icons">schedule</span>
+                                    <span>Tiempo restante estimado: <span id="estimatedTime">--</span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cancel Button -->
+                        <div class="processing-actions">
+                            <button type="button" class="btn-cancel-processing" id="cancelProcessingBtn">
+                                <span class="material-icons">close</span>
+                                Cancelar Proceso
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Report -->
+                <div class="upload-content d-none" id="step3Content">
+                    <div class="report-area-new">
+                        <!-- Report Header -->
+                        <div class="report-header-new">
+                            <div class="report-icon-new success">
+                                <span class="material-icons">task_alt</span>
+                            </div>
+                            <h3 class="report-title-new">Carga Finalizada</h3>
+                            <p class="report-subtitle-new">
+                                El proceso de importaci�n del archivo <span class="fw-bold text-verde-bosque" id="finalFileName">archivo.xlsx</span> ha concluido exitosamente.
+                            </p>
+                        </div>
+
+                        <!-- Summary Cards -->
+                        <div class="summary-cards-new">
+                            <div class="col-12 d-flex gap-3">
+                                <div class="summary-card-new success flex-fill">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-label">�XITOS</p>
+                                        <p class="summary-card-value" id="finalSuccessCount">0</p>
+                                        <p class="summary-card-subtitle">Registros procesados</p>
+                                    </div>
+                                    <div class="summary-card-icon success">
+                                        <span class="material-icons">check_circle</span>
+                                    </div>
+                                </div>
+
+                                <div class="summary-card-new error flex-fill">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-label">ERRORES</p>
+                                        <p class="summary-card-value" id="finalErrorCount">0</p>
+                                        <p class="summary-card-subtitle">Requieren atenci�n</p>
+                                    </div>
+                                    <div class="summary-card-icon error">
+                                        <span class="material-icons">warning</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Error Details Table -->
+                        <div class="error-details-container" id="errorDetailsContainer">
+                            <div class="error-details-header">
+                                <h3 class="error-details-title">
+                                    <span class="material-icons">list_alt</span>
+                                    DETALLE DE INCIDENCIAS
+                                </h3>
+                                <span class="error-badge" id="errorBadge">0 errores detectados</span>
+                            </div>
+                            <div class="error-table-wrapper">
+                                <table class="error-table">
+                                    <thead>
+                                        <tr>
+                                            <th>IDENTIFICACION</th>
+                                            <th>CAMPO</th>
+                                            <th>MOTIVO DEL ERROR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="errorTableBody">
+                                        <!-- Populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="report-actions-new">
+                            <button type="button" class="btn-download-log" id="downloadLogBtn">
+                                <span class="material-icons">download</span>
+                                <span>Descargar Log de Errores</span>
+                            </button>
+                            <button type="button" class="btn-reload" id="reloadBtn">
+                                <span class="material-icons">refresh</span>
+                                <span>Volver a Cargar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Panel (Desktop only) -->
+    <div class="history-panel d-none d-xl-block" id="historyPanel">
+        <div class="history-content">
+            <h4 class="history-title">Historial Reciente</h4>
+            <div class="history-list" id="historyList">
+                <!-- Will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <script src="~/js/bulkupload.js"></script>
+}
+
+<!-- Event Listeners para Section Light Green Form Area -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Evento: Archivo validandose (Usuario selecciona archivo)
+    document.addEventListener('fileValidating', function(e) {
+        console.log('Validando archivo:', e.detail);
+    });
+
+    // Evento: Error de validacion (archivo invalido)
+    document.addEventListener('fileInvalid', function(e) {
+        console.log('Error validacion:', e.detail.errorMessage);
+    });
+
+    // Evento: Archivo valido (validacion exitosa)
+    document.addEventListener('fileValid', function(e) {
+        console.log('Archivo valido:', e.detail);
+    });
+
+    // Evento: Reset (Usuario cancela archivo)
+    document.addEventListener('fileReset', function(e) {
+        console.log('Archivo cancelado');
+    });
+
+    // Evento: Descargar plantilla
+    document.addEventListener('downloadTemplate', function(e) {
+        window.location.href = '/bulkupload?handler=DownloadTemplate';
+    });
+
+    // Evento: Procesar archivo
+    document.addEventListener('processFile', async function(e) {
+        console.log('Procesando archivo');
+    });
+});
+</script>

@@ -1,0 +1,151 @@
+/* =====================================================
+   DS Component: Forms & Inputs
+   Uso: class="ds-form-group" + "ds-input" / "ds-select"
+   ===================================================== */
+
+/* ─── Form Group ──────────────────────────────────────── */
+.ds-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    margin-bottom: var(--spacing-4);
+}
+
+.ds-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.ds-label--required::after {
+    content: ' *';
+    color: var(--color-danger);
+}
+
+/* ─── Form Row (2-column grid) ────────────────────────── */
+.ds-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-3);
+}
+.ds-form-row .ds-form-group {
+    margin-bottom: 0;
+}
+
+/* ─── Input base ──────────────────────────────────────── */
+.ds-input,
+.ds-select,
+.ds-textarea {
+    width: 100%;
+    height: var(--input-height);
+    padding: 0 var(--input-padding-x);
+    border: 1.5px solid var(--input-border);
+    border-radius: var(--input-radius);
+    background: var(--color-bg-surface);
+    font-family: var(--font-family-base);
+    font-size: var(--input-font-size);
+    color: var(--color-text-primary);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.ds-input::placeholder,
+.ds-textarea::placeholder {
+    color: var(--color-text-disabled);
+}
+
+.ds-input:focus,
+.ds-select:focus,
+.ds-textarea:focus {
+    outline: none;
+    border-color: var(--input-border-focus);
+    box-shadow: 0 0 0 3px var(--color-primary-10);
+}
+
+.ds-input:disabled,
+.ds-select:disabled,
+.ds-textarea:disabled {
+    background: var(--color-bg-subtle);
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+}
+
+/* ─── Textarea ────────────────────────────────────────── */
+.ds-textarea {
+    height: auto;
+    min-height: 5rem;
+    padding: var(--spacing-3) var(--input-padding-x);
+    resize: vertical;
+}
+
+/* ─── Select con flecha custom ────────────────────────── */
+.ds-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23295136' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--spacing-3) center;
+    padding-right: var(--spacing-8);
+    cursor: pointer;
+}
+
+/* ─── Validación ──────────────────────────────────────── */
+.ds-input.is-valid,
+.ds-select.is-valid {
+    border-color: var(--color-success);
+}
+.ds-input.is-invalid,
+.ds-select.is-invalid {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 3px var(--color-danger-bg);
+}
+
+.ds-field-error {
+    font-size: var(--font-size-xs);
+    color: var(--color-danger);
+    margin-top: var(--spacing-1);
+    display: none;
+}
+.ds-input.is-invalid ~ .ds-field-error {
+    display: block;
+}
+
+.ds-field-hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+/* ─── Input con icono ─────────────────────────────────── */
+.ds-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.ds-input-group .ds-input {
+    padding-left: 2.5rem;
+}
+.ds-input-group__icon {
+    position: absolute;
+    left: var(--spacing-3);
+    color: var(--color-text-muted);
+    pointer-events: none;
+    font-size: 1.1rem;
+}
+
+/* ─── Checkbox & Radio custom ─────────────────────────── */
+.ds-check {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+}
+
+.ds-check input[type="checkbox"],
+.ds-check input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+}

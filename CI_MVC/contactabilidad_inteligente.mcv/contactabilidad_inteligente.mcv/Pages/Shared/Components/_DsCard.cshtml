@@ -1,0 +1,43 @@
+@* =====================================================
+   DS Partial: Card
+
+   Uso (sin modelo):
+   <partial name="Components/_DsCard" view-data='@(new ViewDataDictionary(ViewData) {
+       ["_DsCard_Title"]    = "Resumen",
+       ["_DsCard_Subtitle"] = "Datos del día",
+       ["_DsCard_Hoverable"] = true
+   })' />
+
+   Uso (con contenido inline → mejor usar directamente las clases CSS):
+   <div class="ds-card">
+       <div class="ds-card__header">
+           <h3 class="ds-card__title">Título</h3>
+       </div>
+       <div class="ds-card__body">...</div>
+   </div>
+   ===================================================== *@
+@{
+    var title     = ViewData["_DsCard_Title"]     as string ?? "";
+    var subtitle  = ViewData["_DsCard_Subtitle"]  as string ?? "";
+    var hoverable = ViewData["_DsCard_Hoverable"] as bool?  ?? false;
+    var cssExtra  = ViewData["_DsCard_Class"]     as string ?? "";
+}
+
+<div class="ds-card @(hoverable ? "ds-card--hoverable" : "") @cssExtra">
+    @if (!string.IsNullOrEmpty(title))
+    {
+        <div class="ds-card__header">
+            <div>
+                <h3 class="ds-card__title">@title</h3>
+                @if (!string.IsNullOrEmpty(subtitle))
+                {
+                    <p class="ds-card__subtitle">@subtitle</p>
+                }
+            </div>
+            @RenderSection("CardActions", required: false)
+        </div>
+    }
+    <div class="ds-card__body">
+        @RenderBody()
+    </div>
+</div>

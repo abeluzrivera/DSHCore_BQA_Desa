@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:gdatos-team-xzr9wxhc.atlassian.net)",
+      "Bash(claude mcp *)"
+    ]
+  }
+}

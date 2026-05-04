@@ -1,0 +1,7 @@
+RANGO 1 al 100: Estados de Contactabilidad 
+RANGO 100 al 150: tipos de Contactabilidad 
+RANGO 150 al 200: Estado de Usuario 
+RANGO 200 al 250: Tipos de Identificacion
+RANGO 250 al 300: Rol De sistema
+RANGO 300 al 350: Estados Archivo
+RANGO 350 al 400: Estados Cliente

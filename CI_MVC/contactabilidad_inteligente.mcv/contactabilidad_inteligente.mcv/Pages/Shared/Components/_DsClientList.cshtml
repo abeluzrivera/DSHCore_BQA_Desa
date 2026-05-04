@@ -1,0 +1,124 @@
+@*  _DsClientList — Panel lateral de lista de clientes con búsqueda contextual
+    ─────────────────────────────────────────────────────────────────────────
+    Figma:   node 110:3444  (dash_client_Searching — Aside izquierdo)
+    Uso:     <partial name="Shared/Components/_DsClientList" />
+    Requiere: ds-search.js, _search.css
+    ─────────────────────────────────────────────────────────────────────── *@
+
+@{
+    var titulo         = ViewData["ClientListTitle"]  as string ?? "Resultados";
+    var countInicial   = ViewData["ClientListCount"]  as int? ?? 0;
+    var totalInicial   = ViewData["ClientListTotal"]  as int? ?? 0;
+    var listPlaceholder= ViewData["ClientListSearch"] as string ?? "Filtrar por nombre o ID...";
+
+     // Parámetros opcionales (pasados via ViewData o model)
+    var filtroActivo   = ViewData["SearchFilter"]   as string ?? "todos";
+    var totalTodos     = ViewData["TotalTodos"]     as int? ?? 0;
+    var totalPorVerif  = ViewData["TotalPorVerif"]  as int? ?? 0;
+    var totalVerif     = ViewData["TotalVerif"]     as int? ?? 0;
+    var placeholder    = ViewData["SearchPlaceholder"] as string ?? "Búsqueda Global...";
+
+}
+
+<aside class="ds-client-list @(ViewData["ClientListExtraClass"] as string ?? "")"
+       aria-label="Lista de clientes"
+       data-component="ds-client-list">
+
+    @* ── Cabecera: meta + búsqueda interna ─────────────── *@
+    <div class="ds-client-list__header">
+
+        <div class="ds-client-list__meta">
+            <div class="ds-client-list__meta-left">
+                <span class="ds-client-list__title">@titulo</span>
+                <span id="ds-client-list-count"
+                      class="ds-client-list__count-badge"
+                      aria-live="polite"
+                      aria-label="Total de resultados">@countInicial</span>
+            </div>
+            <span id="ds-client-list-pager"
+                  class="ds-client-list__pager"
+                  aria-live="polite">
+                @if (totalInicial > 0)
+                {
+                    @($"Mostrando {countInicial} de {totalInicial} resultados")
+                }
+            </span>
+        </div>
+
+        <div class="ds-client-list__search"
+             role="search"
+             aria-label="Filtrar clientes en lista">
+            <img src="~/icons/search.svg" class="ds-icon ds-client-list__search-icon" aria-hidden="true" alt="" />
+            <input id="ds-client-list-search"
+                   type="search"
+                   class="ds-client-list__search-input"
+                   placeholder="@listPlaceholder"
+                   autocomplete="off"
+                   aria-label="Filtrar clientes en la lista actual" />
+        </div>
+    </div>
+
+    <div class="ds-search-filters ds-client-list__filters" role="tablist" aria-label="Filtrar clientes por estado">
+        <button class="ds-search-filters__pill @(filtroActivo == "todos" ? "ds-search-filters__pill--active" : "")"
+                role="tab"
+                aria-selected="@(filtroActivo == "todos" ? "true" : "false")"
+                data-filter="todos"
+                type="button">
+            Todos (<span id="pill-count-todos">@totalTodos</span>)
+        </button>
+
+        <button class="ds-search-filters__pill @(filtroActivo == "por-verificar" ? "ds-search-filters__pill--active" : "")"
+                role="tab"
+                aria-selected="@(filtroActivo == "por-verificar" ? "true" : "false")"
+                data-filter="por-verificar"
+                type="button">
+            Por Verificar (<span id="pill-count-por-verificar">@totalPorVerif</span>)
+        </button>
+
+        <button class="ds-search-filters__pill @(filtroActivo == "verificados" ? "ds-search-filters__pill--active" : "")"
+                role="tab"
+                aria-selected="@(filtroActivo == "verificados" ? "true" : "false")"
+                data-filter="verificados"
+                type="button">
+            Verificados (<span id="pill-count-verificados">@totalVerif</span>)
+        </button>
+    </div>
+
+    @* ── Cuerpo: artículos de cliente (poblados por JS) ─── *@
+    <div id="ds-client-list-body"
+         class="ds-client-list__body"
+         role="list"
+         aria-label="Clientes en lista"
+         aria-live="polite">
+
+        @* Estado inicial — skeletons mientras carga JS *@
+        @for (int i = 0; i < 6; i++)
+        {
+            double opacity = 1.0 - i * 0.14;
+            <article class="ds-client-article ds-client-article--skeleton"
+                     aria-hidden="true"
+                     style="opacity:@opacity.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)">
+                <div class="ds-client-article__avatar-wrap">
+                    <div class="ds-client-article__avatar" aria-hidden="true"></div>
+                </div>
+                <div class="ds-client-article__info">
+                    <div class="ds-client-article__top">
+                        <span class="ds-skeleton-line"
+                              style="height:12px;width:@(100 + (i % 3) * 16)px"></span>
+                        <span class="ds-skeleton-line"
+                              style="height:8px;width:48px"></span>
+                    </div>
+                    <span class="ds-skeleton-line"
+                          style="height:8px;width:@(60 + (i % 2) * 20)px;margin-top:6px"></span>
+                </div>
+            </article>
+        }
+
+        @* Texto de carga visible antes de JS *@
+        <div class="ds-client-list__loading-msg" aria-live="polite">
+            Preparando lista...
+        </div>
+
+    </div>
+
+</aside>

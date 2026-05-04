@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="SDH.SQL.DB">
+  <Items>
+    <LogicalFolder Name="Conexiones" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="192.168.250.109:BANCOMACHALA\pedro.rivera">
+          <Created>2026-03-25T16:00:30.6658268-05:00</Created>
+          <Type>SQL</Type>
+          <Server>192.168.250.109</Server>
+          <UserName />
+          <Authentication>Autenticación de Windows</Authentication>
+          <InitialDB />
+          <LoginTimeout>15</LoginTimeout>
+          <TrustServerCertificate>True</TrustServerCertificate>
+          <EncryptionOption>True</EncryptionOption>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>SQL Server Management Studio</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Consultas" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="GetAddressByIdentification.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:192.168.250.109:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>192.168.250.109</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>GetAddressByIdentification.sql</FullPath>
+        </FileNode>
+        <FileNode Name="GetContactosByIdentification.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:192.168.250.109:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>192.168.250.109</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>GetContactosByIdentification.sql</FullPath>
+        </FileNode>
+        <FileNode Name="GetDataComplete.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:192.168.250.109:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>192.168.250.109</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>GetDataComplete.sql</FullPath>
+        </FileNode>
+        <FileNode Name="SQLQuery1.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:192.168.250.109:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>192.168.250.109</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>SQLQuery1.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Varios" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

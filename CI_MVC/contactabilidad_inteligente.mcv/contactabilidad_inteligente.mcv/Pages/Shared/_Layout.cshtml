@@ -1,0 +1,192 @@
+﻿@functions {
+    private string GetProfileImageUrl() 
+    {
+        // Considerar mover esto a configuración o base de datos
+        return "https://lh3.googleusercontent.com/aida-public/AB6AXuDrX8Bj8uPlHfQgZ6MJHJaLUkVVEQzXnJAW3T1_vtJalwHIRWs6aa4SBbQdpuiVdyJ600IX_3K96YYg3N0F7eGXEgoz5i60DWODTUbI18L5DOgXhK9IZc3a2IMOXxJ6zzI9tJq_nXap_KF2fUMReWm941SOGtbf3FF5-asVayytaJVP6gNFwplbKcvCjshdNttqkKGFO2ue_mQCNkfyert1IrwfoHyxycRRjSJ40Jrwr4qO0MbtOowEDShbU9_A5l4Vu-UwHcv0k1It";
+    }
+
+    private string GetUserRole() => User.IsInRole("Administrador") ? "Administrador" : "Usuario";
+    
+    private string GetActiveLinkClass(string path) => 
+        Context.Request.Path.Value?.Equals(path, StringComparison.OrdinalIgnoreCase) == true ? "active" : "";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Smart Hub Enterprise</title>
+    
+    <!-- Preconnect para cargar Google Fonts sin latencia -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Google Fonts: Inter + Sora (una sola petición) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz@24" rel="stylesheet" />
+    
+    <!-- Bootstrap CSS (se mantiene durante migración gradual) -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Tailwind CSS (prefijo tw-; se carga DESPUÉS de Bootstrap para que las
+         utilidades tw-* tengan mayor especificidad y nunca colisionen) -->
+    <link href="~/css/tailwind.output.css" rel="stylesheet" asp-append-version="true" />
+
+    <!-- 1. Design Tokens -->
+    <link href="~/css/variables.css" rel="stylesheet" />
+
+    <!-- 2. Design System Components -->
+    <link href="~/css/ds/ds.css" rel="stylesheet" />
+
+    <!-- 3. Bootstrap Overrides -->
+    <link href="~/css/bootstrap-overrides.css" rel="stylesheet" />
+
+    <!-- 4. Global styles -->
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <!-- 5. Layout / Nav -->
+    <link href="~/css/layout.css" rel="stylesheet" />
+    
+    <!-- Page Specific Styles -->
+    @await RenderSectionAsync("Styles", required: false)
+
+    <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vt3srohvh8");
+</script>
+</head>
+<body>
+    <div class="d-flex flex-column @(ViewData["WrapperClass"]?.ToString())" style="min-height: 100vh;">
+        <!-- Navigation Bar -->
+        <nav class="navbar-custom" aria-label="Navegación principal">
+            <div class="nav-container">
+
+                @* ── Brand ── *@
+                <a class="navbar-brand" href="/dashboard" aria-label="Data Smart Hub - Inicio">
+                    <div class="navbar-icon">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">hub</span>
+                    </div>
+                    <span class="navbar-brand-name">Data Smart Hub</span>
+                </a>
+
+                @* ── Nav links (desktop) ── *@
+                <nav class="nav-links" aria-label="Menú principal">
+                    <a class="nav-link-custom @GetActiveLinkClass("/dashboard")" href="/dashboard">Contactabilidad Clientes</a>
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <a class="nav-link-custom @GetActiveLinkClass("/users")" href="/users">Usuarios</a>
+                    }
+                </nav>
+
+                @* ── Right: notifications + user + logout ── *@
+                <div class="nav-right">
+
+                    @* Bell notification — oculto temporalmente, sin valor funcional por ahora *@
+                    <button class="nav-bell" aria-label="Notificaciones" type="button" hidden
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.70)" aria-hidden="true">
+                            <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                        </svg>
+                        <span class="nav-bell__dot" aria-hidden="true"></span>
+                    </button>
+
+                    @* User info + avatar *@
+                    <div class="nav-user">
+                        <div class="nav-user__info">
+                            <span class="nav-user__name">@User.Identity?.Name</span>
+                            <span class="nav-user__role">@GetUserRole()</span>
+                        </div>
+                        <div class="nav-user__avatar">
+                            <img src="@GetProfileImageUrl()" alt="" />
+                        </div>
+                    </div>
+
+                    @* Logout *@
+                    <form method="post" asp-page-handler="Logout" class="m-0">
+                        <button type="submit" class="nav-logout" title="Cerrar Sesión" aria-label="Cerrar sesión">
+                            <span class="material-symbols-outlined">logout</span>
+                        </button>
+                    </form>
+
+                    @* Mobile toggle *@
+                    <button class="nav-mobile-toggle" type="button"
+                            aria-controls="nav-mobile-menu"
+                            aria-expanded="false"
+                            aria-label="Abrir menú de navegación">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+
+            </div>
+
+            @* ── Mobile menu ── *@
+            <div class="nav-mobile-menu" id="nav-mobile-menu" hidden>
+                <a class="nav-mobile-link @GetActiveLinkClass("/dashboard")" href="/dashboard">Contactabilidad Clientes</a>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <a class="nav-mobile-link @GetActiveLinkClass("/users")" href="/users">Usuarios</a>
+                }
+                <div class="nav-mobile-user">
+                    <span class="nav-user__name">@User.Identity?.Name</span>
+                    <span class="nav-user__role">@GetUserRole()</span>
+                </div>
+                <form method="post" asp-page-handler="Logout">
+                    <button type="submit" class="nav-mobile-logout">Cerrar Sesión</button>
+                </form>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-grow-1">
+            @RenderBody()
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-auto">
+            <div class="footer-container">
+                <p>Smart Data Hub 2026 © Banco de Machala - Gestión de Datos Todos los derechos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bootstrap -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+    <!-- Mobile nav toggle -->
+    <script>
+        (function () {
+            const toggle = document.querySelector('.nav-mobile-toggle');
+            const menu   = document.getElementById('nav-mobile-menu');
+            if (!toggle || !menu) return;
+            toggle.addEventListener('click', () => {
+                const open = !menu.hidden;
+                menu.hidden = open;
+                toggle.setAttribute('aria-expanded', String(!open));
+            });
+        })();
+    </script>
+
+    <!-- Design System (orden importante: endpoints → core → módulos) -->
+    <script src="~/js/ds/ds-endpoints.js"></script>
+    <script src="~/js/ds/ds-core.js"></script>
+    <script src="~/js/ds/ds-notifications.js"></script>
+    <script src="~/js/ds/ds-api.js"></script>
+    <script src="~/js/ds/ds-catalogs.js"></script>
+    <script src="~/js/ds/ds-modal.js"></script>
+    <script src="~/js/ds/ds-form.js"></script>
+    <script src="~/js/ds/ds-search.js" asp-append-version="true"></script>
+
+    <!-- Layout -->
+    <script src="~/js/pages/layout.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

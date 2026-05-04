@@ -1,0 +1,118 @@
+/* =====================================================
+   DS Component: Tables
+   Uso: class="ds-table" en <table>
+   ===================================================== */
+
+.ds-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-surface);
+}
+
+.ds-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+}
+
+.ds-table thead {
+    background: var(--color-bg-subtle);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-raised);
+}
+
+.ds-table thead th {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.ds-table tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--transition-fast);
+}
+
+.ds-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.ds-table tbody tr:hover {
+    background: var(--color-primary-50);
+}
+
+.ds-table tbody tr.is-selected {
+    background: var(--color-primary-10);
+}
+
+.ds-table td {
+    padding: var(--spacing-3) var(--spacing-4);
+    color: var(--color-text-primary);
+    vertical-align: middle;
+}
+
+/* ─── Columnas especiales ─────────────────────────────── */
+.ds-table__col--actions {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.ds-table__col--number {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.ds-table__col--center { text-align: center; }
+
+/* ─── Encabezado ordenable ────────────────────────────── */
+.ds-table th[data-sortable] {
+    cursor: pointer;
+}
+.ds-table th[data-sortable]:hover {
+    color: var(--color-text-primary);
+}
+.ds-table th[aria-sort="ascending"]::after  { content: ' ↑'; }
+.ds-table th[aria-sort="descending"]::after { content: ' ↓'; }
+
+/* ─── Estado vacío ────────────────────────────────────── */
+.ds-table__empty {
+    text-align: center;
+    padding: var(--spacing-12) var(--spacing-4);
+    color: var(--color-text-muted);
+}
+.ds-table__empty-icon {
+    font-size: 3rem;
+    opacity: 0.4;
+    display: block;
+    margin-bottom: var(--spacing-3);
+}
+
+/* ─── Skeleton loader ─────────────────────────────────── */
+.ds-table td.is-skeleton {
+    pointer-events: none;
+}
+.ds-skeleton-line {
+    height: 1em;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(
+        90deg,
+        var(--color-bg-subtle) 25%,
+        var(--color-border) 50%,
+        var(--color-bg-subtle) 75%
+    );
+    background-size: 200% 100%;
+    animation: ds-skeleton-shimmer 1.5s infinite;
+}
+@keyframes ds-skeleton-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}

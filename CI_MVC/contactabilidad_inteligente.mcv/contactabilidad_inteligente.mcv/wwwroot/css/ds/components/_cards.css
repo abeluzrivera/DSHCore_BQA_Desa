@@ -1,0 +1,108 @@
+/* =====================================================
+   DS Component: Cards
+   Uso: class="ds-card"
+   ===================================================== */
+
+.ds-card {
+    background: var(--color-bg-surface);
+    border: 1px solid var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    padding: var(--card-padding);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.ds-card--hoverable:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
+}
+
+.ds-card--flat {
+    box-shadow: none;
+    border: 1px solid var(--color-border);
+}
+
+.ds-card--glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Secciones internas */
+.ds-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-4);
+    padding-bottom: var(--spacing-4);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ds-card__title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.ds-card__subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: var(--spacing-1) 0 0;
+}
+
+.ds-card__body {
+    /* noop – solo semántico */
+}
+
+.ds-card__footer {
+    margin-top: var(--spacing-4);
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+/* ─── Stat Card (para dashboard) ──────────────────────── */
+.ds-stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.ds-stat-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-primary-10);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-2);
+}
+
+.ds-stat-card__value {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-tight);
+}
+
+.ds-stat-card__label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-medium);
+}
+
+.ds-stat-card__trend {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    margin-top: var(--spacing-1);
+}
+.ds-stat-card__trend--up   { color: var(--color-success); }
+.ds-stat-card__trend--down { color: var(--color-danger); }
