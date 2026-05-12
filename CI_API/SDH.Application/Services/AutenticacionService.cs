@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SDH.Application.DTOs.Auth;
 using SDH.Application.Ports.Services;
+using SDH.Application.Settings;
 using SDH.Domain.Entities.Seguridad;
 using SDH.Domain.Ports;
 using SDH.Domain.Repositories;
@@ -12,9 +14,53 @@ namespace SDH.Application.Services
         IUserRepository usuarioRepository,
         IPasswordHasher passwordHasher,
         ITokenGenerator tokenGenerator,
-        ILogger<AutenticacionService> logger)
+        IOptions<AuthSettings> authOptions,
+        ILogger<AutenticacionService> logger,
+        ILdapAuthenticationService? ldapService = null)
     {
-        public async Task<LoginResultDto?> ValidarCredencialesAsync(string email, string clave, CancellationToken ct = default)
+        private readonly AuthSettings _authSettings = authOptions.Value;
+
+        public async Task<LoginResultDto?> ValidarCredencialesAsync(
+            string usernameOrEmail, string clave, CancellationToken ct = default)
+        {
+            bool useLdap = _authSettings.Provider.Equals("LDAP", StringComparison.OrdinalIgnoreCase);
+            return useLdap
+                ? await ValidarPorLdapAsync(usernameOrEmail, clave, ct)
+                : await ValidarPorBaseDatosAsync(usernameOrEmail, clave, ct);
+        }
+
+        private async Task<LoginResultDto?> ValidarPorLdapAsync(
+            string username, string password, CancellationToken ct)
+        {
+            if (ldapService == null)
+                throw new InvalidOperationException(
+                    "AuthSettings:Provider = LDAP pero ILdapAuthenticationService no está registrado.");
+
+            LdapAuthResult result = await ldapService.AuthenticateAsync(username, password, ct);
+
+            if (!result.Success)
+            {
+                string reason = result.FailureReason == "no_group"
+                    ? _authSettings.UnavailableMessage
+                    : result.FailureReason ?? "Autenticación fallida.";
+                return new LoginResultDto(null, null, null, reason);
+            }
+
+            // STATELESS — objeto transitorio en memoria, sin escritura en BD
+            var usuario = Users.CreateTransient(
+                result.Username!, result.Email!, result.FullName!, result.MappedRole!);
+
+            logger.LogInformation("LDAP OK (stateless): '{Username}' → rol '{Role}'",
+                result.Username, result.MappedRole);
+
+            return new LoginResultDto(
+                usuario,
+                tokenGenerator.GenerarJwtToken(usuario),
+                tokenGenerator.GenerarClaimsPrincipal(usuario));
+        }
+
+        private async Task<LoginResultDto?> ValidarPorBaseDatosAsync(
+            string email, string clave, CancellationToken ct)
         {
             try
             {
@@ -26,11 +72,9 @@ namespace SDH.Application.Services
                     return null;
                 }
 
-                // Delegar al Dominio
                 usuario.Authenticate(clave, passwordHasher);
                 await unitOfWork.SaveChangesAsync(ct);
 
-                // 👈 MAGIA: Generamos los tokens e identidades aquí
                 string jwtToken = tokenGenerator.GenerarJwtToken(usuario);
                 var claimsPrincipal = tokenGenerator.GenerarClaimsPrincipal(usuario);
 

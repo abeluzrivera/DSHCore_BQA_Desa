@@ -51,7 +51,7 @@ builder.Services.AddMemoryCache(options =>
 });
 
 // Registrar la capa de persistencia (Repositorios y UnitOfWork)
-builder.Services.AddPersistence();
+builder.Services.AddPersistence(builder.Configuration);
 
 // Registrar la capa de aplicaci�n (Servicios)
 builder.Services.AddApplicationServices();
@@ -77,7 +77,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.SameSite = SameSiteMode.Strict;
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    // Política base: cualquier usuario autenticado
+    options.AddPolicy("Autenticado", policy => policy.RequireAuthenticatedUser());
+
+    // Políticas por rol — los strings deben coincidir con RoleGroupMappings keys
+    options.AddPolicy("SoloAdmin",       policy => policy.RequireRole("ADMIN"));
+    options.AddPolicy("AdminOSupervisor",policy => policy.RequireRole("ADMIN", "SUPERVISOR"));
+    options.AddPolicy("TodosLosAgentes", policy => policy.RequireRole("ADMIN", "SUPERVISOR", "AGENTE"));
+    options.AddPolicy("AccesoGeneral",   policy => policy.RequireRole("ADMIN", "SUPERVISOR", "AGENTE", "CONSULTA"));
+});
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
