@@ -19,8 +19,7 @@ namespace contactabilidad_inteligente.mcv.Pages.Auth
         }
 
         [BindProperty]
-        [Required(ErrorMessage = "El correo electrónico es requerido")]
-        [EmailAddress(ErrorMessage = "Formato de correo electrónico inválido")]
+        [Required(ErrorMessage = "El usuario es requerido")]
         public string Username { get; set; } = string.Empty;
 
         [BindProperty]
