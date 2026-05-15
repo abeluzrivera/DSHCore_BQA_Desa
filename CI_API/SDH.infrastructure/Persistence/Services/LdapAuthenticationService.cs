@@ -32,19 +32,57 @@ public class LdapAuthenticationService(
             string filter = string.Format(_settings.UserSearchFilter, LdapEscape(username));
             string[] attrs = ["dn", "cn", "mail", "displayName", _settings.GroupAttribute];
 
+            // Domain Scope control (OID 1.2.840.113556.1.4.1339):
+            // Instructs Active Directory to suppress referrals to subordinate naming
+            // contexts (e.g. DomainDnsZones, ForestDnsZones) when searching from the
+            // domain root with ScopeSub. Without this, AD returns an LDAP referral for
+            // each application partition it hosts, causing LdapReferralException.
+            var domainScopeControl = new LdapControl(
+                "1.2.840.113556.1.4.1339",
+                critical: false,
+                (byte[]?)null);
+
+            var constraints = new LdapSearchConstraints
+            {
+                ReferralFollowing = false,
+                MaxResults = 10
+            };
+            constraints.SetControls(domainScopeControl);
+
             ILdapSearchResults results = await conn.SearchAsync(
                 _settings.UserSearchBase,
                 LdapConnection.ScopeSub,
                 filter,
                 attrs,
                 typesOnly: false,
+                constraints,
                 ct);
 
             LdapEntry? userEntry = null;
-            await foreach (LdapEntry entry in results.ConfigureAwait(false))
+            var enumerator = results.ConfigureAwait(false).GetAsyncEnumerator();
+            try
             {
-                userEntry = entry;
-                break;
+                while (await enumerator.MoveNextAsync())
+                {
+                    userEntry = enumerator.Current;
+                    break;
+                }
+            }
+            catch (LdapReferralException referralEx)
+            {
+                // El DC devuelve un referral — significa que el UserSearchBase apunta
+                // a un dominio distinto del Host configurado. Verifique Host en appsettings.
+                logger.LogWarning(
+                    "LDAP: Referral recibido. FailedReferral='{Failed}' Referrals=[{Referrals}]. " +
+                    "Verifique que Host apunte al DC raíz del dominio '{BaseDn}'.",
+                    referralEx.FailedReferral,
+                    string.Join(", ", referralEx.GetReferrals() ?? []),
+                    _settings.UserSearchBase);
+                return Fail("No se pudo localizar al usuario. Contacte al administrador.");
+            }
+            finally
+            {
+                await enumerator.DisposeAsync();
             }
 
             if (userEntry == null)
@@ -86,7 +124,8 @@ public class LdapAuthenticationService(
         }
         catch (LdapException ex) when (ex.ResultCode != LdapException.InvalidCredentials)
         {
-            logger.LogError(ex, "LDAP: Error de conexión.");
+            logger.LogError(ex, "LDAP: Error de conexión. ResultCode={ResultCode} Message={Message}",
+                ex.ResultCode, ex.LdapErrorMessage);
             return Fail("Error al conectar con el directorio activo. Intente más tarde.");
         }
     }
