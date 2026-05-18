@@ -12,7 +12,7 @@ namespace contactabilidad_inteligente.mcv.Controllers
     /// Sigue el contrato DS-Back: retorna DTOs puros, sin ViewModels ni clases CSS.
     /// El cliente (JS) es responsable de aplicar presentación visual.
     /// </summary>
-    [Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "ADMIN")]
     [ApiController]
     [Route("api/users")]
     public class UsersController(

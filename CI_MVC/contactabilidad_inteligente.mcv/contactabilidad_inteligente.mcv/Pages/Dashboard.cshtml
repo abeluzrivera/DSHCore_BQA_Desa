@@ -570,7 +570,9 @@
         window.CONTACT_TYPE_TO_GROUP = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ContactGroupMap));
         @if (!string.IsNullOrWhiteSpace(Model.FilterIds))
         {
-            @:window.DS_FILTER_IDS = '@Html.Raw(Model.FilterIds.Replace("'", ""))';
+            // Sanitize: keep only alphanumeric chars and commas before injecting into JS
+            var _safeFilterIds = System.Text.RegularExpressions.Regex.Replace(Model.FilterIds, @"[^a-zA-Z0-9,]", "");
+            @:window.DS_FILTER_IDS = '@(_safeFilterIds)';
             @:DS.clientListStore?.setAll(window.DS_FILTER_IDS.split(',').map(s => s.trim()).filter(Boolean));
         }
         else
