@@ -601,55 +601,34 @@
     // ─────────────────────────────────────────────────────
 
     function _initAddressMapPanel() {
-        const mapFrame = /** @type {HTMLIFrameElement|null} */ (document.getElementById('cp-map-frame'));
         const addrList = document.getElementById('addresses-list');
         if (!addrList) return;
 
-        // Click en tarjeta de dirección → actualizar panel de mapa
+        // Click en tarjeta de dirección → abrir modal global de mapa
         addrList.addEventListener('click', e => {
             const card = e.target.closest('.cp-contact-card');
             if (!card) return;
             // Ignorar clics en zonas de acción y campos editables GPS
-            if (e.target.closest('.cp-action-pills, .cp-reject-zone, [data-map-btn], .cp-edit-btn, [data-gps-lat], [data-gps-lng]')) return;
+            if (e.target.closest('.cp-action-pills, .cp-reject-zone, [data-map-btn], .cp-edit-btn, [data-gps-lat], [data-gps-lng], [data-open-map-modal]')) return;
 
             const lat = card.dataset.lat;
             const lng = card.dataset.lng;
-            if (lat && lng && mapFrame) {
-                _updateMapPanel(lat, lng);
+            const label = card.dataset.contactValue;
+            if (lat && lng) {
+                _openGlobalMapModal(lat, lng, label);
             }
-            // Resaltar tarjeta seleccionada
-            addrList.querySelectorAll('.cp-contact-card').forEach(c => c.classList.remove('cp-contact-card--selected'));
-            card.classList.add('cp-contact-card--selected');
-        });
-
-        // Botón "open" → abrir en Google Maps en nueva pestaña
-        document.querySelector('[data-map-ctrl="open"]')?.addEventListener('click', () => {
-            if (!mapFrame?.src) return;
-            const match = mapFrame.src.match(/q=([-\d.]+),([-\d.]+)/);
-            if (match) window.open(`https://maps.google.com/?q=${match[1]},${match[2]}`, '_blank', 'noopener');
         });
     }
 
-    /** Actualiza el iframe del panel de mapa con nuevas coordenadas. */
-    function _updateMapPanel(lat, lng) {
-        const panel = document.getElementById('cp-map-panel');
-        if (!panel) return;
-        // Si el panel muestra el estado vacío lo sustituimos con el iframe
-        const emptyEl = panel.querySelector('.cp-map-panel__empty');
-        if (emptyEl) {
-            const iframe = document.createElement('iframe');
-            iframe.id = 'cp-map-frame';
-            iframe.className = 'cp-map-panel__iframe';
-            iframe.title = 'Mapa de dirección';
-            iframe.setAttribute('aria-label', 'Mapa de la dirección del cliente');
-            iframe.loading = 'lazy';
-            emptyEl.replaceWith(iframe);
-        }
-        const frame = /** @type {HTMLIFrameElement} */ (document.getElementById('cp-map-frame'));
-        if (frame) {
-            frame.src = `https://www.google.com/maps?q=${lat},${lng}&z=16&output=embed`;
-        }
+    /** Abre el modal global de mapa con las coordenadas dadas. */
+    function _updateMapPanel(lat, lng, label) {
+        _openGlobalMapModal(lat, lng, label);
     }
+
+    /** Referencia a la función de apertura del modal global (asignada por _initGlobalMapModal). */
+    let _openGlobalMapModal = function(lat, lng, label) {
+        console.warn('[MapPanel] Modal global aún no inicializado');
+    };
 
 
     // Usa DS.contactFilter (ds-core.js) con [data-contact-state] como fuente de verdad.
@@ -826,11 +805,11 @@
                         DS.notify?.success('Coordenadas GPS guardadas');
 
                         if (lat !== null && lng !== null) {
-                            // Actualizar data-lat / data-lng en la tarjeta para que el selector de mapa funcione
+                            // Actualizar data-lat / data-lng en la tarjeta
                             card.dataset.lat = lat.toFixed(6);
                             card.dataset.lng = lng.toFixed(6);
-                            // Actualizar el panel de mapa full-size
-                            _updateMapPanel(String(lat), String(lng));
+                            // Abrir modal global con las nuevas coordenadas
+                            _openGlobalMapModal(String(lat), String(lng), card.dataset.contactValue);
                         }
                     }
 
@@ -864,12 +843,108 @@
         _initContactFilter();
         _initSidebar();
         _initMobileDrawer();
+        _initGlobalMapModal();
         _initAddressMapPanel();
         // Orden inicial: verified → pending → error/unknown
         ['phones-list', 'emails-list', 'addresses-list'].forEach(id => {
             const container = document.getElementById(id);
             if (container) _sortContactCards(container);
         });
+    }
+
+    /* ─────────────────────────────────────────────────────
+       Global Map Modal — único iframe reutilizado por todas las tarjetas
+       ───────────────────────────────────────────────────── */
+    function _initGlobalMapModal() {
+        const modal      = document.getElementById('cp-global-map-modal');
+        const iframe     = document.getElementById('cp-map-modal-iframe');
+        const closeBtn   = document.getElementById('cp-map-modal-close');
+        const addressLbl = document.getElementById('cp-map-modal-address');
+        const extLink    = document.getElementById('cp-map-modal-external');
+
+        if (!modal || !iframe) return;
+
+        // ── Open ──────────────────────────────────────────
+        function _openMapModal(lat, lng, label) {
+            const latF = parseFloat(lat);
+            const lngF = parseFloat(lng);
+
+            if (isNaN(latF) || isNaN(lngF)) {
+                console.warn('[MapModal] Coordenadas inválidas:', lat, lng);
+                return;
+            }
+
+            // Google Maps Embed API
+            const src = `https://maps.google.com/maps?q=${latF},${lngF}&z=16&output=embed`;
+            const mapsUrl = `https://www.google.com/maps?q=${latF},${lngF}`;
+
+            iframe.src = src;
+            if (addressLbl) addressLbl.textContent = label || `${latF.toFixed(6)}, ${lngF.toFixed(6)}`;
+            if (extLink)    extLink.href = mapsUrl;
+
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+
+            // Trigger animation on next frame
+            requestAnimationFrame(() => modal.classList.add('is-visible'));
+
+            // Move focus to close button
+            closeBtn?.focus();
+        }
+
+        // ── Close ─────────────────────────────────────────
+        function _closeMapModal() {
+            modal.classList.remove('is-visible');
+            document.body.style.overflow = '';
+
+            modal.addEventListener('transitionend', () => {
+                modal.hidden = true;
+                // Clear src to stop any ongoing network activity
+                iframe.src = '';
+            }, { once: true });
+        }
+
+        // ── Triggers ─────────────────────────────────────
+        // Delegated: any [data-open-map-modal] inside the page
+        document.addEventListener('click', e => {
+            const trigger = e.target.closest('[data-open-map-modal]');
+            if (!trigger) return;
+            const lat   = trigger.dataset.lat   ?? trigger.closest('[data-lat]')?.dataset.lat;
+            const lng   = trigger.dataset.lng   ?? trigger.closest('[data-lng]')?.dataset.lng;
+            const label = trigger.dataset.label ?? trigger.closest('[data-contact-value]')?.dataset.contactValue;
+            _openMapModal(lat, lng, label);
+        });
+
+        closeBtn?.addEventListener('click', _closeMapModal);
+
+        // Click on backdrop closes modal
+        modal.addEventListener('click', e => {
+            if (e.target === modal) _closeMapModal();
+        });
+
+        // Escape key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && !modal.hidden) _closeMapModal();
+        });
+
+        // ── Focus trap ────────────────────────────────────
+        modal.addEventListener('keydown', e => {
+            if (e.key !== 'Tab' || modal.hidden) return;
+            const focusable = Array.from(
+                modal.querySelectorAll('button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])')
+            );
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last  = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault(); last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault(); first.focus();
+            }
+        });
+
+        // ── Expose to module scope for _updateMapPanel ────
+        _openGlobalMapModal = _openMapModal;
     }
 
     /* ─────────────────────────────────────────────────────
