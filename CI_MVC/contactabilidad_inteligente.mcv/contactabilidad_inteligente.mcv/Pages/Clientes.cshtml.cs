@@ -161,8 +161,8 @@ namespace contactabilidad_inteligente.mcv.Pages
                         State = stateName,
 
                         // Errores
-                        ErrorCode = isError ? stateName : string.Empty,
-                        ErrorLabel = isError ? ContactabilityLabelHelper.GetErrorLabelContactability(stateName) : string.Empty
+                        ErrorCode = isError ? contacto.VerificationStatus : string.Empty,
+                        ErrorLabel = isError ? ContactabilityLabelHelper.GetErrorLabelContactability(contacto.VerificationStatus) : string.Empty
                     };
                 })];
         }
@@ -229,7 +229,7 @@ namespace contactabilidad_inteligente.mcv.Pages
                             HasGps: d.Latitude.HasValue && d.Longitude.HasValue,
                             Lat: d.Latitude,
                             Lng: d.Longitude,
-                            ErrorLabel: isError ? ContactabilityLabelHelper.GetErrorLabelContactability(estadoEnum.GetValueCatalog()) : string.Empty
+                            ErrorLabel: isError ? ContactabilityLabelHelper.GetErrorLabelContactability(d.VerificationStatus) : string.Empty
                         );
                     })];
         }

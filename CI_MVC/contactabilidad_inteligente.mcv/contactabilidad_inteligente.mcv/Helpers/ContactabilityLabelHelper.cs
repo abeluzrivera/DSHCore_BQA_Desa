@@ -38,12 +38,24 @@ namespace contactabilidad_inteligente.mcv.Helpers
             .SelectMany(lista => lista)
             .ToDictionary(pill => pill.Code, pill => pill.ShortLabel);
 
+        // Labels for generic statuses that are not rejection pills
+        private static readonly Dictionary<string, string> _genericStatusLabels = new()
+        {
+            ["NORES"]       = "Sin respuesta",
+            ["CADU"]        = "Información vencida",
+            ["ERROR"]       = "Error de validación",
+            ["PEND-LOPDP"]  = "Pendiente LOPDP",
+            ["Deny-LOPDP"]  = "Rechazado LOPDP",
+        };
+
         public static string GetErrorLabelContactability(string errorCode)
         {
             if (_flatPillsLookup.TryGetValue(errorCode, out string? shortLabel))
-            {
                 return shortLabel;
-            }
+
+            if (_genericStatusLabels.TryGetValue(errorCode, out string? genericLabel))
+                return genericLabel;
+
             return errorCode;
         }
 

@@ -37,8 +37,7 @@ namespace contactabilidad_inteligente.mcv.Mappers
         public static List<ContactViewModel> MapContactos(List<CustomerContactDto> contactos)
         {
             return [.. contactos
-                // El Where es excelente, rápido y directo a nivel numérico
-                .Where(c => !c.IsDeleted && c.VerificationStatusId != (int)EnumContactabilityStatus.Error)
+                .Where(c => !c.IsDeleted)
                 .OrderBy(c => c.ContactMediumTypeId)
                 .Select(c =>
                 {
