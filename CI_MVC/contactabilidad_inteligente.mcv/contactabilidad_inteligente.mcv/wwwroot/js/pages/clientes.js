@@ -143,6 +143,17 @@
                             );
                         }
 
+                        // E2. Actualizar la clase del value-row (fila con icono + valor)
+                        const valueRow = card.querySelector('[class*="cp-contact-card__value-row--"]');
+                        if (valueRow) {
+                            valueRow.classList.remove(
+                                'cp-contact-card__value-row--pending',
+                                'cp-contact-card__value-row--error',
+                                'cp-contact-card__value-row--unknown'
+                            );
+                            valueRow.classList.add('cp-contact-card__value-row--verified');
+                        }
+
                         // F. Sincronizar data-contact-state → re-aplicar filtro activo
                         _syncCardFilter(card, 'verified');
                     } else {
@@ -272,6 +283,17 @@
                             iconBox.classList.add(
                                 'tw-bg-error-bg', 'tw-border-error-border', 'tw-text-error-text'
                             );
+                        }
+
+                        // E2. Actualizar la clase del value-row (fila con icono + valor)
+                        const valueRow = card.querySelector('[class*="cp-contact-card__value-row--"]');
+                        if (valueRow) {
+                            valueRow.classList.remove(
+                                'cp-contact-card__value-row--pending',
+                                'cp-contact-card__value-row--verified',
+                                'cp-contact-card__value-row--unknown'
+                            );
+                            valueRow.classList.add('cp-contact-card__value-row--error');
                         }
 
                         // F. Sincronizar data-contact-state → re-aplicar filtro activo
