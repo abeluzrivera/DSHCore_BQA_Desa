@@ -863,7 +863,139 @@
         _initMapBtn();
         _initContactFilter();
         _initSidebar();
+        _initMobileDrawer();
         _initAddressMapPanel();
+        // Orden inicial: verified → pending → error/unknown
+        ['phones-list', 'emails-list', 'addresses-list'].forEach(id => {
+            const container = document.getElementById(id);
+            if (container) _sortContactCards(container);
+        });
+    }
+
+    /* ─────────────────────────────────────────────────────
+       Mobile Drawer — off-canvas sidebar con focus trap
+       ───────────────────────────────────────────────────── */
+    function _initMobileDrawer() {
+        const sidebar  = document.getElementById('cp-sidebar');
+        const overlay  = document.getElementById('cp-sidebar-overlay');
+        const toggle   = document.getElementById('cp-sidebar-toggle');
+        const closeBtn = document.getElementById('cp-sidebar-close');
+        const bottomMenuBtn = document.getElementById('cp-bottom-nav-menu');
+        const mobileTitle   = document.getElementById('cp-mobile-section-title');
+        const bottomNavBtns = document.querySelectorAll('.cp-bottom-nav__item[data-sub]');
+
+        if (!sidebar || !overlay) return;
+
+        // ── Open / Close helpers ──────────────────────────────
+        function _openDrawer() {
+            sidebar.classList.add('is-animating');
+            sidebar.classList.add('is-open');
+            overlay.style.display = 'block';
+            requestAnimationFrame(() => overlay.classList.add('is-visible'));
+            toggle?.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+
+            // Move focus to first focusable element inside sidebar
+            const firstFocusable = sidebar.querySelector('button:not([disabled]), [tabindex="0"]');
+            firstFocusable?.focus();
+
+            sidebar.addEventListener('transitionend', () => {
+                sidebar.classList.remove('is-animating');
+            }, { once: true });
+        }
+
+        function _closeDrawer() {
+            sidebar.classList.add('is-animating');
+            sidebar.classList.remove('is-open');
+            overlay.classList.remove('is-visible');
+            toggle?.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+
+            overlay.addEventListener('transitionend', () => {
+                overlay.style.display = 'none';
+                sidebar.classList.remove('is-animating');
+            }, { once: true });
+
+            toggle?.focus(); // return focus to trigger
+        }
+
+        // ── Triggers ─────────────────────────────────────────
+        toggle?.addEventListener('click', () =>
+            sidebar.classList.contains('is-open') ? _closeDrawer() : _openDrawer());
+
+        bottomMenuBtn?.addEventListener('click', () =>
+            sidebar.classList.contains('is-open') ? _closeDrawer() : _openDrawer());
+
+        closeBtn?.addEventListener('click', _closeDrawer);
+        overlay.addEventListener('click', _closeDrawer);
+
+        // ── Escape key ────────────────────────────────────────
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && sidebar.classList.contains('is-open')) {
+                _closeDrawer();
+            }
+        });
+
+        // ── Focus trap ────────────────────────────────────────
+        sidebar.addEventListener('keydown', e => {
+            if (e.key !== 'Tab' || !sidebar.classList.contains('is-open')) return;
+            const focusable = Array.from(
+                sidebar.querySelectorAll('button:not([disabled]), [href], input, [tabindex]:not([tabindex="-1"])')
+            ).filter(el => !el.closest('[hidden]'));
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last  = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        });
+
+        // ── Bottom nav section switching ──────────────────────
+        bottomNavBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const sub = btn.dataset.sub;
+                _showContactSection(sub);
+
+                // Sync active state on bottom nav
+                bottomNavBtns.forEach(b => b.classList.remove('cp-bottom-nav__item--active'));
+                btn.classList.add('cp-bottom-nav__item--active');
+
+                // Sync sidebar subitems
+                document.querySelectorAll('.cp-sidebar__subitem').forEach(s => {
+                    s.classList.toggle('cp-sidebar__subitem--active', s.dataset.sub === sub);
+                });
+
+                // Update mobile title
+                if (mobileTitle) mobileTitle.textContent = btn.querySelector('span:last-child')?.textContent ?? '';
+
+                // Load map on first address open
+                if (sub === 'addresses') {
+                    const firstAddr = document.querySelector('#addresses-list .cp-contact-card');
+                    if (firstAddr) firstAddr.click();
+                }
+            });
+        });
+
+        // ── Sync bottom nav when sidebar subitems are clicked ─
+        document.querySelectorAll('.cp-sidebar__subitem').forEach(item => {
+            item.addEventListener('click', () => {
+                const sub = item.dataset.sub;
+                bottomNavBtns.forEach(b => {
+                    b.classList.toggle('cp-bottom-nav__item--active', b.dataset.sub === sub);
+                });
+                if (mobileTitle) {
+                    const label = { phones: 'Teléfonos', emails: 'Correos', addresses: 'Direcciones' };
+                    mobileTitle.textContent = label[sub] ?? 'Contactabilidad';
+                }
+                // Close drawer after selecting a section on mobile
+                if (window.innerWidth <= 768) _closeDrawer();
+            });
+        });
+    
         // Orden inicial: verified → pending → error/unknown
         ['phones-list', 'emails-list', 'addresses-list'].forEach(id => {
             const container = document.getElementById(id);

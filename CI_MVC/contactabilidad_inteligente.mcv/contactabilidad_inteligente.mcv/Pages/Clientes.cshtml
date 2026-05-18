@@ -248,9 +248,28 @@
             </div>
         </header>
 
+        @* Mobile: toggle button visible solo en móvil *@
+        <div class="cp-mobile-bar">
+            <button class="cp-mobile-bar__toggle"
+                    id="cp-sidebar-toggle"
+                    aria-label="Abrir menú de navegación"
+                    aria-expanded="false"
+                    aria-controls="cp-sidebar">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <span class="cp-mobile-bar__title" id="cp-mobile-section-title">Contactabilidad</span>
+        </div>
+
+        @* Overlay oscuro detrás del drawer *@
+        <div class="cp-sidebar-overlay" id="cp-sidebar-overlay" aria-hidden="true"></div>
+
         <div class="cp-body">
 
-            <nav class="cp-sidebar" aria-label="Secciones del perfil">
+            <nav class="cp-sidebar" id="cp-sidebar" aria-label="Secciones del perfil">
+                @* Mobile: botón cerrar drawer *@
+                <button class="cp-sidebar__close" id="cp-sidebar-close" aria-label="Cerrar menú" type="button">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
                 <div class="cp-sidebar__item-wrapper">
                     <button class="cp-sidebar__item cp-sidebar__item--coming-soon" data-tab="datos-personales" type="button" disabled>
                         <span class="cp-sidebar__icon material-symbols-outlined" aria-hidden="true">grid_view</span>
@@ -417,6 +436,26 @@
 
             </main>
         </div>
+
+        @* Mobile Bottom Nav: acceso rápido a las 3 secciones sin abrir el drawer *@
+        <nav class="cp-bottom-nav" aria-label="Navegación rápida">
+            <button class="cp-bottom-nav__item cp-bottom-nav__item--active" data-sub="phones" type="button">
+                <span class="material-symbols-outlined">phone</span>
+                <span>Teléfonos</span>
+            </button>
+            <button class="cp-bottom-nav__item" data-sub="emails" type="button">
+                <span class="material-symbols-outlined">mail</span>
+                <span>Correos</span>
+            </button>
+            <button class="cp-bottom-nav__item" data-sub="addresses" type="button">
+                <span class="material-symbols-outlined">location_on</span>
+                <span>Direcciones</span>
+            </button>
+            <button class="cp-bottom-nav__item cp-bottom-nav__item--menu" id="cp-bottom-nav-menu" type="button" aria-label="Más opciones">
+                <span class="material-symbols-outlined">menu</span>
+                <span>Menú</span>
+            </button>
+        </nav>
 
         <div id="modal-nuevo-email" class="ds-modal-backdrop" style="display: none;">
             <div class="ds-modal ds-modal--sm">
