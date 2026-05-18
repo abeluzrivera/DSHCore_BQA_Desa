@@ -609,7 +609,7 @@
             const card = e.target.closest('.cp-contact-card');
             if (!card) return;
             // Ignorar clics en zonas de acción y campos editables GPS
-            if (e.target.closest('.cp-action-pills, .cp-reject-zone, [data-map-btn], .cp-edit-btn, [data-gps-lat], [data-gps-lng], [data-open-map-modal]')) return;
+            if (e.target.closest('.cp-action-pills, .cp-reject-zone, .cp-edit-btn, [data-gps-lat], [data-gps-lng], [data-open-map-modal]')) return;
 
             const lat = card.dataset.lat;
             const lng = card.dataset.lng;
@@ -911,7 +911,7 @@
             if (!trigger) return;
             const lat   = trigger.dataset.lat   ?? trigger.closest('[data-lat]')?.dataset.lat;
             const lng   = trigger.dataset.lng   ?? trigger.closest('[data-lng]')?.dataset.lng;
-            const label = trigger.dataset.label ?? trigger.closest('[data-contact-value]')?.dataset.contactValue;
+            const label = trigger.dataset.contactValue ?? trigger.closest('[data-contact-value]')?.dataset.contactValue;
             _openMapModal(lat, lng, label);
         });
 

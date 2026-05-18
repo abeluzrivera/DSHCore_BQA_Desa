@@ -1012,48 +1012,42 @@
 
 
 /* ─────────────────────────────────────────────────────
-   Mobile Map Trigger — address cards
+   Map Trigger — unified button for address cards (mobile + desktop)
    ───────────────────────────────────────────────────── */
-.cp-mobile-map-trigger {
+.cp-map-trigger {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 8px;
     width: 100%;
     padding: 10px 14px;
     margin-top: 8px;
     border: none;
     border-radius: 10px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-align: left;
+    transition: background 0.15s, transform 0.1s;
+}
+.cp-map-trigger .material-symbols-outlined { font-size: 20px; }
+
+/* Active state — has GPS */
+.cp-map-trigger--active {
     background: #eff6ff;
     color: #1d4ed8;
     cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    transition: background 0.15s, transform 0.1s;
-    text-align: left;
+    justify-content: space-between;
 }
-.cp-mobile-map-trigger:active { transform: scale(0.98); }
-.cp-mobile-map-trigger:hover  { background: #dbeafe; }
+.cp-map-trigger--active:hover  { background: #dbeafe; }
+.cp-map-trigger--active:active { transform: scale(0.98); }
 
-.cp-mobile-map-trigger__info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.cp-mobile-map-trigger__info .material-symbols-outlined { font-size: 20px; }
+.cp-map-trigger__arrow { font-size: 16px; opacity: 0.7; margin-left: auto; }
 
-.cp-mobile-map-trigger__arrow { font-size: 16px; opacity: 0.7; }
-
-/* Disabled / no-GPS state */
-.cp-mobile-map-trigger--disabled {
+/* Disabled state — no GPS */
+.cp-map-trigger--disabled {
     background: #f3f4f6;
     color: #9ca3af;
     cursor: not-allowed;
 }
-.cp-mobile-map-trigger--disabled:hover,
-.cp-mobile-map-trigger--disabled:active { background: #f3f4f6; transform: none; }
-
-/* Card modifier when no GPS */
-.cp-contact-card--no-gps .cp-map-btn { opacity: 0.4; pointer-events: none; }
 
 /* ─────────────────────────────────────────────────────
    Global Map Modal

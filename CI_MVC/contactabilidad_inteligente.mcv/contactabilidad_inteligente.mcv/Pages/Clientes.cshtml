@@ -153,44 +153,38 @@
                 <span class="cp-contact-card__value">@addr.Value</span>
             </div>
 
-            @* GPS inputs — desktop only *@
+            @* GPS coords — desktop only, read-only display *@
             <div class="cp-gps-row tw-hidden lg:tw-flex">
                 <div class="cp-gps-field">
                     <label class="cp-gps-label">LATITUD</label>
-                    <div class="cp-gps-input" contenteditable="true" inputmode="decimal" data-gps-lat>@(addr.Lat?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")</div>
+                    <div class="cp-gps-input" data-gps-lat>@(addr.Lat?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "—")</div>
                 </div>
                 <div class="cp-gps-field">
                     <label class="cp-gps-label">LONGITUD</label>
-                    <div class="cp-gps-input" contenteditable="true" inputmode="decimal" data-gps-lng>@(addr.Lng?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")</div>
+                    <div class="cp-gps-input" data-gps-lng>@(addr.Lng?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "—")</div>
                 </div>
-                <button class="cp-map-btn" aria-label="Guardar coordenadas" data-map-btn>
-                    <span class="material-symbols-outlined">my_location</span>
-                </button>
             </div>
 
-            @* Mobile map trigger — mobile only *@
+            @* Botón unificado de mapa — funciona en mobile y desktop *@
             @if (addr.HasGps && addr.Lat != null && addr.Lng != null)
             {
-                <button class="cp-mobile-map-trigger lg:tw-hidden"
+                <button class="cp-map-trigger cp-map-trigger--active tw-w-full"
+                        type="button"
                         data-open-map-modal
                         data-lat="@addr.Lat?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)"
                         data-lng="@addr.Lng?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)"
-                        data-label="@addr.Value"
-                        type="button">
-                    <div class="cp-mobile-map-trigger__info">
-                        <span class="material-symbols-outlined">map</span>
-                        <span>Ver ubicación en mapa</span>
-                    </div>
-                    <span class="material-symbols-outlined cp-mobile-map-trigger__arrow">arrow_forward_ios</span>
+                        data-contact-id="@addr.Id"
+                        data-contact-value="@addr.Value">
+                    <span class="material-symbols-outlined">map</span>
+                    <span>Ver ubicación en mapa</span>
+                    <span class="material-symbols-outlined cp-map-trigger__arrow">arrow_forward_ios</span>
                 </button>
             }
             else
             {
-                <div class="cp-mobile-map-trigger cp-mobile-map-trigger--disabled lg:tw-hidden" aria-disabled="true">
-                    <div class="cp-mobile-map-trigger__info">
-                        <span class="material-symbols-outlined">wrong_location</span>
-                        <span>Mapa no disponible (Sin coordenadas)</span>
-                    </div>
+                <div class="cp-map-trigger cp-map-trigger--disabled tw-w-full" aria-disabled="true">
+                    <span class="material-symbols-outlined">wrong_location</span>
+                    <span>Mapa no disponible (Sin coordenadas)</span>
                 </div>
             }
 
