@@ -28,17 +28,17 @@ namespace SDH.infrastructure.Persistence.Seeders
                 logger.LogInformation("No se encontraron usuarios. Creando usuarios por defecto...");
 
                 // Create usuario administrador por defecto
-                // Contraseña: Admin123!
+                // Contraseï¿½a: Admin123!
                 logger.LogDebug("Generando hash para usuario Pedro Rivera administrador...");
                 string adminHash = BCrypt.Net.BCrypt.HashPassword("Admin123!");
 
-                logger.LogInformation("Creando usuario administrador con código: {CodigoUsuario}", "ADMIN001");
+                logger.LogInformation("Creando usuario administrador con cï¿½digo: {CodigoUsuario}", "ADMIN001");
                 Users admin = Users.Create(
                     "ADMIN001",
                     "pedro.rivera@bmachala.com",
                     adminHash,
                     "Administrador del Sistema",
-                    "Administrador"
+                    "ADMIN"
                 );
 
                 Users admin2 = Users.Create(
@@ -46,21 +46,21 @@ namespace SDH.infrastructure.Persistence.Seeders
                    "aldo.saldana@bmachala.com",
                    adminHash,
                    "Administrador del Sistema",
-                   "Administrador"
+                   "ADMIN"
                );
 
                 // Create usuario de prueba
-                // Contraseña: Usuario123!
-                logger.LogDebug("Generando hash para usuario Aldo Saldaña de prueba...");
+                // Contraseï¿½a: Usuario123!
+                logger.LogDebug("Generando hash para usuario Aldo Saldaï¿½a de prueba...");
                 string usuarioHash = BCrypt.Net.BCrypt.HashPassword("Usuario123!");
 
-                logger.LogInformation("Creando usuario de prueba con código: {CodigoUsuario}", "USER001");
+                logger.LogInformation("Creando usuario de prueba con cï¿½digo: {CodigoUsuario}", "USER001");
                 Users usuario = Users.Create(
                     "USER001",
                     "usuario@bmachala.com",
                     usuarioHash,
                     "Usuario de Prueba",
-                    "Usuario"
+                    "USER"
                 );
 
                 logger.LogInformation("Agregando {CantidadUsuarios} usuarios al contexto...", 2);
