@@ -164,7 +164,7 @@ app.Use(async (context, next) =>
     string csp = app.Environment.IsDevelopment()
         ? "default-src 'self'; " +
           "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
           "font-src 'self' https://fonts.gstatic.com; " +
           "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com; " +
           "connect-src 'self' http://localhost:* ws://localhost:* https://*.clarity.ms https://cdn.jsdelivr.net; " +
@@ -172,7 +172,7 @@ app.Use(async (context, next) =>
           "frame-ancestors 'none';"
         : "default-src 'self'; " +
           "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
           "font-src 'self' https://fonts.gstatic.com; " +
           "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com; " +
           "connect-src 'self' https://*.clarity.ms; " +
