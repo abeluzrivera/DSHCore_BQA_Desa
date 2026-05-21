@@ -50,9 +50,6 @@ namespace SDH.Application.Services
                 if (await usuarioQueryService.ExistsByEmailAsync(command.Email, cancellationToken: cancellationToken))
                     return Result<int>.Failure($"El email '{command.Email}' ya está registrado.");
 
-                string rolTextoVisual = await catalogoService.ObtenerTextoVisualAsync(
-                    CatalogGroups.SystemRole, command.RoleCode, command.RoleCode, cancellationToken);
-
                 string claveHash = passwordHasher.GenerarHash(command.PlainPassword);
 
                 var usuario = Users.Create(
@@ -60,7 +57,7 @@ namespace SDH.Application.Services
                     command.Email,
                     claveHash,
                     command.FullName,
-                    rolTextoVisual,
+                    command.RoleCode,
                     command.CreatedBy);
 
                 if (!command.IsActive)
@@ -70,7 +67,7 @@ namespace SDH.Application.Services
                 await unitOfWork.SaveChangesAsync(cancellationToken);
 
                 logger.LogInformation("Usuario creado: {Codigo} - {Email} - Rol: {Rol}",
-                    command.Username, command.Email, rolTextoVisual);
+                    command.Username, command.Email, command.RoleCode);
 
                 return Result<int>.Success(usuario.Id);
             }
@@ -104,14 +101,11 @@ namespace SDH.Application.Services
                 if (await usuarioQueryService.ExistsByEmailAsync(command.Email, command.Id, cancellationToken))
                     return Result.Failure($"El email '{command.Email}' ya está registrado.");
 
-                string rolTextoVisual = await catalogoService.ObtenerTextoVisualAsync(
-                    CatalogGroups.SystemRole, command.RoleCode, command.RoleCode, cancellationToken);
-
                 usuario.UpdateProfile(
                     command.FullName,
                     command.Username,
                     command.Email,
-                    rolTextoVisual,
+                    command.RoleCode,
                     command.ModifiedBy);
 
                 usuario.ChangeStatus(command.IsActive, command.ModifiedBy);
