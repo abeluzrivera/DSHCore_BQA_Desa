@@ -1,6 +1,8 @@
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SDH.Domain.Entities.Seguridad;
 using SDH.infrastructure.Persistence.Data;
+using SDH.infrastructure.Persistence.Services;
 
 namespace SDH.infrastructure.Persistence.Seeders
 {
@@ -12,13 +14,12 @@ namespace SDH.infrastructure.Persistence.Seeders
         /// <summary>
         /// Crea usuarios iniciales si no existen
         /// </summary>
-        public static async Task SeedAsync(ApplicationDbContext context, ILogger logger)
+        public static async Task SeedAsync(ApplicationDbContext context, ILogger logger, IConfiguration configuration)
         {
             try
             {
                 logger.LogInformation("Iniciando seeding de usuarios...");
 
-                // Verify si ya existen usuarios
                 if (context.Users.Any())
                 {
                     logger.LogInformation("Ya existen usuarios en la base de datos. Se omite el seeding.");
@@ -27,49 +28,41 @@ namespace SDH.infrastructure.Persistence.Seeders
 
                 logger.LogInformation("No se encontraron usuarios. Creando usuarios por defecto...");
 
-                // Create usuario administrador por defecto
-                // Contrase�a: Admin123!
-                logger.LogDebug("Generando hash para usuario Pedro Rivera administrador...");
-                string adminHash = BCrypt.Net.BCrypt.HashPassword("Admin123!");
+                string encryptedPassword = configuration["SeedSettings:DefaultPassword"]
+                    ?? throw new InvalidOperationException("Falta configurar SeedSettings:DefaultPassword en appsettings.");
 
-                logger.LogInformation("Creando usuario administrador con c�digo: {CodigoUsuario}", "ADMIN001");
+                string plainPassword = ConfigCrypto.DecryptFromEnvironment(encryptedPassword);
+                string seedHash = BCrypt.Net.BCrypt.HashPassword(plainPassword);
+
                 Users admin = Users.Create(
                     "ADMIN001",
                     "pedro.rivera@bmachala.com",
-                    adminHash,
+                    seedHash,
                     "Administrador del Sistema",
                     "ADMIN"
                 );
 
                 Users admin2 = Users.Create(
-                   "ADMIN002",
-                   "aldo.saldana@bmachala.com",
-                   adminHash,
-                   "Administrador del Sistema",
-                   "ADMIN"
-               );
+                    "ADMIN002",
+                    "aldo.saldana@bmachala.com",
+                    seedHash,
+                    "Administrador del Sistema",
+                    "ADMIN"
+                );
 
-                // Create usuario de prueba
-                // Contrase�a: Usuario123!
-                logger.LogDebug("Generando hash para usuario Aldo Salda�a de prueba...");
-                string usuarioHash = BCrypt.Net.BCrypt.HashPassword("Usuario123!");
-
-                logger.LogInformation("Creando usuario de prueba con c�digo: {CodigoUsuario}", "USER001");
                 Users usuario = Users.Create(
                     "USER001",
                     "usuario@bmachala.com",
-                    usuarioHash,
+                    seedHash,
                     "Usuario de Prueba",
                     "USER"
                 );
 
-                logger.LogInformation("Agregando {CantidadUsuarios} usuarios al contexto...", 2);
                 context.Users.AddRange(admin, admin2, usuario);
 
-                logger.LogDebug("Guardando cambios en la base de datos...");
                 await context.SaveChangesAsync();
 
-                logger.LogInformation("Seeding de usuarios completado exitosamente. Se crearon {CantidadUsuarios} usuarios.", 2);
+                logger.LogInformation("Seeding de usuarios completado. Se crearon 3 usuarios.");
             }
             catch (Exception ex)
             {
