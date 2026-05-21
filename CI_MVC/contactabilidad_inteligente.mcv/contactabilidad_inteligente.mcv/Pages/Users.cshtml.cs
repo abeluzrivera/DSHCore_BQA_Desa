@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 namespace contactabilidad_inteligente.mcv.Pages
 {
     // TODO Phase 5: Full implementation migrated to UsersController (API Layer)
-    [Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "ADMIN")]
     public class UsersModel(
         ILogger<UsersModel> logger,
         IUserQueryService usuarioQueryService,
@@ -33,7 +33,7 @@ namespace contactabilidad_inteligente.mcv.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            if (!User.IsInRole("Administrador"))
+            if (!User.IsInRole("ADMIN"))
                 return RedirectToPage("/Dashboard");
 
             _logger.LogInformation("Pagina de usuarios accedida por: {User}", User.Identity?.Name);
@@ -131,10 +131,12 @@ namespace contactabilidad_inteligente.mcv.Pages
         public string FullName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El codigo de usuario es requerido")]
-        [StringLength(20)]
+        [StringLength(20, MinimumLength = 3)]
+        [RegularExpression(@"^[a-zA-Z0-9._@-]+$", ErrorMessage = "El código de usuario solo puede contener letras, números y los caracteres . _ @ -")]
         public string UserCode { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El rol es requerido")]
+        [RegularExpression(@"^(ADMIN|SUPERVISOR|AGENTE|CONSULTA|USER)$", ErrorMessage = "Rol no válido")]
         public string Role { get; set; } = "USER";
 
         [Required(ErrorMessage = "El email es requerido")]

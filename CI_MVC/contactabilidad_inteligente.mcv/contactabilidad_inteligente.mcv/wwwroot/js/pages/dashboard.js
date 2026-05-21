@@ -1201,8 +1201,18 @@
         return DS.catalogs?.shouldTruncate(tipo) || false;
     }
 
+    const _GENERIC_STATUS_LABELS = {
+        'ERROR':       'Error de validación',
+        'NORES':       'Sin respuesta',
+        'CADU':        'Información vencida',
+        'PEND-LOPDP':  'Pendiente LOPDP',
+        'Deny-LOPDP':  'Rechazado LOPDP',
+    };
+
     function _getErrorLabel(errorCode) {
-        return DS.catalogs?.getErrorLabel(errorCode) || errorCode;
+        return DS.catalogs?.getErrorLabel(errorCode)
+            || _GENERIC_STATUS_LABELS[errorCode]
+            || errorCode;
     }
 
     /**

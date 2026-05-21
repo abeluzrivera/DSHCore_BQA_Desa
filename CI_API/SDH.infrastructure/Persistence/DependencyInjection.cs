@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using SDH.Application.Ports.Queries;
 using SDH.Application.Ports.Services;
+using SDH.Application.Settings;
 using SDH.Domain.Ports;
 using SDH.Domain.Repositories;
 using SDH.infrastructure.Persistence.Cache;
@@ -15,7 +17,7 @@ namespace SDH.infrastructure.Persistence
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddPersistence(this IServiceCollection services)
+        public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpContextAccessor();
 
@@ -38,6 +40,19 @@ namespace SDH.infrastructure.Persistence
 
             // Unit of Work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Auth Settings
+            services.Configure<AuthSettings>(
+                configuration.GetSection(AuthSettings.SectionName));
+
+            // LDAP (registro condicional según proveedor configurado)
+            if ((configuration["AuthSettings:Provider"] ?? "Database")
+                .Equals("LDAP", StringComparison.OrdinalIgnoreCase))
+            {
+                services.Configure<LdapSettings>(
+                    configuration.GetSection(LdapSettings.SectionName));
+                services.AddScoped<ILdapAuthenticationService, LdapAuthenticationService>();
+            }
 
             return services;
         }

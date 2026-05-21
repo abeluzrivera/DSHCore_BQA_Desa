@@ -51,7 +51,7 @@ builder.Services.AddMemoryCache(options =>
 });
 
 // Registrar la capa de persistencia (Repositorios y UnitOfWork)
-builder.Services.AddPersistence();
+builder.Services.AddPersistence(builder.Configuration);
 
 // Registrar la capa de aplicaci�n (Servicios)
 builder.Services.AddApplicationServices();
@@ -77,7 +77,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.SameSite = SameSiteMode.Strict;
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    // Política base: cualquier usuario autenticado
+    options.AddPolicy("Autenticado", policy => policy.RequireAuthenticatedUser());
+
+    // Políticas por rol — los strings deben coincidir con RoleGroupMappings keys
+    options.AddPolicy("SoloAdmin",       policy => policy.RequireRole("ADMIN"));
+    options.AddPolicy("AdminOSupervisor",policy => policy.RequireRole("ADMIN", "SUPERVISOR"));
+    options.AddPolicy("TodosLosAgentes", policy => policy.RequireRole("ADMIN", "SUPERVISOR", "AGENTE"));
+    options.AddPolicy("AccesoGeneral",   policy => policy.RequireRole("ADMIN", "SUPERVISOR", "AGENTE", "CONSULTA"));
+});
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
@@ -140,6 +150,39 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Security headers
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["X-Frame-Options"]        = "DENY";
+    context.Response.Headers["X-XSS-Protection"]       = "1; mode=block";
+    context.Response.Headers["Referrer-Policy"]        = "strict-origin-when-cross-origin";
+    context.Response.Headers["Permissions-Policy"]     = "camera=(), microphone=(), geolocation=()";
+
+    // CSP: in Development allow VS Browser Link (localhost) and Hot Reload (ws://localhost)
+    string csp = app.Environment.IsDevelopment()
+        ? "default-src 'self'; " +
+          "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+          "font-src 'self' https://fonts.gstatic.com; " +
+          "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com; " +
+          "connect-src 'self' http://localhost:* ws://localhost:* https://*.clarity.ms https://cdn.jsdelivr.net; " +
+          "frame-src https://www.google.com https://maps.google.com https://www.google.com.ec; " +
+          "frame-ancestors 'none';"
+        : "default-src 'self'; " +
+          "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+          "font-src 'self' https://fonts.gstatic.com; " +
+          "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com; " +
+          "connect-src 'self' https://*.clarity.ms; " +
+          "frame-src https://www.google.com https://maps.google.com https://www.google.com.ec; " +
+          "frame-ancestors 'none';";
+
+    context.Response.Headers["Content-Security-Policy"] = csp;
+    await next();
+});
+
 app.UseRouting();
 
 // Add authentication and authorization middleware

@@ -19,8 +19,7 @@ namespace contactabilidad_inteligente.mcv.Pages.Auth
         }
 
         [BindProperty]
-        [Required(ErrorMessage = "El correo electrónico es requerido")]
-        [EmailAddress(ErrorMessage = "Formato de correo electrónico inválido")]
+        [Required(ErrorMessage = "El usuario es requerido")]
         public string Username { get; set; } = string.Empty;
 
         [BindProperty]
@@ -52,13 +51,17 @@ namespace contactabilidad_inteligente.mcv.Pages.Auth
             {
                 _logger.LogInformation($"Login attempt for user: {Username}");
 
+                // La clave puede venir del header X-User-Password (tiene precedencia) o del campo del formulario
+                string clave = Request.Headers.TryGetValue("X-User-Password", out var headerValue)
+                    ? headerValue.ToString()
+                    : Password;
 
-                var authResult = await _autenticacionService.ValidarCredencialesAsync(Username, Password);
+                var authResult = await _autenticacionService.ValidarCredencialesAsync(Username, clave);
 
-                if (authResult == null)
+                if (authResult == null || authResult.Principal == null)
                 {
                     ShowError = true;
-                    ErrorMessage = "Usuario o contraseña incorrectos.";
+                    ErrorMessage = authResult?.ErrorMessage ?? "Usuario o contraseña incorrectos.";
                     return Page();
                 }
 
@@ -71,12 +74,12 @@ namespace contactabilidad_inteligente.mcv.Pages.Auth
 
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
-                    authResult.Principal,
+                    authResult.Principal!,
                     authProperties);
 
-                HttpContext.Response.Cookies.Append("AccessToken", authResult.Token, new CookieOptions { HttpOnly = true });
+                HttpContext.Response.Cookies.Append("AccessToken", authResult.Token!, new CookieOptions { HttpOnly = true });
 
-                _logger.LogInformation($"User {authResult.User.Email} logged in.");
+                _logger.LogInformation($"User {authResult.User!.Email} logged in.");
                 return RedirectToPage("/Dashboard");
             }
             catch (Exception ex)

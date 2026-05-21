@@ -97,7 +97,7 @@
     // Plantilla para Direcciones
     void RenderAddressCard(dynamic addr)
     {
-        <div class="cp-contact-card cp-contact-card--@addr.State"
+        <div class="cp-contact-card cp-contact-card--@addr.State @(addr.HasGps ? "" : "cp-contact-card--no-gps")"
              data-client-id="@Model.Cliente.Id"
              data-contact-type="@addr.TipoContacto"
              data-contact-value="@addr.Value"
@@ -153,19 +153,40 @@
                 <span class="cp-contact-card__value">@addr.Value</span>
             </div>
 
-            <div class="cp-gps-row">
+            @* GPS coords — desktop only, read-only display *@
+            <div class="cp-gps-row tw-hidden lg:tw-flex">
                 <div class="cp-gps-field">
                     <label class="cp-gps-label">LATITUD</label>
-                    <div class="cp-gps-input" contenteditable="true" inputmode="decimal" data-gps-lat>@(addr.Lat?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")</div>
+                    <div class="cp-gps-input" data-gps-lat>@(addr.Lat?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "—")</div>
                 </div>
                 <div class="cp-gps-field">
                     <label class="cp-gps-label">LONGITUD</label>
-                    <div class="cp-gps-input" contenteditable="true" inputmode="decimal" data-gps-lng>@(addr.Lng?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")</div>
+                    <div class="cp-gps-input" data-gps-lng>@(addr.Lng?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "—")</div>
                 </div>
-                <button class="cp-map-btn" aria-label="Guardar coordenadas" data-map-btn>
-                    <span class="material-symbols-outlined">my_location</span>
-                </button>
             </div>
+
+            @* Botón unificado de mapa — funciona en mobile y desktop *@
+            @if (addr.HasGps && addr.Lat != null && addr.Lng != null)
+            {
+                <button class="cp-map-trigger cp-map-trigger--active tw-w-full"
+                        type="button"
+                        data-open-map-modal
+                        data-lat="@addr.Lat?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)"
+                        data-lng="@addr.Lng?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)"
+                        data-contact-id="@addr.Id"
+                        data-contact-value="@addr.Value">
+                    <span class="material-symbols-outlined">map</span>
+                    <span>Ver ubicación en mapa</span>
+                    <span class="material-symbols-outlined cp-map-trigger__arrow">arrow_forward_ios</span>
+                </button>
+            }
+            else
+            {
+                <div class="cp-map-trigger cp-map-trigger--disabled tw-w-full" aria-disabled="true">
+                    <span class="material-symbols-outlined">wrong_location</span>
+                    <span>Mapa no disponible (Sin coordenadas)</span>
+                </div>
+            }
 
             @if (addr.State == "error" || addr.State == "unknown")
             {
@@ -248,9 +269,28 @@
             </div>
         </header>
 
+        @* Mobile: toggle button visible solo en móvil *@
+        <div class="cp-mobile-bar">
+            <button class="cp-mobile-bar__toggle"
+                    id="cp-sidebar-toggle"
+                    aria-label="Abrir menú de navegación"
+                    aria-expanded="false"
+                    aria-controls="cp-sidebar">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <span class="cp-mobile-bar__title" id="cp-mobile-section-title">Contactabilidad</span>
+        </div>
+
+        @* Overlay oscuro detrás del drawer *@
+        <div class="cp-sidebar-overlay" id="cp-sidebar-overlay" aria-hidden="true"></div>
+
         <div class="cp-body">
 
-            <nav class="cp-sidebar" aria-label="Secciones del perfil">
+            <nav class="cp-sidebar" id="cp-sidebar" aria-label="Secciones del perfil">
+                @* Mobile: botón cerrar drawer *@
+                <button class="cp-sidebar__close" id="cp-sidebar-close" aria-label="Cerrar menú" type="button">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
                 <div class="cp-sidebar__item-wrapper">
                     <button class="cp-sidebar__item cp-sidebar__item--coming-soon" data-tab="datos-personales" type="button" disabled>
                         <span class="cp-sidebar__icon material-symbols-outlined" aria-hidden="true">grid_view</span>
@@ -300,7 +340,7 @@
                         {
                             RenderFilterBar("Filtrar teléfonos por estado");
                         }
-                        <div class="cp-cards-grid" id="phones-list">
+                        <div class="cp-cards-grid cp-cards-grid--phones" id="phones-list">
                             @if (Model.Cliente.Phones != null && Model.Cliente.Phones.Any())
                             {
                                 foreach (var contact in Model.Cliente.Phones)
@@ -332,7 +372,7 @@
                         {
                             RenderFilterBar("Filtrar correos por estado");
                         }
-                        <div class="cp-cards-grid--2col" id="emails-list">
+                        <div class="cp-cards-grid cp-cards-grid--emails" id="emails-list">
                             @if (Model.Cliente.Emails != null && Model.Cliente.Emails.Any())
                             {
                                 foreach (var contact in Model.Cliente.Emails)
@@ -364,9 +404,7 @@
                         {
                             RenderFilterBar("Filtrar direcciones por estado");
                         }
-                        <div class="cp-addr-layout">
-                            <div class="cp-addr-list">
-                                <div class="cp-cards-stack" id="addresses-list">
+                        <div class="cp-cards-grid cp-cards-grid--addresses" id="addresses-list">
                                     @if (Model.Cliente.Addresses != null && Model.Cliente.Addresses.Any())
                                     {
                                         foreach (var addr in Model.Cliente.Addresses)
@@ -381,19 +419,6 @@
                                             <p>Sin direcciones registradas</p>
                                         </div>
                                     }
-                                </div>
-                            </div>
-                            <div class="cp-map-panel" id="cp-map-panel">
-                                <div class="cp-map-panel__empty">
-                                    <span class="material-symbols-outlined">map</span>
-                                    <span>Sin coordenadas disponibles</span>
-                                </div>
-                                <div class="cp-map-panel__controls">
-                                    <button class="cp-map-ctrl" data-map-ctrl="zoom-in" type="button" title="Acercar"><span class="material-symbols-outlined">zoom_in</span></button>
-                                    <button class="cp-map-ctrl" data-map-ctrl="zoom-out" type="button" title="Alejar"><span class="material-symbols-outlined">zoom_out</span></button>
-                                    <button class="cp-map-ctrl" data-map-ctrl="open" type="button" title="Abrir en Google Maps"><span class="material-symbols-outlined">my_location</span></button>
-                                </div>
-                            </div>
                         </div>
                     </section>
 
@@ -417,6 +442,26 @@
 
             </main>
         </div>
+
+        @* Mobile Bottom Nav: acceso rápido a las 3 secciones sin abrir el drawer *@
+        <nav class="cp-bottom-nav" aria-label="Navegación rápida">
+            <button class="cp-bottom-nav__item cp-bottom-nav__item--active" data-sub="phones" type="button">
+                <span class="material-symbols-outlined">phone</span>
+                <span>Teléfonos</span>
+            </button>
+            <button class="cp-bottom-nav__item" data-sub="emails" type="button">
+                <span class="material-symbols-outlined">mail</span>
+                <span>Correos</span>
+            </button>
+            <button class="cp-bottom-nav__item" data-sub="addresses" type="button">
+                <span class="material-symbols-outlined">location_on</span>
+                <span>Direcciones</span>
+            </button>
+            <button class="cp-bottom-nav__item cp-bottom-nav__item--menu" id="cp-bottom-nav-menu" type="button" aria-label="Más opciones">
+                <span class="material-symbols-outlined">menu</span>
+                <span>Menú</span>
+            </button>
+        </nav>
 
         <div id="modal-nuevo-email" class="ds-modal-backdrop" style="display: none;">
             <div class="ds-modal ds-modal--sm">
@@ -519,6 +564,35 @@
                         <button type="submit" class="ds-btn ds-btn--primary">Agregar</button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        @* Modal global de mapa (único, reutilizado por todas las tarjetas de dirección) *@
+        <div id="cp-global-map-modal" class="cp-map-modal-backdrop" hidden aria-modal="true" role="dialog" aria-labelledby="cp-map-modal-title">
+            <div class="cp-map-modal">
+                <div class="cp-map-modal__header">
+                    <span class="material-symbols-outlined">location_on</span>
+                    <h2 class="cp-map-modal__title" id="cp-map-modal-title">Ubicación</h2>
+                    <button class="cp-map-modal__close" id="cp-map-modal-close" type="button" aria-label="Cerrar mapa">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div class="cp-map-modal__address" id="cp-map-modal-address"></div>
+                <div class="cp-map-modal__body">
+                    <iframe id="cp-map-modal-iframe"
+                            class="cp-map-modal__iframe"
+                            src=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            allowfullscreen
+                            title="Mapa de ubicación"></iframe>
+                </div>
+                <div class="cp-map-modal__footer">
+                    <a id="cp-map-modal-external" href="#" target="_blank" rel="noopener noreferrer" class="ds-btn ds-btn--outline">
+                        <span class="material-symbols-outlined">open_in_new</span>
+                        Abrir en Google Maps
+                    </a>
+                </div>
             </div>
         </div>
     }

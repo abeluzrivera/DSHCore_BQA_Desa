@@ -5,7 +5,9 @@
         return "https://lh3.googleusercontent.com/aida-public/AB6AXuDrX8Bj8uPlHfQgZ6MJHJaLUkVVEQzXnJAW3T1_vtJalwHIRWs6aa4SBbQdpuiVdyJ600IX_3K96YYg3N0F7eGXEgoz5i60DWODTUbI18L5DOgXhK9IZc3a2IMOXxJ6zzI9tJq_nXap_KF2fUMReWm941SOGtbf3FF5-asVayytaJVP6gNFwplbKcvCjshdNttqkKGFO2ue_mQCNkfyert1IrwfoHyxycRRjSJ40Jrwr4qO0MbtOowEDShbU9_A5l4Vu-UwHcv0k1It";
     }
 
-    private string GetUserRole() => User.IsInRole("Administrador") ? "Administrador" : "Usuario";
+    private string GetUserRole() => User.IsInRole("ADMIN") ? "Administrador" : 
+        User.IsInRole("SUPERVISOR") ? "Supervisor" :
+        User.IsInRole("AGENTE") ? "Agente" : "Consulta";
     
     private string GetActiveLinkClass(string path) => 
         Context.Request.Path.Value?.Equals(path, StringComparison.OrdinalIgnoreCase) == true ? "active" : "";
@@ -79,7 +81,7 @@
                 @* ── Nav links (desktop) ── *@
                 <nav class="nav-links" aria-label="Menú principal">
                     <a class="nav-link-custom @GetActiveLinkClass("/dashboard")" href="/dashboard">Contactabilidad Clientes</a>
-                    @if (User.IsInRole("Administrador"))
+                    @if (User.IsInRole("ADMIN"))
                     {
                         <a class="nav-link-custom @GetActiveLinkClass("/users")" href="/users">Usuarios</a>
                     }
@@ -128,7 +130,7 @@
             @* ── Mobile menu ── *@
             <div class="nav-mobile-menu" id="nav-mobile-menu" hidden>
                 <a class="nav-mobile-link @GetActiveLinkClass("/dashboard")" href="/dashboard">Contactabilidad Clientes</a>
-                @if (User.IsInRole("Administrador"))
+                @if (User.IsInRole("ADMIN"))
                 {
                     <a class="nav-mobile-link @GetActiveLinkClass("/users")" href="/users">Usuarios</a>
                 }

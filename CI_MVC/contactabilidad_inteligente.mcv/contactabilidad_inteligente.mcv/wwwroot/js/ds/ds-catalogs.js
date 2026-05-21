@@ -100,7 +100,15 @@
                 const found = errors.find(e => e.code === errorCode);
                 if (found) return found.label;
             }
-            return errorCode; // Fallback al código crudo
+            // Fallback for generic status codes not present in rejection pills
+            const genericLabels = {
+                'ERROR':      'Error de validación',
+                'NORES':      'Sin respuesta',
+                'CADU':       'Información vencida',
+                'PEND-LOPDP': 'Pendiente LOPDP',
+                'Deny-LOPDP': 'Rechazado LOPDP',
+            };
+            return genericLabels[errorCode] ?? errorCode;
         },
 
         /**
