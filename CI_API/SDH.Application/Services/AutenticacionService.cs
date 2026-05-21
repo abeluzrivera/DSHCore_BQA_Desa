@@ -60,15 +60,16 @@ namespace SDH.Application.Services
         }
 
         private async Task<LoginResultDto?> ValidarPorBaseDatosAsync(
-            string email, string clave, CancellationToken ct)
+            string usernameOrEmail, string clave, CancellationToken ct)
         {
             try
             {
-                Users? usuario = await usuarioRepository.GetByEmailAsync(email, ct);
+                Users? usuario = await usuarioRepository.GetByEmailAsync(usernameOrEmail, ct)
+                              ?? await usuarioRepository.GetByUsernameAsync(usernameOrEmail, ct);
 
                 if (usuario == null)
                 {
-                    logger.LogWarning("Intento de login fallido: Usuario no encontrado con email: {Email}", email);
+                    logger.LogWarning("Intento de login fallido: Usuario no encontrado: {UsernameOrEmail}", usernameOrEmail);
                     return null;
                 }
 
@@ -78,13 +79,13 @@ namespace SDH.Application.Services
                 string jwtToken = tokenGenerator.GenerarJwtToken(usuario);
                 var claimsPrincipal = tokenGenerator.GenerarClaimsPrincipal(usuario);
 
-                logger.LogInformation("Usuario autenticado exitosamente: {Email}", email);
+                logger.LogInformation("Usuario autenticado exitosamente: {UsernameOrEmail}", usernameOrEmail);
 
                 return new LoginResultDto(usuario, jwtToken, claimsPrincipal);
             }
             catch (Exception ex) when (ex is UnauthorizedAccessException || ex is InvalidOperationException)
             {
-                logger.LogWarning("Intento de login fallido/rechazado para {Email}. Razón: {Reason}", email, ex.Message);
+                logger.LogWarning("Intento de login fallido/rechazado para {UsernameOrEmail}. Razón: {Reason}", usernameOrEmail, ex.Message);
                 return null;
             }
         }
