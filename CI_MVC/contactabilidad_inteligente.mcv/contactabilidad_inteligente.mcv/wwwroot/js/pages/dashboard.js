@@ -206,7 +206,7 @@
 
         // Botón "Volver al Dashboard"
         document.getElementById('ds-client-view-back')?.addEventListener('click', () => {
-            history.back(); // popstate se encargará de llamar _showDashboardView
+            _showDashboardView();
         });
     }
 

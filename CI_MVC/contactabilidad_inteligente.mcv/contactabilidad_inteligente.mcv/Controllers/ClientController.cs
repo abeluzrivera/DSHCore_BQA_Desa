@@ -9,7 +9,7 @@ using SDH.Domain.Extensions;
 
 namespace contactabilidad_inteligente.mcv.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "AccesoGeneral")]
     [ApiController]
     [Route("api/clientes")]
     public class ClientController(
@@ -219,6 +219,7 @@ namespace contactabilidad_inteligente.mcv.Controllers
         // ─── Verificación de contactos ─────────────────────────────────────────
 
         [HttpPost("{idCliente}/contacts/{idContacto}/verify")]
+        [Authorize(Policy = "TodosLosAgentes")]
         public async Task<IActionResult> VerificarContacto(long idCliente, long idContacto, CancellationToken cancellationToken)
         {
             try
@@ -239,6 +240,7 @@ namespace contactabilidad_inteligente.mcv.Controllers
         }
 
         [HttpPost("{idCliente}/contacts/{idContacto}/unverify/{errorCode}")]
+        [Authorize(Policy = "TodosLosAgentes")]
         public async Task<IActionResult> UnverifyContactability(long idCliente, long idContacto, string? errorCode, CancellationToken cancellationToken)
         {
             try
@@ -266,6 +268,7 @@ namespace contactabilidad_inteligente.mcv.Controllers
         // --- SECCIÓN: DIRECCIONES ---
 
         [HttpPost("{idClient}/address/{idAddress}/verify")]
+        [Authorize(Policy = "TodosLosAgentes")]
         public async Task<IActionResult> VerificarDireccion(long idClient, long idAddress, CancellationToken cancellationToken)
         {
             try
@@ -286,6 +289,7 @@ namespace contactabilidad_inteligente.mcv.Controllers
         }
 
         [HttpPost("{idCliente}/address/{idAddress}/unverify/{errorCode}")]
+        [Authorize(Policy = "TodosLosAgentes")]
         public async Task<IActionResult> UnverifyAddress(long idCliente, long idAddress, string? errorCode, CancellationToken cancellationToken)
         {
             try
@@ -311,6 +315,7 @@ namespace contactabilidad_inteligente.mcv.Controllers
         }
 
         [HttpPost("{idClient}/address/{idAddress}/update/GPS")]
+        [Authorize(Policy = "TodosLosAgentes")]
         public async Task<IActionResult> UpdateGPS(long idClient, long idAddress, [FromBody] SaveGpsRequest gpsDto)
         {
             try
@@ -330,6 +335,7 @@ namespace contactabilidad_inteligente.mcv.Controllers
 
         // Cambiamos la ruta a una convención puramente RESTful
         [HttpPost("{idClient}/contacts")]
+        [Authorize(Policy = "TodosLosAgentes")]
         public async Task<IActionResult> AddContact(long idClient, [FromBody] AddContactRequest request, CancellationToken cancellationToken)
         {
             // 1. VALIDACIÓN BÁSICA (Fail Fast)
@@ -377,6 +383,7 @@ namespace contactabilidad_inteligente.mcv.Controllers
         }
 
         [HttpPost("{idClient}/addresses")]
+        [Authorize(Policy = "TodosLosAgentes")]
         public async Task<IActionResult> AddAddress(long idClient, [FromBody] AddAddressRequest request, CancellationToken cancellationToken)
         {
             // 1. VALIDACIÓN DEL ENUM (Fail Fast - Solo Direcciones)

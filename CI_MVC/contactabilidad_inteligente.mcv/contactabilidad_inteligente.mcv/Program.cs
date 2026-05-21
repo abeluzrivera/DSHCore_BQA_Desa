@@ -122,7 +122,7 @@ using (IServiceScope scope = app.Services.CreateScope())
     // Seed usuarios iniciales
     ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
-    await UsuarioSeeder.SeedAsync(context, logger);
+    await UsuarioSeeder.SeedAsync(context, logger, app.Configuration);
     await CatalogoSeeder.SeedAsync(context, logger);
 
     // Inicializar cach� de cat�logos

@@ -51,12 +51,7 @@ namespace contactabilidad_inteligente.mcv.Pages.Auth
             {
                 _logger.LogInformation($"Login attempt for user: {Username}");
 
-                // La clave puede venir del header X-User-Password (tiene precedencia) o del campo del formulario
-                string clave = Request.Headers.TryGetValue("X-User-Password", out var headerValue)
-                    ? headerValue.ToString()
-                    : Password;
-
-                var authResult = await _autenticacionService.ValidarCredencialesAsync(Username, clave);
+                var authResult = await _autenticacionService.ValidarCredencialesAsync(Username, Password);
 
                 if (authResult == null || authResult.Principal == null)
                 {
