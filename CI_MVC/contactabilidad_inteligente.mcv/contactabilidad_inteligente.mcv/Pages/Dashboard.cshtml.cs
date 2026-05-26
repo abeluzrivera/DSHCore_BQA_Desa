@@ -10,6 +10,7 @@ using SDH.Application.Ports.Services;
 using SDH.Domain.Enums;
 using SDH.Domain.Extensions;
 using System.Text.Json;
+using System.IO;
 
 namespace contactabilidad_inteligente.mcv.Pages
 {
@@ -66,15 +67,27 @@ namespace contactabilidad_inteligente.mcv.Pages
             if (!string.IsNullOrWhiteSpace(LoteIds))
                 FilterIds = LoteIds;
 
+            _logger.LogInformation("Dashboard accedido por el usuario: {User}", User.Identity?.Name);
             try
             {
-                _logger.LogInformation("Dashboard accedido por el usuario: {User}", User.Identity?.Name);
                 await LoadClientsAsync();
                 return Page();
             }
-            catch (Exception ex)
+            catch (OperationCanceledException ex)
             {
-                _logger.LogError(ex, "Error al cargar clientes en el dashboard");
+                _logger.LogWarning(ex, "Carga de dashboard cancelada por el usuario: {User}", User.Identity?.Name);
+                Clients = [];
+                return Page();
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "I/O error al cargar clientes en el dashboard");
+                Clients = [];
+                return Page();
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "InvalidOperation al cargar clientes en el dashboard");
                 Clients = [];
                 return Page();
             }
@@ -104,9 +117,19 @@ namespace contactabilidad_inteligente.mcv.Pages
 
                 return new JsonResult(new { success = true, data });
             }
-            catch (Exception ex)
+            catch (OperationCanceledException ex)
             {
-                _logger.LogError(ex, "Error al buscar clientes por nombre: {Q}", q);
+                _logger.LogWarning(ex, "Busqueda cancelada por el usuario: {Q}", q);
+                return new JsonResult(new { success = false, message = "Busqueda cancelada" }) { StatusCode = 499 };
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "I/O error al buscar clientes por nombre: {Q}", q);
+                return new JsonResult(new { success = false, message = "Error interno (I/O)" }) { StatusCode = 500 };
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "InvalidOperation al buscar clientes por nombre: {Q}", q);
                 return new JsonResult(new { success = false, message = "Error interno" }) { StatusCode = 500 };
             }
         }
@@ -141,7 +164,7 @@ namespace contactabilidad_inteligente.mcv.Pages
         {
             try
             {
-                using StreamReader reader = new(Request.Body);
+                using StreamReader reader = new(Request.Body, System.Text.Encoding.UTF8, true, 1024, leaveOpen: true);
                 string body = await reader.ReadToEndAsync();
 
                 SearchClientsByIdsRequest? searchData = JsonSerializer.Deserialize<SearchClientsByIdsRequest>(body,
@@ -169,10 +192,20 @@ namespace contactabilidad_inteligente.mcv.Pages
                     data = clientesEncontrados
                 });
             }
-            catch (Exception ex)
+            catch (JsonException ex)
             {
-                _logger.LogError(ex, "Error al buscar clientes por IDs");
-                return new JsonResult(new { success = false, message = "Error al procesar la solicitud: " + ex.Message }) { StatusCode = 500 };
+                _logger.LogError(ex, "JSON inválido al procesar IDs");
+                return new JsonResult(new { success = false, message = "JSON inválido en la solicitud" }) { StatusCode = 400 };
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "I/O error al buscar clientes por IDs");
+                return new JsonResult(new { success = false, message = "Error al procesar la solicitud" }) { StatusCode = 500 };
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "InvalidOperation al buscar clientes por IDs");
+                return new JsonResult(new { success = false, message = "Error al procesar la solicitud" }) { StatusCode = 500 };
             }
         }
 
@@ -197,9 +230,19 @@ namespace contactabilidad_inteligente.mcv.Pages
                     errorMessage = result.ErrorMessage
                 });
             }
-            catch (Exception ex)
+            catch (InvalidDataException ex)
             {
-                _logger.LogError(ex, "Error al procesar el archivo del lote modal");
+                _logger.LogWarning(ex, "Archivo inválido o con formato incorrecto al validar archivo del lote");
+                return new JsonResult(new { isValid = false, errorMessage = "Archivo inválido o con formato incorrecto." }) { StatusCode = 400 };
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "I/O error al procesar el archivo del lote modal");
+                return new JsonResult(new { isValid = false, errorMessage = "Error interno al procesar el archivo." }) { StatusCode = 500 };
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "InvalidOperation al procesar el archivo del lote modal");
                 return new JsonResult(new { isValid = false, errorMessage = "Error interno al procesar el archivo." }) { StatusCode = 500 };
             }
         }
