@@ -13,6 +13,7 @@ namespace SDH.infrastructure.Persistence.Repositories
         private readonly ApplicationDbContext _context = context ?? throw new ArgumentNullException(nameof(context));
         private readonly ILogger<UnitOfWork> _logger = logger;
         private IDbContextTransaction? _transaction;
+        private bool _disposed = false;
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -41,48 +42,131 @@ namespace SDH.infrastructure.Persistence.Repositories
 
         public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(UnitOfWork));
+
+            if (_transaction != null)
+                throw new InvalidOperationException("A transaction is already in progress.");
+
             _transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
         }
 
         public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
         {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(UnitOfWork));
+
+            if (_transaction == null)
+            {
+                _logger.LogWarning("CommitTransactionAsync called without an active transaction.");
+                return;
+            }
+
             try
             {
                 await _context.SaveChangesAsync(cancellationToken);
-                if (_transaction != null)
-                {
-                    await _transaction.CommitAsync(cancellationToken);
-                }
+                await _transaction.CommitAsync(cancellationToken);
             }
-            catch
+            catch (Exception ex)
             {
-                await RollbackTransactionAsync(cancellationToken);
+                _logger.LogError(ex, "Error during CommitTransactionAsync, attempting rollback.");
+                try
+                {
+                    if (_transaction != null)
+                    {
+                        await _transaction.RollbackAsync(cancellationToken);
+                    }
+                }
+                catch (Exception rollbackEx)
+                {
+                    _logger.LogError(rollbackEx, "Rollback failed after commit error.");
+                }
+
                 throw;
             }
             finally
             {
                 if (_transaction != null)
                 {
-                    await _transaction.DisposeAsync();
-                    _transaction = null;
+                    try
+                    {
+                        await _transaction.DisposeAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to dispose transaction in CommitTransactionAsync finalizer.");
+                    }
+                    finally
+                    {
+                        _transaction = null;
+                    }
                 }
             }
         }
 
         public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
         {
-            if (_transaction != null)
+            if (_disposed)
+            {
+                _logger.LogWarning("Rollback called after UnitOfWork disposed.");
+                return;
+            }
+
+            if (_transaction == null)
+            {
+                _logger.LogDebug("RollbackTransactionAsync called with no active transaction.");
+                return;
+            }
+
+            try
             {
                 await _transaction.RollbackAsync(cancellationToken);
-                await _transaction.DisposeAsync();
-                _transaction = null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while rolling back transaction.");
+            }
+            finally
+            {
+                try
+                {
+                    await _transaction.DisposeAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Failed to dispose transaction during rollback.");
+                }
+                finally
+                {
+                    _transaction = null;
+                }
             }
         }
 
         public void Dispose()
         {
-            _transaction?.Dispose();
-            _context.Dispose();
+            if (_disposed) return;
+
+            // Dispose synchronous resources
+            try
+            {
+                _transaction?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Error disposing transaction in Dispose().");
+            }
+
+            try
+            {
+                _context.Dispose();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Error disposing context in Dispose().");
+            }
+
+            _disposed = true;
         }
     }
 }
