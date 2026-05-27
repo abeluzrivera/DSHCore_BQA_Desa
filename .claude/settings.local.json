@@ -1,8 +1,15 @@
 {
+  "defaultMode": "bypassPermissions",
   "permissions": {
     "allow": [
       "WebFetch(domain:gdatos-team-xzr9wxhc.atlassian.net)",
-      "Bash(claude mcp *)"
+      "Bash(claude mcp *)",
+      "Bash(dotnet *)",
+        "Bash(sqlcmd *)",
+        "PowerShell(dotnet *)",
+        "PowerShell(sqlcmd *)",
+        "PowerShell(Remove-Item *)",
+        "PowerShell(New-Item *)"
     ]
   }
 }
