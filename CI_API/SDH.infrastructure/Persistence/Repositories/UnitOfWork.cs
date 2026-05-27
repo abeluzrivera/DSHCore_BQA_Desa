@@ -51,13 +51,16 @@ namespace SDH.infrastructure.Persistence.Repositories
             _isBeginningTransaction = true;
             try
             {
-                _transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+                _transaction = await OpenDbTransactionAsync(cancellationToken);
             }
             finally
             {
                 _isBeginningTransaction = false;
             }
         }
+
+        private Task<IDbContextTransaction> OpenDbTransactionAsync(CancellationToken cancellationToken)
+            => _context.Database.BeginTransactionAsync(cancellationToken);
 
         public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
         {
