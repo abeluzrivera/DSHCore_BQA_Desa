@@ -375,7 +375,6 @@
     }
 
     function _showListLoading(loading) {
-        const msg = $listBody?.querySelector('.ds-client-list__loading-msg');
         if (!$listBody) return;
         if (loading) {
             $listBody.innerHTML = `<div class="ds-client-list__loading-msg">Preparando lista...</div>

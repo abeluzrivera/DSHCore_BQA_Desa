@@ -132,10 +132,15 @@ namespace contactabilidad_inteligente.mcv.Pages
                     fileName
                 );
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
-                _logger.LogError(ex, "Error al descargar plantilla");
-                return StatusCode(500, "Error al descargar la plantilla: " + ex.Message);
+                _logger.LogError(ex, "Error de I/O al descargar plantilla");
+                return StatusCode(500, "Error al descargar la plantilla.");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogError(ex, "Acceso denegado al descargar plantilla");
+                return StatusCode(500, "Error al descargar la plantilla.");
             }
         }
 
@@ -215,9 +220,19 @@ namespace contactabilidad_inteligente.mcv.Pages
 
                 return new JsonResult(result);
             }
-            catch (Exception ex)
+            catch (InvalidDataException ex)
             {
-                _logger.LogError(ex, "Error al procesar archivo de carga masiva: {FileName}", file.FileName);
+                _logger.LogError(ex, "Datos inválidos en archivo de carga masiva: {FileName}", file.FileName);
+                return new JsonResult(new { success = false, message = "El archivo contiene datos inválidos. Por favor, intente nuevamente." });
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "Error de I/O al procesar archivo de carga masiva: {FileName}", file.FileName);
+                return new JsonResult(new { success = false, message = "Error al procesar el archivo. Por favor, intente nuevamente." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Error de operación al procesar archivo de carga masiva: {FileName}", file.FileName);
                 return new JsonResult(new { success = false, message = "Error al procesar el archivo. Por favor, intente nuevamente." });
             }
         }
@@ -272,9 +287,14 @@ namespace contactabilidad_inteligente.mcv.Pages
 
                 return File(bytes, "text/csv", logFileName);
             }
-            catch (Exception ex)
+            catch (System.Text.Json.JsonException ex)
             {
-                _logger.LogError(ex, "Error al generar log de errores");
+                _logger.LogError(ex, "Error al deserializar errores para el log");
+                return StatusCode(500, "Error al generar el archivo de log");
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "Error de I/O al generar log de errores");
                 return StatusCode(500, "Error al generar el archivo de log");
             }
         }

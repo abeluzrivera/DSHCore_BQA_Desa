@@ -248,17 +248,17 @@ namespace contactabilidad_inteligente.mcv.Pages.Auth
 
         public static readonly Dictionary<string, string> ErrorMessages = new()
         {
-            { "InvalidCredentials", "Correo electrónico o contraseña inválidos." },
-            { "AccountLocked", "La cuenta está bloqueada. Intente más tarde." },
-            { "InvalidEmail", "El formato del correo electrónico no es válido." },
-            { "WeakPassword", "La contraseña no cumple con los requisitos de seguridad." },
-            { "DuplicateEmail", "Ya existe una cuenta con este correo electrónico." },
+            { "InvalidCredentials", "Correo electrï¿½nico o contraseï¿½a invï¿½lidos." },
+            { "AccountLocked", "La cuenta estï¿½ bloqueada. Intente mï¿½s tarde." },
+            { "InvalidEmail", "El formato del correo electrï¿½nico no es vï¿½lido." },
+            { "WeakPassword", "La contraseï¿½a no cumple con los requisitos de seguridad." },
+            { "DuplicateEmail", "Ya existe una cuenta con este correo electrï¿½nico." },
             { "UserNotFound", "Usuario no encontrado." },
-            { "SessionExpired", "Su sesión ha expirado. Por favor, inicie sesión nuevamente." },
-            { "TooManyAttempts", "Demasiados intentos fallidos. Intente más tarde." },
-            { "InternalError", "Error interno del servidor. Por favor, intente más tarde." },
-            { "EmailNotVerified", "Por favor, verifique su correo electrónico antes de iniciar sesión." },
-            { "TwoFactorRequired", "Autenticación de dos factores requerida." }
+            { "SessionExpired", "Su sesiï¿½n ha expirado. Por favor, inicie sesiï¿½n nuevamente." },
+            { "TooManyAttempts", "Demasiados intentos fallidos. Intente mï¿½s tarde." },
+            { "InternalError", "Error interno del servidor. Por favor, intente mï¿½s tarde." },
+            { "EmailNotVerified", "Por favor, verifique su correo electrï¿½nico antes de iniciar sesiï¿½n." },
+            { "TwoFactorRequired", "Autenticaciï¿½n de dos factores requerida." }
         };
 
         // =============================================
@@ -274,27 +274,27 @@ namespace contactabilidad_inteligente.mcv.Pages.Auth
 
             if (string.IsNullOrWhiteSpace(password))
             {
-                errors.Add("La contraseña no puede estar vacía.");
+                errors.Add("La contraseï¿½a no puede estar vacï¿½a.");
                 return (false, errors);
             }
 
             if (password.Length < MinPasswordLength)
-                errors.Add($"La contraseña debe tener al menos {MinPasswordLength} caracteres.");
+                errors.Add($"La contraseï¿½a debe tener al menos {MinPasswordLength} caracteres.");
 
             if (password.Length > MaxPasswordLength)
-                errors.Add($"La contraseña no puede exceder {MaxPasswordLength} caracteres.");
+                errors.Add($"La contraseï¿½a no puede exceder {MaxPasswordLength} caracteres.");
 
             if (RequireUppercase && !password.Any(char.IsUpper))
-                errors.Add("La contraseña debe contener al menos una letra mayúscula.");
+                errors.Add("La contraseï¿½a debe contener al menos una letra mayï¿½scula.");
 
             if (RequireLowercase && !password.Any(char.IsLower))
-                errors.Add("La contraseña debe contener al menos una letra minúscula.");
+                errors.Add("La contraseï¿½a debe contener al menos una letra minï¿½scula.");
 
             if (RequireDigit && !password.Any(char.IsDigit))
-                errors.Add("La contraseña debe contener al menos un número.");
+                errors.Add("La contraseï¿½a debe contener al menos un nï¿½mero.");
 
             if (RequireSpecialChar && !password.Any(c => !char.IsLetterOrDigit(c)))
-                errors.Add("La contraseña debe contener al menos un carácter especial.");
+                errors.Add("La contraseï¿½a debe contener al menos un carï¿½cter especial.");
 
             return (errors.Count == 0, errors);
         }
@@ -309,7 +309,7 @@ namespace contactabilidad_inteligente.mcv.Pages.Auth
                 System.Net.Mail.MailAddress addr = new(email);
                 return addr.Address == email;
             }
-            catch
+            catch (FormatException)
             {
                 return false;
             }

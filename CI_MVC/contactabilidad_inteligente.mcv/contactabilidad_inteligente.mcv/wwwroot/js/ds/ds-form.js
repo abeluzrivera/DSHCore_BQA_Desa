@@ -30,6 +30,13 @@ DS.modules.register('form', function () {
      * Valida un formulario según atributos HTML5 (required, minlength, pattern, etc.)
      * y agrega/quita clases ds-input.is-invalid.
      */
+    function _isValidEmail(value) {
+        const at = value.indexOf('@');
+        if (at < 1) return false;
+        const dot = value.lastIndexOf('.');
+        return dot > at + 1 && dot < value.length - 1;
+    }
+
     function validate(formSelector) {
         const form = typeof formSelector === 'string'
             ? document.querySelector(formSelector)
@@ -49,7 +56,7 @@ DS.modules.register('form', function () {
             if (/\\\d/.test(pattern) || /\\k</.test(pattern)) return false; // backreferences like \1 or \k<name>
             if (/\(\?>/.test(pattern)) return false; // atomic group (?> )
             // Detect nested quantifiers like (.+)+ which can be catastrophic
-            if (/\([^)]*[\*\+][^)]*\)[\*\+]/.test(pattern)) return false;
+            if (pattern.includes(')+') || pattern.includes(')*') || pattern.includes(')?')) return false;
             return true;
         }
 
@@ -62,7 +69,7 @@ DS.modules.register('form', function () {
             if (field.hasAttribute('required') && !value) {
                 fieldValid = false;
                 setError(field, field.dataset.errorRequired ?? 'Este campo es obligatorio');
-            } else if (field.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            } else if (field.type === 'email' && value && !_isValidEmail(value)) {
                 fieldValid = false;
                 setError(field, field.dataset.errorEmail ?? 'Email inválido');
             } else if (field.hasAttribute('minlength') && value.length < +field.getAttribute('minlength')) {

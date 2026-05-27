@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Data.Common;
+using Microsoft.Extensions.Logging;
 using SDH.Application.Ports.Queries;
 using SDH.Application.Services;
 using SDH.Domain.Enums;
@@ -49,9 +50,17 @@ namespace SDH.infrastructure.Startup
                     "Caché de catálogos precargado exitosamente en {Duration}ms",
                     sw.ElapsedMilliseconds);
             }
-            catch (Exception ex)
+            catch (DbException ex)
             {
-                logger.LogError(ex, "Error al inicializar caché de catálogos. Se cargarán bajo demanda.");
+                logger.LogError(ex, "Error de base de datos al inicializar caché de catálogos. Se cargarán bajo demanda.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                logger.LogError(ex, "Error de configuración al inicializar caché de catálogos. Se cargarán bajo demanda.");
+            }
+            catch (OperationCanceledException ex)
+            {
+                logger.LogWarning(ex, "Inicialización de caché cancelada.");
             }
         }
 

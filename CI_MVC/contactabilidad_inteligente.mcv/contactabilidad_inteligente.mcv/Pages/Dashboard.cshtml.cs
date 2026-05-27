@@ -164,8 +164,11 @@ namespace contactabilidad_inteligente.mcv.Pages
         {
             try
             {
-                using StreamReader reader = new(Request.Body, System.Text.Encoding.UTF8, true, 1024, leaveOpen: true);
-                string body = await reader.ReadToEndAsync();
+                string body;
+                using (var reader = new StreamReader(Request.Body, System.Text.Encoding.UTF8, true, 1024, leaveOpen: true))
+                {
+                    body = await reader.ReadToEndAsync();
+                }
 
                 SearchClientsByIdsRequest? searchData = JsonSerializer.Deserialize<SearchClientsByIdsRequest>(body,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

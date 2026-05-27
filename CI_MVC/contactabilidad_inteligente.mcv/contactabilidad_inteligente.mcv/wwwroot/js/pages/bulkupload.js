@@ -42,12 +42,6 @@
         if (!file) return;
 
         // Validate file type
-        const allowedTypes = [
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'application/vnd.ms-excel',
-            'text/csv'
-        ];
-        
         const allowedExtensions = ['.xlsx', '.xls', '.csv'];
         const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
 

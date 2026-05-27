@@ -11,13 +11,6 @@
      */
     const CONTACT_TYPE_TO_GROUP = window.CONTACT_TYPE_TO_GROUP ?? {};
 
-    const CONTACT_TYPE_TO_ICON = {
-        'TEL_C': 'phone',       'CEL':   'phone',     'WAPP': 'phone',
-        'EMAIL': 'mail',
-        'DIR_D': 'location_on', 'DIR_T': 'location_on',
-        'LINK':  'link',
-    };
-
     /** Numeric priority for "worst-wins" aggregation (higher = worse). */
     const STATE_PRIORITY = { verified: 0, pending: 1, error: 2 };
 

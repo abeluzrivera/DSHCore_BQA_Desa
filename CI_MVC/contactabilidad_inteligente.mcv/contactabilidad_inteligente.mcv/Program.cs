@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
+using System.IO;
 using SDH.Application;
 using SDH.infrastructure.Persistence;
 using SDH.infrastructure.Persistence.Data;
@@ -97,113 +99,140 @@ builder.Services.AddSwaggerGen();
 
 WebApplication app = builder.Build();
 
-// 3. >>> AGREGA ESTO EN EL PIPELINE HTTP (Generalmente al principio) <<<
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    // Esto genera la interfaz gr�fica (UI)
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API de Cat�logos V1");
-    });
-}
-
-// Seed initial data
-using (IServiceScope scope = app.Services.CreateScope())
-{
-    ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
+    // 3. >>> AGREGA ESTO EN EL PIPELINE HTTP (Generalmente al principio) <<<
     if (app.Environment.IsDevelopment())
     {
-        // Aplicar migraciones pendientes
-        await context.Database.MigrateAsync();
+        app.UseSwagger();
+        // Esto genera la interfaz gr�fica (UI)
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API de Cat�logos V1");
+        });
     }
 
-    // Seed usuarios iniciales
-    ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-
-    await UsuarioSeeder.SeedAsync(context, logger, app.Configuration);
-    await CatalogoSeeder.SeedAsync(context, logger);
-
-    // Inicializar cach� de cat�logos
-    try
+    // Seed initial data
+    using (IServiceScope scope = app.Services.CreateScope())
     {
-        CatalogosCacheInitializer cacheInitializer = scope.ServiceProvider.GetRequiredService<CatalogosCacheInitializer>();
-        await cacheInitializer.InicializarCacheAsync();
+        ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        if (app.Environment.IsDevelopment())
+        {
+            // Aplicar migraciones pendientes
+            await context.Database.MigrateAsync();
+        }
+
+        // Seed usuarios iniciales
+        ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+        await UsuarioSeeder.SeedAsync(context, logger, app.Configuration);
+        await CatalogoSeeder.SeedAsync(context, logger);
+
+        // Inicializar cach� de cat�logos
+        try
+        {
+            CatalogosCacheInitializer cacheInitializer = scope.ServiceProvider.GetRequiredService<CatalogosCacheInitializer>();
+            await cacheInitializer.InicializarCacheAsync();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "No se pudo inicializar el cach� de cat�logos. Se cargar� bajo demanda.");
+        }
     }
-    catch (Exception ex)
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
     {
-        logger.LogWarning(ex, "No se pudo inicializar el cach� de cat�logos. Se cargar� bajo demanda.");
+        app.UseMigrationsEndPoint();
     }
+    else
+    {
+        app.UseExceptionHandler("/Error");
+        app.UseHsts();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+
+    // Security headers
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+        context.Response.Headers["X-Frame-Options"]        = "DENY";
+        context.Response.Headers["X-XSS-Protection"]       = "1; mode=block";
+        context.Response.Headers["Referrer-Policy"]        = "strict-origin-when-cross-origin";
+        context.Response.Headers["Permissions-Policy"]     = "camera=(), microphone=(), geolocation=()";
+
+        // CSP: in Development allow VS Browser Link (localhost) and Hot Reload (ws://localhost)
+        string csp = app.Environment.IsDevelopment()
+            ? "default-src 'self'; " +
+              "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
+              "font-src 'self' https://fonts.gstatic.com; " +
+              "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com; " +
+              "connect-src 'self' http://localhost:* ws://localhost:* https://*.clarity.ms https://cdn.jsdelivr.net; " +
+              "frame-src https://www.google.com https://maps.google.com https://www.google.com.ec; " +
+              "frame-ancestors 'none';"
+            : "default-src 'self'; " +
+              "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
+              "font-src 'self' https://fonts.gstatic.com; " +
+              "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com; " +
+              "connect-src 'self' https://*.clarity.ms; " +
+              "frame-src https://www.google.com https://maps.google.com https://www.google.com.ec; " +
+              "frame-ancestors 'none';";
+
+        context.Response.Headers["Content-Security-Policy"] = csp;
+        await next();
+    });
+
+    app.UseRouting();
+
+    // Add authentication and authorization middleware
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapStaticAssets();
+
+    // Redirect root to login
+    app.MapGet("/", context =>
+    {
+        context.Response.Redirect("/Login");
+        return Task.CompletedTask;
+    });
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    // Map Razor Pages
+    app.MapRazorPages()
+       .WithStaticAssets();
+
+    app.Run();
 }
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+catch (DbException ex)
 {
-    app.UseMigrationsEndPoint();
+    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
+    logger.LogCritical(ex, "Database error during host startup.");
+    throw;
 }
-else
+catch (IOException ex)
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
+    logger.LogCritical(ex, "I/O error during host startup.");
+    throw;
 }
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-// Security headers
-app.Use(async (context, next) =>
+catch (OperationCanceledException ex)
 {
-    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
-    context.Response.Headers["X-Frame-Options"]        = "DENY";
-    context.Response.Headers["X-XSS-Protection"]       = "1; mode=block";
-    context.Response.Headers["Referrer-Policy"]        = "strict-origin-when-cross-origin";
-    context.Response.Headers["Permissions-Policy"]     = "camera=(), microphone=(), geolocation=()";
-
-    // CSP: in Development allow VS Browser Link (localhost) and Hot Reload (ws://localhost)
-    string csp = app.Environment.IsDevelopment()
-        ? "default-src 'self'; " +
-          "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
-          "font-src 'self' https://fonts.gstatic.com; " +
-          "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com; " +
-          "connect-src 'self' http://localhost:* ws://localhost:* https://*.clarity.ms https://cdn.jsdelivr.net; " +
-          "frame-src https://www.google.com https://maps.google.com https://www.google.com.ec; " +
-          "frame-ancestors 'none';"
-        : "default-src 'self'; " +
-          "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
-          "font-src 'self' https://fonts.gstatic.com; " +
-          "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com; " +
-          "connect-src 'self' https://*.clarity.ms; " +
-          "frame-src https://www.google.com https://maps.google.com https://www.google.com.ec; " +
-          "frame-ancestors 'none';";
-
-    context.Response.Headers["Content-Security-Policy"] = csp;
-    await next();
-});
-
-app.UseRouting();
-
-// Add authentication and authorization middleware
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapStaticAssets();
-
-// Redirect root to login
-app.MapGet("/", context =>
+    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
+    logger.LogWarning(ex, "Startup was canceled.");
+    throw;
+}
+catch (Exception ex)
 {
-    context.Response.Redirect("/Login");
-    return Task.CompletedTask;
-});
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-// Map Razor Pages
-app.MapRazorPages()
-   .WithStaticAssets();
-
-app.Run();
+    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
+    logger.LogCritical(ex, "Unhandled exception during host startup.");
+    throw;
+}
