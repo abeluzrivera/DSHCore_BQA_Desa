@@ -118,12 +118,12 @@ aB3$mK9pL@2xN5qR7vW8yZ0dF4gH6jT1
 
 ```powershell
 # PowerShell (administrador)
-[Environment]::SetEnvironmentVariable("CONFIG_MASTER_KEY", "aB3$mK9pL@2xN5qR7vW8yZ0dF4gH6jT1", "Machine")
+[Environment]::SetEnvironmentVariable("CONFIG_MASTER_KEY", "MyPassword123!", "Machine")
 ```
 
 ```cmd
 # CMD (administrador)
-setx CONFIG_MASTER_KEY "aB3$mK9pL@2xN5qR7vW8yZ0dF4gH6jT1"
+setx CONFIG_MASTER_KEY "MyPassword123!"
 ```
 
 ---
@@ -169,7 +169,7 @@ ENC:tQzYFt7xbs2Amlcb3cfXhgNTlhHbWxTt/NmtVkleJU8=
     "Provider": "DB"
   },
   "SeedSettings": {
-    "DefaultPassword": "ENC:tQzYFt7xbs2Amlcb3cfXhgNTlhHbWxTt/NmtVkleJU8="
+    "DefaultPassword": "---"
   }
 }
 ```
@@ -276,7 +276,7 @@ ENC:aBc123DeF4gHiJkLmNoPqRsTuVwXyZaBcDeFgHiJkLmNoPqRsT
 ### Cifrar token API
 
 ```
-Ingrese el valor a cifrar: sk_live_51234567890abcdefghijklmnop
+Ingrese el valor a cifrar: MyPassword123!
 
 Valor cifrado:
 ENC:9xYzAbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQr
