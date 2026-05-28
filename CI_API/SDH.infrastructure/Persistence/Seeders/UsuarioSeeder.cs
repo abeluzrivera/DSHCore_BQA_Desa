@@ -44,7 +44,7 @@ namespace SDH.infrastructure.Persistence.Seeders
 
                 Users admin2 = Users.Create(
                     "ADMIN002",
-                    "aldo.saldana@bmachala.com",
+                    "admin@bmachala.com",
                     seedHash,
                     "Administrador del Sistema",
                     "ADMIN"

@@ -142,7 +142,6 @@ namespace SDH.infrastructure.Persistence.Seeders
                 (CatalogGroups.SystemRole, "Roles de acceso al aplicativo", true),
                 (CatalogGroups.AccountingType, "Clasificaci�n contable para an�lisis financiero", true),
                 (CatalogGroups.ContactabilityStatus, "Estado final de la validaci�n del dato de contacto", true),
-                (CatalogGroups.ContactabilityStatus, "Detalle del por qu� fall� la validaci�n del dato", true),
                 (CatalogGroups.CustomerStatus, "Estado general de validaci�n del cliente", true),
                 (CatalogGroups.IdentificationType, "Tipos de documentos de identidad legales", true)
             ];

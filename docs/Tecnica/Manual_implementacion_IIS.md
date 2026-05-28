@@ -13,7 +13,7 @@
 3. [Configuración de la herramienta de cifrado](#3-configuración-de-la-herramienta-de-cifrado)
 4. [Variables de entorno del sistema](#4-variables-de-entorno-del-sistema)
 5. [Configuración del sitio en IIS](#5-configuración-del-sitio-en-iis)
-6. [Configuración de autenticación de base de datos](#6-configuración-de-autenticación-de-base-de-datos)
+6. [Configuración de usuario de base de datos](#6-configuración-de-usuario-de-base-de-datos)
 7. [Configuración de la aplicación](#7-configuración-de-la-aplicación)
 
 ---
@@ -46,20 +46,12 @@ Antes de iniciar la instalación, verifique que el servidor cuente con los sigui
    ```
    C:\Sitios\DataSmartHub\
    ├── appsettings.json
-   ├── appsettings.Staging.json
    ├── bin\
    ├── wwwroot\
    └── *.dll
    ```
 
-### 2.2 Selección del archivo de configuración por entorno
-
-| Entorno | Archivo de configuración |
-|---|---|
-| Pruebas / Staging | `appsettings.Staging.json` |
-| Producción | `appsettings.json` |
-
-> Los archivos de configuración se encuentran en la raíz de `C:\Sitios\DataSmartHub\`.
+> El archivo de configuración es `appsettings.json`, ubicado en la raíz de `C:\Sitios\DataSmartHub\`.
 
 ---
 
@@ -175,70 +167,93 @@ El sistema requiere dos variables de entorno definidas a nivel del sistema opera
 
 ![Creación del sitio web](image.png)
 
-### 5.3 Configuración del entorno (solo Staging)
-
-Para ambientes de pruebas, configure la variable de entorno `ASPNETCORE_ENVIRONMENT` en el grupo de aplicaciones:
-
-1. En el **Administrador de IIS**, seleccione el grupo de aplicaciones `SmartHubPool`.
-2. En el panel de acciones, haga clic en **"Configuración avanzada"**.
-3. Localice la sección **"Variables de entorno"** y agregue:
-
-   | Nombre | Valor |
-   |---|---|
-   | `ASPNETCORE_ENVIRONMENT` | `Staging` |
-
-4. Haga clic en **"Aceptar"**.
-
-> En producción, esta variable no es necesaria ya que `appsettings.json` es el archivo de configuración predeterminado.
 
 ---
 
-## 6. Configuración de autenticación de base de datos
+## 6. Configuración de usuario de base de datos
 
-La aplicación utiliza **Autenticación de Windows** (Integrated Security) para conectarse a SQL Server. El usuario de servicio del grupo de aplicaciones debe tener permisos sobre la base de datos.
+La aplicación utiliza **autenticación SQL Server** con usuario local de base de datos. No se requiere usuario de dominio ni Autenticación de Windows.
 
-### 6.1 Asignación de usuario al grupo de aplicaciones
+### 6.1 Creación del usuario en SQL Server
 
-1. En el **Administrador de IIS**, seleccione el grupo de aplicaciones `SmartHubPool`.
-2. En el panel de acciones, haga clic en **"Configuración avanzada"**.
-3. Localice la sección **"Modelo de proceso"** y configure el campo **"Identidad"**:
-   - Seleccione **"Cuenta personalizada"**.
-   - Ingrese el nombre del usuario de dominio asignado para la aplicación (por ejemplo: `DOMINIO\db_u_smart_hub`).
-   - Ingrese la contraseña correspondiente.
-4. Haga clic en **"Aceptar"**.
+Cree un usuario local en SQL Server con los permisos mínimos necesarios. Utilice el siguiente script como referencia (reemplace el nombre y la contraseña según el entorno):
 
-### 6.2 Permisos sobre la carpeta del sitio
+```sql
+-- Crear el login en SQL Server
+CREATE LOGIN usr_smarthub WITH PASSWORD = 'Passw0rd!Prueba';
+
+-- Asociar el login a la base de datos correspondiente
+USE DB_ODS;
+CREATE USER usr_smarthub FOR LOGIN usr_smarthub;
+
+-- Asignar permisos de lectura y escritura
+ALTER ROLE db_datareader ADD MEMBER usr_smarthub;
+ALTER ROLE db_datawriter ADD MEMBER usr_smarthub;
+```
+
+> Para el entorno de staging, repita el proceso sobre la base de datos `DB_ODS_DEV`.
+
+### 6.2 Identidad del grupo de aplicaciones
+
+El grupo de aplicaciones `SmartHubPool` debe conservar la identidad predeterminada `ApplicationPoolIdentity`. No se requiere asignar una cuenta de dominio ni cuenta personalizada.
+
+### 6.3 Permisos sobre la carpeta del sitio
 
 1. En el Explorador de Windows, navegue a `C:\Sitios\DataSmartHub`.
 2. Haga clic derecho en la carpeta y seleccione **"Propiedades"**.
 3. En la pestaña **"Seguridad"**, haga clic en **"Editar → Agregar"**.
-4. Ingrese el nombre del usuario de servicio y haga clic en **"Aceptar"**.
-5. Seleccione el usuario y asigne los permisos **"Lectura y ejecución"** como mínimo.
+4. Ingrese `IIS AppPool\SmartHubPool` y haga clic en **"Aceptar"**.
+5. Asigne los permisos **"Lectura y ejecución"** como mínimo.
 6. Haga clic en **"Aceptar"** para guardar los cambios.
-
-> **Nota:** El usuario también debe tener permisos `db_datareader` y `db_datawriter` sobre las bases de datos `DB_ODS` (producción) y `DB_ODS_DEV` (staging) en SQL Server.
 
 ---
 
 ## 7. Configuración de la aplicación
 
-### 7.1 Configuración de autenticación
+### 7.1 Configuración de conexión y autenticación
 
-Abra el archivo `appsettings.json` (o `appsettings.Staging.json` según el entorno) ubicado en `C:\Sitios\DataSmartHub\` y verifique que la sección `AuthSettings` tenga el proveedor correcto:
+Abra el archivo `appsettings.json` ubicado en `C:\Sitios\DataSmartHub\`.
 
-**Producción con LDAP:**
+#### Cadena de conexión
+
+La cadena de conexión completa debe cifrarse con SmartHubSecretTool. Localice la sección `ConnectionStrings` y coloque el resultado del cifrado como valor de `DefaultConnection`:
+
 ```json
-"AuthSettings": {
-  "Provider": "LDAP"
+"ConnectionStrings": {
+  "DefaultConnection": "ENC:xxxxxxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
-**Autenticación local (base de datos):**
+Para obtener el valor cifrado:
+
+1. Construya la cadena en texto plano con los datos del entorno:
+   ```
+   Server=<IP_SERVIDOR>;Database=<NOMBRE_BD>;User ID=usr_smarthub;Password=<CONTRASENA>;Persist Security Info=False;TrustServerCertificate=True
+   ```
+2. En SmartHubSecretTool, seleccione **"Cifrar cadena"** e ingrese la cadena completa como valor a cifrar.
+3. Copie el resultado `ENC:...` y péguelo como valor de `DefaultConnection` en el archivo de configuración.
+
+#### Proveedor de autenticación de usuarios
+
+Localice la sección `AuthSettings` y establezca el proveedor en `"DB"` para utilizar autenticación local contra la base de datos:
+
 ```json
 "AuthSettings": {
   "Provider": "DB"
 }
 ```
+
+#### Contraseña inicial de usuarios (DefaultPassword)
+
+La sección `SeedSettings` define la contraseña que se asigna a los usuarios creados automáticamente en el primer arranque. Este valor también debe cifrarse con SmartHubSecretTool.
+
+```json
+"SeedSettings": {
+  "DefaultPassword": "ENC:xxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+Para obtener el valor cifrado, siga el proceso de la [sección 3.3](#33-cifrado-de-valores-sensibles) ingresando la contraseña inicial deseada como texto a cifrar.
 
 ### 7.2 Configuración de LDAP
 
@@ -279,6 +294,7 @@ Antes de entregar el ambiente al equipo funcional, valide los siguientes puntos:
 - [ ] Sitio web responde en el puerto configurado
 - [ ] Variables de entorno `CONFIG_MASTER_KEY` y `JwtSettings__SecretKey` están definidas en el sistema
 - [ ] IIS fue reiniciado tras configurar las variables de entorno
-- [ ] El login con usuario de dominio (modo LDAP) funciona correctamente (si aplica)
+- [ ] El login con usuario local de base de datos funciona correctamente
 - [ ] Los catálogos cargan sin errores en el dashboard
-- [ ] El usuario de servicio tiene acceso de lectura/escritura a la base de datos
+- [ ] El usuario SQL Server tiene permisos `db_datareader` y `db_datawriter` sobre la base de datos
+- [ ] La cadena de conexión y el `DefaultPassword` están cifrados con formato `ENC:...`

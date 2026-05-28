@@ -127,6 +127,7 @@ try
         ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
         await UsuarioSeeder.SeedAsync(context, logger, app.Configuration);
+        await ViewSeeder.SeedAsync(context, logger);
         await CatalogoSeeder.SeedAsync(context, logger);
 
         // Inicializar cach� de cat�logos
