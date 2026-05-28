@@ -8,8 +8,23 @@ using SDH.infrastructure.Persistence.Data;
 using SDH.infrastructure.Persistence.Services;
 using SDH.infrastructure.Persistence.Seeders;
 using SDH.infrastructure.Startup;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(
+        path: Path.Combine("Logs", "log-.txt"),
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 builder.WebHost.UseStaticWebAssets();
 
 // Add services to the container.
@@ -236,4 +251,8 @@ catch (Exception ex)
     var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
     logger.LogCritical(ex, "Unhandled exception during host startup.");
     throw;
+}
+finally
+{
+    Log.CloseAndFlush();
 }
