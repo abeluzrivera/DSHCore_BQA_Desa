@@ -153,9 +153,11 @@ Siempre persistir a través de `IUnitOfWork`. No llamar `SaveChanges` directamen
 
 ## Design System (DS)
 
-La capa de presentación incluye un Design System interno en JavaScript bajo `wwwroot/js/ds/`:
+El Design System cubre tokens (colores, tipografía, espaciado), componentes CSS (botones, cards, tablas, formularios, modals) y módulos JS reutilizables.
 
-| Módulo | Responsabilidad |
+Referencia completa: [`docs/Tecnica/DESIGN_SYSTEM.md`](docs/Tecnica/DESIGN_SYSTEM.md)
+
+| Módulo JS | Responsabilidad |
 |---|---|
 | `ds-core.js` | EventBus, utilidades, estado reactivo, registro de módulos |
 | `ds-api.js` | Wrapper de Axios con interceptores de autenticación y errores |
@@ -167,3 +169,14 @@ La capa de presentación incluye un Design System interno en JavaScript bajo `ww
 | `ds-modal.js` | Gestión de modales |
 
 La comunicación entre módulos se realiza a través de `DS.events` (pub/sub desacoplado).
+
+## Documentación
+
+| Documento | Ubicación | Contenido |
+|---|---|---|
+| Design System | `docs/Tecnica/DESIGN_SYSTEM.md` | Tokens CSS, componentes, módulos JS, patrones de uso |
+| Runbook | `docs/Tecnica/Runbook.md` | Operación, deploy, incidentes, contactos |
+| Manual IIS | `docs/Tecnica/Manual_implementacion_IIS.md` | Instalación paso a paso en Windows Server |
+| Procedimientos | `docs/Funcional/Procedimientos.md` | Flujos de negocio y control de acceso |
+| Arquitectura | `docs/Archi/` | Diagramas ArchiMate |
+| Assets | `docs/assets/` | Logo, imágenes y recursos compartidos |
