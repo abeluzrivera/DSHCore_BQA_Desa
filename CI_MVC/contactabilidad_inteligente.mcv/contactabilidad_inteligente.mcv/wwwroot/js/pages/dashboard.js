@@ -54,7 +54,13 @@
         DS.events?.on('cliente:seleccionado', ({ id }) => {
             const alreadyActive = !!document.querySelector(
                 `.ds-client-article--active[data-id="${CSS.escape(id)}"]`);
-            if (!alreadyActive) _selectClient(id);
+            if (alreadyActive) return;
+            const inList = !!document.querySelector(`.ds-client-article[data-id="${CSS.escape(id)}"]`);
+            if (inList) {
+                _selectClient(id);
+            } else {
+                _handleClienteAgregar(id);
+            }
         });
 
         DS.events?.on('cliente:agregar', ({ id }) => _handleClienteAgregar(id));
