@@ -172,10 +172,16 @@
         if (viewEl)  viewEl.hidden  = true;
         if (dashEl)  dashEl.hidden  = false;
 
+        // Invalidate cached panel so fresh contact data is fetched on return
+        const activeArt = document.querySelector('.ds-client-article--active');
+        const clientId  = activeArt?.dataset.id;
+        if (clientId) {
+            document.querySelector(`.dash-detail__panel[data-client-id="${CSS.escape(clientId)}"]`)?.remove();
+            _selectClientNoHistory(clientId);
+        }
+
         if (updateHistory) {
             // Volver a la URL del panel del cliente activo (sin view=perfil)
-            const activeArt = document.querySelector('.ds-client-article--active');
-            const clientId  = activeArt?.dataset.id;
             if (clientId) {
                 history.replaceState(
                     { clientId, listScrollY: 0 },
