@@ -36,13 +36,10 @@ namespace SDH.infrastructure.Startup
 
                 logger.LogInformation("Caché inicializada e integridad verificada.");
 
-                // 2. Precargar catálogos dinámicos usando tus CONSTANTES seguras
-                await Task.WhenAll(
-                    catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.FileStatus, cancellationToken),
-                    catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.ContactType, cancellationToken),
-                    catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.ContactabilityStatus, cancellationToken)
-                
-                );
+                // 2. Precargar catálogos dinámicos secuencialmente (DbContext no es thread-safe)
+                await catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.FileStatus, cancellationToken);
+                await catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.ContactType, cancellationToken);
+                await catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.ContactabilityStatus, cancellationToken);
 
                 sw.Stop();
 
