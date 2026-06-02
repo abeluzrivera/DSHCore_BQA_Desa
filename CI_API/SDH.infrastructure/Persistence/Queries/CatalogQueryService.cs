@@ -119,27 +119,34 @@ namespace SDH.Infrastructure.Persistence.Queries
         {
             var mapa = new Dictionary<string, HashSet<string>>();
 
-            // 1. Buscamos todas las clases en el ensamblado del Dominio que tengan nuestro atributo
             var tiposConAtributo = typeof(CatalogGroups).Assembly.GetTypes()
                 .Where(t => t.GetCustomAttributes(typeof(MappedCatalog), true).Length != 0);
 
             foreach (var tipo in tiposConAtributo)
             {
-                // 2. Extraer el nombre del grupo definido en el Atributo
                 var atributo = (MappedCatalog)tipo.GetCustomAttributes(typeof(MappedCatalog), true).First();
                 string nombreGrupo = atributo.Value;
 
-                // 3. Extraer todos los valores de las constantes (public const string)
-                var valoresConstantes = tipo.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
-                    .Where(f => f.IsLiteral && !f.IsInitOnly && f.FieldType == typeof(string))
-                    .Select(f => f.GetValue(null)?.ToString() ?? string.Empty)
-                    .Where(v => !string.IsNullOrEmpty(v))
-                    .ToHashSet();
+                HashSet<string> valoresConstantes;
+
+                if (tipo.IsEnum)
+                {
+                    valoresConstantes = tipo.GetFields(BindingFlags.Public | BindingFlags.Static)
+                        .Select(f => f.GetCustomAttribute<MappedCatalog>()?.Value)
+                        .Where(v => !string.IsNullOrEmpty(v))
+                        .ToHashSet()!;
+                }
+                else
+                {
+                    valoresConstantes = tipo.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                        .Where(f => f.IsLiteral && !f.IsInitOnly && f.FieldType == typeof(string))
+                        .Select(f => f.GetValue(null)?.ToString() ?? string.Empty)
+                        .Where(v => !string.IsNullOrEmpty(v))
+                        .ToHashSet();
+                }
 
                 if (!mapa.ContainsKey(nombreGrupo))
-                {
                     mapa.Add(nombreGrupo, valoresConstantes);
-                }
             }
 
             return mapa;

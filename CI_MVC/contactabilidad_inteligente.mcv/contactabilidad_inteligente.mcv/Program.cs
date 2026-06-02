@@ -32,6 +32,8 @@ string rawConnectionString = builder.Configuration.GetConnectionString("DefaultC
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 string connectionString = ConfigCrypto.DecryptFromEnvironment(rawConnectionString);
 
+Log.Information("environment: {EnvironmentName}", builder.Environment.EnvironmentName);
+
 // Configurar DbContext con opciones seg�n el entorno
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -132,11 +134,7 @@ try
     {
         ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        if (app.Environment.IsDevelopment())
-        {
-            // Aplicar migraciones pendientes
-            await context.Database.MigrateAsync();
-        }
+        await context.Database.MigrateAsync();
 
         // Seed usuarios iniciales
         ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
@@ -145,7 +143,7 @@ try
         await ViewSeeder.SeedAsync(context, logger);
         await CatalogoSeeder.SeedAsync(context, logger);
 
-        // Inicializar cach� de cat�logos
+        // Inicializar cache de catalogos
         try
         {
             CatalogosCacheInitializer cacheInitializer = scope.ServiceProvider.GetRequiredService<CatalogosCacheInitializer>();

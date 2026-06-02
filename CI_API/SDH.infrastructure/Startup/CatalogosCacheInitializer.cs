@@ -41,7 +41,7 @@ namespace SDH.infrastructure.Startup
                     catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.FileStatus, cancellationToken),
                     catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.ContactType, cancellationToken),
                     catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.ContactabilityStatus, cancellationToken)
-                // Puedes agregar TIPO_CONTABILIDAD u otros aquí fácilmente
+                
                 );
 
                 sw.Stop();
@@ -52,11 +52,11 @@ namespace SDH.infrastructure.Startup
             }
             catch (DbException ex)
             {
-                logger.LogError(ex, "Error de base de datos al inicializar caché de catálogos. Se cargarán bajo demanda.");
+                logger.LogWarning(ex, "Error de base de datos al inicializar caché de catálogos. Se cargarán bajo demanda.");
             }
             catch (InvalidOperationException ex)
             {
-                logger.LogError(ex, "Error de configuración al inicializar caché de catálogos. Se cargarán bajo demanda.");
+                logger.LogWarning(ex, "Error de configuración al inicializar caché de catálogos. Se cargarán bajo demanda.");
             }
             catch (OperationCanceledException ex)
             {

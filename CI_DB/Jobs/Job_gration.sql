@@ -124,7 +124,7 @@ GeoDireccion AS (
 SELECT
     COALESCE(c.Identificacion, d.identificacion, g.identificacion) AS Identificacion,
     COALESCE(c.NombreCompleto, d.Nombre_Completo, '') AS NombreCompleto,
-    c.Telefono1, c.Telefono2, c.Telefono3, c.Telefono4, c.Telefono5, c.Telefono6,   Telefono6
+    c.Telefono1, c.Telefono2, c.Telefono3, c.Telefono4, c.Telefono5, c.Telefono6,
     c.Email1, c.Email2, c.Email3, c.Email4, c.Email5, c.Email6,
     d.direccion1, d.direccion2, d.direccion3, d.direccion4, d.direccion5,
     d.telefono_fijo1, d.telefono_fijo2, d.telefono_fijo3, d.telefono_fijo4, d.telefono_fijo5,
@@ -176,7 +176,7 @@ PRINT 'PASO 3: Enriqueciendo Clientes Existentes...';
 
 SELECT 
     m.Identificacion, m.NombreCompleto,
-    m.Telefono1, m.Telefono2, m.Telefono3, m.Telefono4, m.Telefono5, m.Telefono6,   Telefono6
+    m.Telefono1, m.Telefono2, m.Telefono3, m.Telefono4, m.Telefono5, m.Telefono6, 
     m.Email1, m.Email2, m.Email3, m.Email4, m.Email5, m.Email6,
     m.direccion1, m.direccion2, m.direccion3, m.direccion4, m.direccion5,
     m.telefono_fijo1, m.telefono_fijo2, m.telefono_fijo3, m.telefono_fijo4, m.telefono_fijo5,
