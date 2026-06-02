@@ -23,7 +23,7 @@ Modelo de datos requerido: agregar la columna `Id_Cliente_Canonico` (BIGINT, FK 
 
 ---
 
-## Plataforma de Gestión de Datos (PGD) — Historial y Roadmap
+## Plataformas de Gestión de Datos (PGD) — Roadmap
 
 ---
 
