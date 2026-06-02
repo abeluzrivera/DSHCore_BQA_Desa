@@ -1,0 +1,57 @@
+@* =====================================================
+   DS Partial: Modal declarativo
+   
+   Uso en la página:
+   @await Html.PartialAsync("Components/_DsModal", new {
+       Id      = "modal-crear-cliente",
+       Title   = "Crear cliente",
+       Size    = "lg"     // sm | lg | xl | (vacío = md)
+   })
+
+   Contenido va en el body del partial (no se puede con Html.PartialAsync).
+   Recomendación: usar las clases CSS directamente para modales con contenido:
+
+   <div class="ds-modal-backdrop" id="modal-crear-cliente" style="display:none">
+       <div class="ds-modal ds-modal--lg">
+           <div class="ds-modal__header">
+               <h2 class="ds-modal__title">Crear cliente</h2>
+               <button class="ds-modal__close" onclick="DS.modal.close()">
+                   <span class="material-symbols-outlined">close</span>
+               </button>
+           </div>
+           <div class="ds-modal__body">
+               ... formulario o contenido ...
+           </div>
+           <div class="ds-modal__footer">
+               <button class="ds-btn ds-btn--ghost" onclick="DS.modal.close()">Cancelar</button>
+               <button class="ds-btn ds-btn--primary" id="btn-guardar">Guardar</button>
+           </div>
+       </div>
+   </div>
+
+   Abrir desde JS: DS.modal.open('modal-crear-cliente')
+   ===================================================== *@
+@{
+    var modalId = (string)(ViewData["_DsModal_Id"]    ?? "") ;
+    var title   = (string)(ViewData["_DsModal_Title"] ?? "");
+    var size    = (string)(ViewData["_DsModal_Size"]  ?? "");
+    var sizeClass = string.IsNullOrEmpty(size) ? "" : $"ds-modal--{size}";
+}
+
+<div class="ds-modal-backdrop" id="@modalId" style="display:none" role="dialog" aria-modal="true">
+    <div class="ds-modal @sizeClass">
+        <div class="ds-modal__header">
+            <h2 class="ds-modal__title">@title</h2>
+            <button class="ds-modal__close" aria-label="Cerrar" onclick="DS.modal.close()">
+                <span class="material-symbols-outlined" style="font-size:1.2rem">close</span>
+            </button>
+        </div>
+        <div class="ds-modal__body" id="@(modalId)-body">
+            @* Insertar contenido aquí *@
+        </div>
+        <div class="ds-modal__footer" id="@(modalId)-footer">
+            <button class="ds-btn ds-btn--ghost" onclick="DS.modal.close()">Cancelar</button>
+            <button class="ds-btn ds-btn--primary" id="@(modalId)-confirm">Confirmar</button>
+        </div>
+    </div>
+</div>

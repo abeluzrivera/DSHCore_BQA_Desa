@@ -1,0 +1,26 @@
+@* =====================================================
+   DS Partial: Encabezado de página
+   
+   Uso:
+   @await Html.PartialAsync("Components/_DsPageHeader", new {
+       Title    = "Clientes",
+       Subtitle = "Gestión de clientes registrados"
+   })
+   ===================================================== *@
+@{
+    var title    = (string)(ViewData["_DsPageHeader_Title"]    ?? Model?.Title    ?? "");
+    var subtitle = (string)(ViewData["_DsPageHeader_Subtitle"] ?? Model?.Subtitle ?? "");
+}
+
+<div class="ds-page-header">
+    <div class="ds-page-header__left">
+        <h1 class="ds-page-title">@title</h1>
+        @if (!string.IsNullOrEmpty(subtitle))
+        {
+            <p class="ds-page-subtitle">@subtitle</p>
+        }
+    </div>
+    <div class="ds-page-header__right">
+        @RenderSection("PageActions", required: false)
+    </div>
+</div>

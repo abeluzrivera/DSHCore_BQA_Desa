@@ -1,0 +1,449 @@
+﻿@page "/users"
+@using contactabilidad_inteligente.mcv.Pages
+@model UsersModel
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+}
+
+@section Styles {
+    <link href="~/css/users.css" rel="stylesheet" />
+}
+
+<main class="users-main">
+    <!-- Breadcrumb and Header -->
+    <div class="page-header">
+        <nav class="breadcrumb-nav">
+            <a href="/dashboard" class="breadcrumb-link">Administración</a>
+            <span class="material-icons breadcrumb-separator">chevron_right</span>
+            <span class="breadcrumb-current">Matriz de Usuarios</span>
+        </nav>
+        
+        <div class="header-content">
+            <div class="header-text">
+                <h2 class="page-title">Matriz de Usuarios</h2>
+                <p class="page-subtitle">Gestión centralizada de cuentas y permisos.</p>
+            </div>
+            <div class="header-actions">
+                <span class="sync-info">Última sincronización: Hace 5 mins</span>
+                <button class="refresh-btn" title="Refrescar datos">
+                    <span class="material-icons">refresh</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="material-icons me-2" style="vertical-align: middle;">check_circle</span>
+            @Model.SuccessMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span class="material-icons me-2" style="vertical-align: middle;">error</span>
+            @Model.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Actions Bar -->
+    <div class="actions-bar">
+        <div class="search-container">
+            <span class="material-icons search-icon-left">search</span>
+            <input 
+                type="text" 
+                class="search-input-users" 
+                id="searchUsersInput"
+                placeholder="Buscar por nombre, usuario o email..." 
+            />
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn-secondary">
+                <span class="material-icons">filter_list</span>
+                <span class="btn-text">Filtrar</span>
+            </button>
+            <button class="btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                <span class="material-icons">add</span>
+                <span class="btn-text">Agregar Usuario</span>
+            </button>
+            <button class="btn-accent">
+                <span class="material-icons">download</span>
+                <span class="btn-text">Exportar</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-container">
+        <div class="table-wrapper">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th class="col-checkbox">
+                            <input type="checkbox" class="checkbox-input" id="selectAll" />
+                        </th>
+                        <th class="col-user">Usuario</th>
+                        <th class="col-role">Rol</th>
+                        <th class="col-access">Último Acceso</th>
+                        <th class="col-status">Estado</th>
+                        <th class="col-actions">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr class="user-row">
+                            <td class="col-checkbox">
+                                <input type="checkbox" class="checkbox-input" />
+                            </td>
+                            <td class="col-user">
+                                <div class="user-cell">
+                                    @if (!string.IsNullOrEmpty(user.AvatarUrl))
+                                    {
+                                        <img src="@user.AvatarUrl" alt="@user.Name" class="user-avatar-img" />
+                                    }
+                                    else
+                                    {
+                                        <div class="user-avatar-initials">@user.Initials</div>
+                                    }
+                                    <div class="user-info-cell">
+                                        <span class="user-name-cell">@user.Name</span>
+                                        <span class="user-email-cell">@user.Email</span>
+                                        <span class="user-email-cell" style="font-family: 'Courier New', monospace; font-size: 0.75rem; color: #7f9787;">[@user.UserCode]</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-role">
+                                <span class="role-badge @user.RoleBadgeClass">@user.Role</span>
+                            </td>
+                            <td class="col-access">
+                                <span class="access-text">@user.LastAccess</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="status-cell @user.StatusClass">
+                                    <div class="status-dot"></div>
+                                    <span class="status-text">@user.Status</span>
+                                </div>
+                            </td>
+                            <td class="col-actions">
+                                <div class="action-buttons-cell">
+                                    <button class="action-btn text-primary" title="Editar" onclick="editUser(@user.Id)">
+                                        <span class="material-icons">edit</span>
+                                    </button>
+                                    @if (user.IsActive)
+                                    {
+                                        <button class="action-btn text-danger" title="Desactivar" onclick="toggleUserStatus(@user.Id)">
+                                            <span class="material-icons">block</span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="action-btn text-success" title="Activar" onclick="toggleUserStatus(@user.Id)">
+                                            <span class="material-icons">check_circle</span>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                <span>Mostrando <strong>1</strong> a <strong>@Model.Users.Count</strong> de <strong>@Model.Users.Count</strong> resultados</span>
+            </div>
+            <nav class="pagination-nav">
+                <button class="pagination-btn" disabled>
+                    <span class="material-icons">chevron_left</span>
+                </button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <span class="pagination-ellipsis">...</span>
+                <button class="pagination-btn">8</button>
+                <button class="pagination-btn">
+                    <span class="material-icons">chevron_right</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+</main>
+
+<!-- Modal Crear Usuario -->
+<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-height: 90vh;">
+        <div class="modal-content" style="border-radius: 1rem; border: 1px solid rgba(127, 151, 135, 0.2); overflow: hidden; max-height: 90vh; display: flex; flex-direction: column;">
+            <!-- Modal Header -->
+            <div class="modal-header flex-shrink-0" style="background: linear-gradient(135deg, #295136 0%, #3a6b4a 100%); color: white; border: none; padding: 1.25rem 1.5rem;">
+                <h5 class="modal-title d-flex align-items-center gap-2 fw-bold" id="createUserModalLabel" style="font-size: 1.125rem;">
+                    <span class="material-icons" style="color: var(--ocre-intenso); font-size: 1.5rem;">person_add</span>
+                    Crear Nuevo Usuario
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <!-- Modal Body -->
+            <form method="post" asp-page-handler="CreateUser" enctype="multipart/form-data" id="createUserForm" class="d-flex flex-column" style="flex: 1; min-height: 0;">
+                <div class="modal-body flex-grow-1" style="background: #f8faf9; padding: 2rem 1.5rem; overflow-y: auto;">
+                    
+                    <!-- Foto de Perfil -->
+                    <div class="mb-4 p-4 rounded-3 border" style="background: white; border-color: rgba(127, 151, 135, 0.15) !important;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="profile-image-container position-relative" 
+                                 style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #f0f4f2 0%, #e8ede9 100%); 
+                                        border: 3px dashed rgba(127, 151, 135, 0.4); display: flex; align-items: center; 
+                                        justify-content: center; cursor: pointer; transition: all 0.3s ease; flex-shrink: 0;"
+                                 onclick="document.getElementById('profileImageInput').click()"
+                                 onmouseover="this.style.borderColor='var(--ocre-intenso)'; this.style.borderStyle='solid'; this.style.transform='scale(1.05)'"
+                                 onmouseout="this.style.borderColor='rgba(127, 151, 135, 0.4)'; this.style.borderStyle='dashed'; this.style.transform='scale(1)'">
+                                <span class="material-icons" style="font-size: 2rem; color: rgba(127, 151, 135, 0.6);">add_a_photo</span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-1 fw-bold" style="color: var(--forest-green); font-size: 0.9375rem;">Foto de perfil</p>
+                                <p class="mb-0" style="color: #6c757d; font-size: 0.8125rem; line-height: 1.4;">JPG, PNG o GIF. Máx 1MB.</p>
+                                <input type="file" class="d-none" id="profileImageInput" 
+                                       asp-for="CreateUserInput.ProfileImage" 
+                                       accept="image/jpeg,image/png,image/gif,image/bmp" />
+                            </div>
+                        </div>
+                        <span asp-validation-for="CreateUserInput.ProfileImage" class="text-danger small d-block mt-2"></span>
+                    </div>
+
+                    <!-- Nombre Completo -->
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control form-control-lg" id="fullName" 
+                                   asp-for="CreateUserInput.FullName" 
+                                   placeholder="Nombre Completo"
+                                   required
+                                   style="border: 2px solid rgba(127, 151, 135, 0.2); border-radius: 0.75rem; font-size: 0.9375rem;">
+                            <label for="fullName" style="color: #6c757d; font-size: 0.875rem;">Nombre Completo</label>
+                        </div>
+                        <span asp-validation-for="CreateUserInput.FullName" class="text-danger small d-block mt-1"></span>
+                    </div>
+
+                    <!-- Código y Rol -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="userCode" 
+                                       asp-for="CreateUserInput.UserCode" 
+                                       placeholder="Código"
+                                       required
+                                       style="border: 2px solid rgba(127, 151, 135, 0.2); border-radius: 0.75rem; font-family: 'Courier New', monospace; font-size: 0.9375rem;">
+                                <label for="userCode" style="color: #6c757d; font-size: 0.875rem;">Código</label>
+                            </div>
+                            <span asp-validation-for="CreateUserInput.UserCode" class="text-danger small d-block mt-1"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="role" asp-for="CreateUserInput.Role" 
+                                        asp-items="Model.RolesList"
+                                        required
+                                        style="border: 2px solid rgba(127, 151, 135, 0.2); border-radius: 0.75rem; font-size: 0.9375rem;">
+                                </select>
+                                <label for="role" style="color: #6c757d; font-size: 0.875rem;">Rol Asignado</label>
+                            </div>
+                            <span asp-validation-for="CreateUserInput.Role" class="text-danger small d-block mt-1"></span>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="email" class="form-control form-control-lg" id="email" 
+                                   asp-for="CreateUserInput.Email" 
+                                   placeholder="Correo Electrónico"
+                                   required
+                                   pattern="[a-zA-Z0-9._%+\-]+@@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                                   style="border: 2px solid rgba(127, 151, 135, 0.2); border-radius: 0.75rem; font-size: 0.9375rem;">
+                            <label for="email" style="color: #6c757d; font-size: 0.875rem;">Correo Electrónico Corporativo</label>
+                        </div>
+                        <span asp-validation-for="CreateUserInput.Email" class="text-danger small d-block mt-1"></span>
+                    </div>
+
+                    <!-- Seguridad de Acceso -->
+                    <div class="p-4 rounded-3 mb-3" style="background: white; border: 2px solid rgba(127, 151, 135, 0.15); border-left: 4px solid var(--verde-musgo);">
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <label class="fw-bold mb-0" style="color: var(--forest-green); font-size: 0.9375rem;">Seguridad de Acceso</label>
+                            <button type="button" class="btn btn-sm d-flex align-items-center gap-1 px-3 py-2" 
+                                    id="generatePasswordBtn"
+                                    style="color: var(--ocre-intenso); font-size: 0.8125rem; font-weight: 600; background: rgba(203, 128, 27, 0.1); border: none; border-radius: 0.5rem; transition: all 0.3s;"
+                                    onmouseover="this.style.background='rgba(203, 128, 27, 0.2)'"
+                                    onmouseout="this.style.background='rgba(203, 128, 27, 0.1)'">
+                                <span class="material-icons" style="font-size: 1rem;">autorenew</span>
+                                <span class="d-none d-sm-inline">Generar Clave Segura</span>
+                                <span class="d-inline d-sm-none">Generar</span>
+                            </button>
+                        </div>
+                        
+                        <div class="position-relative mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="password" 
+                                       asp-for="CreateUserInput.Password" 
+                                       placeholder="Contraseña"
+                                       required
+                                       minlength="8"
+                                       style="border: 2px solid rgba(127, 151, 135, 0.2); border-radius: 0.75rem; font-family: 'Courier New', monospace; letter-spacing: 0.05em; padding-right: 3.5rem; font-size: 0.9375rem;">
+                                <label for="password" style="color: #6c757d; font-size: 0.875rem;">Contraseña</label>
+                            </div>
+                            <button type="button" class="btn btn-sm position-absolute" 
+                                    id="copyPasswordBtn"
+                                    style="right: 0.75rem; top: 50%; transform: translateY(-50%); color: #6c757d; background: transparent; border: none; padding: 0.5rem;"
+                                    title="Copiar al portapapeles">
+                                <span class="material-icons" style="font-size: 1.25rem;">content_copy</span>
+                            </button>
+                        </div>
+                        <span asp-validation-for="CreateUserInput.Password" class="text-danger small d-block mb-2"></span>
+                        
+                        <div id="passwordStrength" class="d-none">
+                            <div class="d-flex align-items-center gap-2 p-2 rounded" style="background: rgba(40, 167, 69, 0.1);">
+                                <span class="material-icons text-success" style="font-size: 1rem;">verified_user</span>
+                                <span class="text-success" style="font-size: 0.8125rem; font-weight: 500;">
+                                    Nivel de seguridad: <strong id="strengthLevel">Alto</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estado Inicial -->
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: white; border: 2px solid rgba(127, 151, 135, 0.15);">
+                        <div class="flex-grow-1">
+                            <span class="fw-bold d-block mb-1" style="color: var(--forest-green); font-size: 0.9375rem;">Estado Inicial</span>
+                            <span class="text-muted" style="font-size: 0.8125rem;">El usuario podrá acceder inmediatamente</span>
+                        </div>
+                        <div class="form-check form-switch ms-3" style="padding-left: 0;">
+                            <input class="form-check-input" type="checkbox" role="switch" 
+                                   id="isActive" asp-for="CreateUserInput.IsActive" 
+                                   checked style="width: 3.5rem; height: 1.75rem; cursor: pointer; margin-left: 0; flex-shrink: 0;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer flex-shrink-0" style="background: white; border-top: 2px solid rgba(127, 151, 135, 0.1); padding: 1.25rem 1.5rem; gap: 0.75rem;">
+                    <button type="button" class="btn btn-secondary px-4 py-2" data-bs-dismiss="modal" 
+                            style="border-radius: 0.75rem; font-weight: 500; font-size: 0.9375rem;">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn d-flex align-items-center gap-2 px-4 py-2" 
+                            style="background: linear-gradient(135deg, var(--ocre-intenso) 0%, #b06f17 100%); color: white; border: none; border-radius: 0.75rem; font-weight: 600; font-size: 0.9375rem; box-shadow: 0 4px 12px rgba(203, 128, 27, 0.3);">
+                        <span class="material-icons" style="font-size: 1.125rem;">save</span>
+                        Guardar Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Usuario -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-height: 90vh;">
+        <div class="modal-content" style="border-radius: 1rem; border: 1px solid rgba(127, 151, 135, 0.2); overflow: hidden; max-height: 90vh; display: flex; flex-direction: column;">
+            <!-- Modal Header -->
+            <div class="modal-header flex-shrink-0" style="background: linear-gradient(135deg, #295136 0%, #3a6b4a 100%); color: white; border: none; padding: 1.25rem 1.5rem;">
+                <h5 class="modal-title d-flex align-items-center gap-2 fw-bold" id="editUserModalLabel" style="font-size: 1.125rem;">
+                    <span class="material-icons" style="color: var(--ocre-intenso); font-size: 1.5rem;">edit</span>
+                    Editar Usuario
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <!-- Modal Body -->
+            <form id="editUserForm" class="d-flex flex-column" style="flex: 1; min-height: 0;">
+                <input type="hidden" id="editUserId" />
+                
+                <div class="modal-body flex-grow-1" style="background: #f8faf9; padding: 2rem 1.5rem; overflow-y: auto;">
+                    
+                    <!-- Nombre Completo -->
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control form-control-lg" id="editFullName" 
+                                   placeholder="Nombre Completo"
+                                   required
+                                   style="border: 2px solid rgba(127, 151, 135, 0.2); border-radius: 0.75rem; font-size: 0.9375rem;">
+                            <label for="editFullName" style="color: #6c757d; font-size: 0.875rem;">Nombre Completo</label>
+                        </div>
+                    </div>
+
+                    <!-- Código y Rol -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="editUserCode" 
+                                       placeholder="Código"
+                                       required
+                                       style="border: 2px solid rgba(127, 151, 135, 0.2); border-radius: 0.75rem; font-family: 'Courier New', monospace; font-size: 0.9375rem;">
+                                <label for="editUserCode" style="color: #6c757d; font-size: 0.875rem;">Código</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="editRole" 
+                                        required
+                                        style="border: 2px solid rgba(127, 151, 135, 0.2); border-radius: 0.75rem; font-size: 0.9375rem;">
+                                    @foreach (var role in Model.RolesList)
+                                    {
+                                        <option value="@role.Value">@role.Text</option>
+                                    }
+                                </select>
+                                <label for="editRole" style="color: #6c757d; font-size: 0.875rem;">Rol Asignado</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="email" class="form-control form-control-lg" id="editEmail" 
+                                   placeholder="Correo Electrónico"
+                                   required
+                                   pattern="[a-zA-Z0-9._%+\-]+@@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                                   style="border: 2px solid rgba(127, 151, 135, 0.2); border-radius: 0.75rem; font-size: 0.9375rem;">
+                            <label for="editEmail" style="color: #6c757d; font-size: 0.875rem;">Correo Electrónico Corporativo</label>
+                        </div>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: white; border: 2px solid rgba(127, 151, 135, 0.15);">
+                        <div class="flex-grow-1">
+                            <span class="fw-bold d-block mb-1" style="color: var(--forest-green); font-size: 0.9375rem;">Estado del Usuario</span>
+                            <span class="text-muted" style="font-size: 0.8125rem;">Determina si el usuario puede acceder al sistema</span>
+                        </div>
+                        <div class="form-check form-switch ms-3" style="padding-left: 0;">
+                            <input class="form-check-input" type="checkbox" role="switch" 
+                                   id="editIsActive" 
+                                   style="width: 3.5rem; height: 1.75rem; cursor: pointer; margin-left: 0; flex-shrink: 0;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer flex-shrink-0" style="background: white; border-top: 2px solid rgba(127, 151, 135, 0.1); padding: 1.25rem 1.5rem; gap: 0.75rem;">
+                    <button type="button" class="btn btn-secondary px-4 py-2" data-bs-dismiss="modal" 
+                            style="border-radius: 0.75rem; font-weight: 500; font-size: 0.9375rem;">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn d-flex align-items-center gap-2 px-4 py-2" 
+                            style="background: linear-gradient(135deg, var(--ocre-intenso) 0%, #b06f17 100%); color: white; border: none; border-radius: 0.75rem; font-weight: 600; font-size: 0.9375rem; box-shadow: 0 4px 12px rgba(203, 128, 27, 0.3);">
+                        <span class="material-icons" style="font-size: 1.125rem;">save</span>
+                        Actualizar Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/pages/users.js"></script>
+}

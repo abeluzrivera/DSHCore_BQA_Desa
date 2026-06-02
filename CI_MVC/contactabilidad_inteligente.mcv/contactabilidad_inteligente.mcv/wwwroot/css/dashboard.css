@@ -1,0 +1,1733 @@
+/* =====================================================
+   Dashboard — Layout & page-specific styles
+   Usa: ds.css, variables.css, _search.css
+   ===================================================== */
+
+/* ─── Viewport lock — solo activo en el dashboard ────
+   .layout-viewport se inyecta al wrapper div desde ViewData
+   solo en la página del dashboard, sin afectar otras páginas  */
+.layout-viewport {
+    height: 100vh;
+    overflow: hidden;
+}
+.layout-viewport > main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+    flex: 1 1 0;
+}
+
+/* ─── Page wrapper ────────────────────────────────── */
+.dash-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4) var(--spacing-6);
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ─── Breadcrumb ──────────────────────────────────── */
+.dash-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    flex-shrink: 0;
+}
+
+.dash-breadcrumb__item {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.dash-breadcrumb__item--active {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+.dash-breadcrumb__sep {
+    color: var(--color-text-disabled);
+    font-size: var(--font-size-xs);
+}
+
+/* ─── Top bar (search + upload widget) ─────────────── */
+.dash-topbar {
+    display: flex;
+    align-items: stretch;
+    gap: var(--spacing-3);
+    flex-shrink: 0;
+}
+
+.dash-topbar__search {
+    flex: 1 1 0;
+    min-width: 0;
+    background: var(--color-bg-surface);
+    padding: var(--spacing-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+}
+
+/* ds-search-widget fills the search column */
+.dash-topbar__search .ds-search-widget {
+    width: 100%;
+}
+
+/* ─── Upload widget ────────────────────────────────── */
+.dash-upload-widget {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: var(--spacing-4);
+    flex-shrink: 0;
+    gap: var(--spacing-3);
+}
+
+/* Left col: button + optional filename */
+.dash-upload-widget__left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-top: 2px;
+    padding-left: 4px;
+    flex-shrink: 0;
+}
+
+.dash-upload-widget__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    width: 144px;
+    height: var(--btn-height-lg);
+    background: var(--color-primary-dark);
+    color: var(--color-text-inverse);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    border: none;
+    border-radius: 15px;
+    box-shadow: var(--shadow-btn);
+    text-decoration: none;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.dash-upload-widget__btn:hover {
+    background: var(--color-primary-dark);
+    color: var(--color-text-inverse);
+    text-decoration: none;
+}
+
+.dash-upload-widget__filename {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-10);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-pd-60);
+    text-align: center;
+    line-height: var(--line-height-normal);
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Right col: stats */
+.dash-upload-widget__right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-1);
+    padding-right: 8px;
+    min-width: 0;
+}
+
+.dash-upload-widget__stats-label {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-10);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: var(--color-primary-dark);
+    line-height: 1;
+}
+
+.dash-upload-widget__progress-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    align-self: stretch;
+}
+
+.dash-upload-widget__bar {
+    flex: 1;
+    height: 8px;
+    background: var(--color-neutral-100);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    min-width: 0;
+}
+
+.dash-upload-widget__bar-fill {
+    height: 100%;
+    background: var(--color-primary-dark);
+    border-radius: var(--radius-full);
+    transition: width var(--transition-medium);
+}
+
+.dash-upload-widget__pct {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-dark);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.dash-upload-widget__detail {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-9);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-pd-60);
+    line-height: var(--line-height-normal);
+}
+
+/* ─── Search widget spacing (standalone) ────────────── */
+.ds-search-widget {
+    flex-shrink: 0;
+}
+
+/* ─── Two-panel body ───────────────────────────────── */
+.dash-body {
+    display: flex;
+    gap: var(--spacing-4);
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ─── Aside (left: client list) ───────────────────── */
+.dash-aside {
+    width: var(--aside-width);
+    flex-shrink: 0;
+    min-height: 0;
+    padding: 10px;
+}
+
+/* ─── Detail panel container (right) ──────────────── */
+.dash-detail {
+    flex: 1 1 0;
+    min-height: 0;
+    min-width: 0;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dash-detail__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-3);
+    flex: 1 1 0;
+    min-height: 0;
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: var(--spacing-8);
+}
+
+.dash-detail__empty .material-symbols-outlined {
+    font-size: var(--font-size-4xl);
+    opacity: 0.25;
+}
+
+.dash-detail__empty p {
+    font-size: var(--font-size-sm);
+    max-width: 240px;
+    margin: 0;
+}
+
+/* ─── Per-client hidden panels ─────────────────────── */
+.dash-detail__panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.dash-detail__panel[hidden] {
+    display: none !important;
+}
+
+/* ─── Detail header ────────────────────────────────── */
+.dash-detail__header {
+    padding: var(--spacing-6);
+    background: var(--color-bg-surface);
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--color-pd-10);
+    flex-shrink: 0;
+}
+
+.dash-detail__client-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+.dash-detail__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: var(--color-pd-10);
+    box-shadow: var(--shadow-sm);
+    outline: 2px solid white;
+    outline-offset: -2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-dark);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.dash-detail__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dash-detail__client-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+/* ── Name row: name + meta button ── */
+.dash-detail__name-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.dash-detail__name {
+    color: var(--color-primary-dark);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-2xl);          /* 24px */
+    font-weight: var(--font-weight-bold);
+    line-height: 2rem;          /* 32px */
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dash-detail__meta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--color-pd-10);
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    color: var(--color-primary-dark);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-xs);         /* 12px */
+    font-weight: var(--font-weight-bold);
+    line-height: 1rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background var(--transition-fast);
+}
+
+.dash-detail__meta-btn:hover {
+    background: var(--color-pd-18);
+}
+
+/* ── Meta row: status | id | location ── */
+.dash-detail__meta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    flex-wrap: wrap;
+}
+
+.dash-detail__status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-9);       /* 9px */
+    font-weight: var(--font-weight-bold);
+    line-height: 0.84375rem;    /* 13.5px */
+    letter-spacing: 0.22px;
+    white-space: nowrap;
+}
+
+.dash-detail__status-pill--pending {
+    background: var(--color-pending-bg);
+    outline: 1px solid var(--color-pending-border);
+    outline-offset: -1px;
+    color: var(--color-pending-text);
+}
+
+.dash-detail__status-pill--verified {
+    background: var(--color-verified-bg);
+    outline: 1px solid var(--color-verified-border);
+    outline-offset: -1px;
+    color: var(--color-verified-text);
+}
+
+.dash-detail__meta-sep {
+    display: inline-block;
+    width: 1px;
+    height: 16px;
+    background: var(--color-pd-20);
+    flex-shrink: 0;
+}
+
+.dash-detail__id-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    background: var(--color-pd-05);
+    border-radius: var(--radius-sm);
+    color: var(--color-pd-60);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);        /* 14px */
+    font-weight: var(--font-weight-regular);
+    line-height: 1.25rem;
+    white-space: nowrap;
+}
+
+.dash-detail__location {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    color: var(--color-pd-60);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);        /* 14px */
+    font-weight: var(--font-weight-regular);
+    line-height: 1.25rem;
+}
+
+/* ─── Scrollable sections body ─────────────────────── */
+.dash-detail__body {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0 var(--spacing-4) var(--spacing-4);
+    display: block; /* Cambiamos de flex a block para evitar conflictos de compresión en flex-direction: column */
+}
+
+/* Scrollbar siempre visible en el body de contactos */
+.dash-detail__body::-webkit-scrollbar {
+    width: 6px;
+}
+.dash-detail__body::-webkit-scrollbar-track {
+    background: var(--color-neutral-100, #f0f0f0);
+    border-radius: 3px;
+}
+.dash-detail__body::-webkit-scrollbar-thumb {
+    background: var(--color-pd-30, #b0b0b0);
+    border-radius: 3px;
+}
+.dash-detail__body::-webkit-scrollbar-thumb:hover {
+    background: var(--color-pd-50, #888);
+}
+
+/* ─── Section (Teléfonos / Emails / Direcciones) ───── */
+.dash-detail__section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    padding-bottom: var(--spacing-4);
+}
+
+.dash-detail__section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-11);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin: 0;
+    padding: var(--spacing-3) var(--spacing-4) 0;
+}
+
+.dash-detail__section-title .material-symbols-outlined {
+    font-size: 14px;
+}
+
+/* ─── Contact row ──────────────────────────────────── */
+.dash-contact-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    margin: 0 var(--spacing-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color var(--transition-fast);
+}
+
+.dash-contact-row + .dash-contact-row {
+    margin-top: var(--spacing-2);
+}
+
+.dash-contact-row--verified {
+    border-color: var(--color-success-25);
+    background: var(--color-success-bg);
+}
+
+.dash-contact-row--error {
+    border-color: var(--color-danger-30);
+    background: var(--color-danger-3);
+}
+
+.dash-contact-row__info {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: 10px var(--spacing-3);
+    min-width: 0;
+}
+
+.dash-contact-row__actions {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding-right: var(--spacing-2);
+    flex-shrink: 0;
+}
+
+.dash-contact-row__error-hint {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px var(--spacing-3) 7px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-danger);
+    border-top: 1px solid rgba(254, 202, 202, 0.50);  /* matches rejection zone separator */
+    background: var(--color-danger-3);                /* subtle red tint on the closed row */
+}
+
+.dash-contact-row__error-hint .material-symbols-outlined {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.dash-contact-row__icon {
+    font-size: 16px;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    line-height: 1;
+}
+.dash-contact-row--error   .dash-contact-row__icon { color: var(--color-danger); }
+.dash-contact-row--verified .dash-contact-row__icon { color: var(--color-primary); }
+
+.dash-contact-row--error   .ds-badge { background: var(--color-danger-10); color: var(--color-danger); border-color: var(--color-danger-30); }
+.dash-contact-row--verified .ds-badge { background: var(--color-verified-bg); color: var(--color-verified-text); border-color: var(--color-verified-border); }
+
+.dash-contact-row__value {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dash-contact-row--error    .dash-contact-row__value { color: var(--color-danger); }
+.dash-contact-row--verified .dash-contact-row__value { color: var(--color-verified-text); }
+
+.dash-contact-row__type-badge {
+    flex-shrink: 0;
+}
+
+/* ─── Vuesax icon base ─────────────────────────────── */
+.ds-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+.ds-icon--sm {
+    width: 14px;
+    height: 14px;
+}
+
+/* ─── Action buttons — uniform container ──────────── */
+.dash-contact-row__actions .ds-btn--icon {
+    width: var(--btn-height-sm) !important;
+    height: var(--btn-height-sm) !important;
+    border-radius: var(--radius-full) !important;
+    flex-shrink: 0;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: var(--shadow-action);
+}
+
+
+.contact-verify-btn--verified {
+    background: var(--color-verified-bg) !important;
+    border-color: var(--color-success-20) !important;
+}
+
+/* Verified = disabled: no hover/focus feedback */
+.contact-verify-btn--verified:disabled,
+.contact-verify-btn--verified[disabled] {
+    opacity: 1;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Reduce check icon so it looks proportional to the other 20px icons */
+.contact-verify-btn .ds-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* note-remove button active (rejection applied) */
+.contact-reject-btn.is-active {
+    background: var(--color-rejection) !important;
+}
+
+.contact-reject-btn.is-active .ds-icon {
+    filter: brightness(0) invert(1); /* force pure white regardless of original icon color */
+}
+
+/* ─── Status icons (legacy, kept for JS compat) ────── */
+
+/* ─── Inline rejection zone ─────────────────────────── */
+.dash-rejection-zone {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);                         /* 8px */
+    padding: var(--spacing-1) var(--spacing-3) 10px;
+    border-top: 1px solid rgba(254, 202, 202, 0.50);
+}
+
+.dash-rejection-zone__label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    color: var(--color-danger);
+    font-size: var(--font-size-xs);                /* 12px */
+    font-family: 'Sora', var(--font-family-base);
+    font-weight: var(--font-weight-semibold);      /* 600 */
+    line-height: 16px;
+}
+
+.dash-rejection-zone__label-dot {
+    display: block;
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    border-radius: var(--radius-xs);               /* 2px */
+    background: var(--color-danger);
+}
+
+.dash-rejection-zone__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);                         /* 8px */
+    align-content: flex-start;
+}
+
+.dash-rejection-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-1) var(--spacing-3);    /* 4px 12px */
+    background: var(--color-bg-surface);           /* #fff */
+    border: none;
+    border-radius: var(--radius-full);             /* 9999px */
+    outline: 1px solid var(--color-danger);
+    outline-offset: -1px;
+    box-shadow: var(--shadow-sm);                  /* 0 1px 2px rgba(0,0,0,.05) */
+    color: #4B5563;                                /* Figma gray-600 — no DS token */
+    font-size: var(--font-size-xs);                /* 12px */
+    font-family: var(--font-family-base);          /* Inter */
+    font-weight: var(--font-weight-medium);        /* 500 */
+    line-height: 1.4;
+    cursor: pointer;
+    word-break: break-word;
+    text-align: center;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.dash-rejection-pill:hover {
+    background: #FEF2F2;                           /* red-50 — no DS token */
+    color: var(--color-danger);
+}
+
+.dash-rejection-pill:focus-visible {
+    outline: 2px solid var(--color-danger);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* ─── Back button — hidden on desktop, shown via mobile media query ── */
+.dash-detail__back-btn {
+    display: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   Contact filter bar
+   Barra de filtro por estado dentro del panel de detalle.
+   Ubicación: entre dash-detail__header y dash-detail__body.
+   ═══════════════════════════════════════════════════ */
+
+.dash-contact-filter {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding: var(--spacing-2) var(--spacing-4);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.dash-contact-filter::-webkit-scrollbar { display: none; }
+
+.dash-contact-filter__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: var(--radius-full, 999px);
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+    line-height: 1.4;
+}
+.dash-contact-filter__btn:hover {
+    background: var(--color-pd-05);
+    color: var(--color-text-primary);
+}
+.dash-contact-filter__btn .material-symbols-outlined {
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+/* ── Estado activo base (Todos) ── */
+.dash-contact-filter__btn--active {
+    background: var(--color-pd-08, var(--color-pd-05));
+    color: var(--color-primary-dark);
+    font-weight: var(--font-weight-semibold);
+    border-color: var(--color-pd-18, var(--color-pd-20));
+}
+
+/* ── Estados activos con color semántico ── */
+.dash-contact-filter__btn--active[data-filter="verificado"] {
+    background: var(--color-verified-bg);
+    color: var(--color-verified-text);
+    border-color: var(--color-verified-border);
+}
+.dash-contact-filter__btn--active[data-filter="pendiente"] {
+    background: var(--color-pending-bg);
+    color: var(--color-pending-text);
+    border-color: var(--color-pending-border);
+}
+.dash-contact-filter__btn--active[data-filter="error"] {
+    background: var(--color-danger-3, #fef2f2);
+    color: var(--color-danger, #dc2626);
+    border-color: var(--color-danger-30, #fca5a5);
+}
+
+/* ── Badge de conteo ── */
+.dash-contact-filter__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    background: var(--color-pd-12, var(--color-pd-10));
+    color: var(--color-primary-dark);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+}
+.dash-contact-filter__btn--active .dash-contact-filter__count {
+    background: var(--color-primary-dark);
+    color: #fff;
+}
+.dash-contact-filter__btn--active[data-filter="verificado"] .dash-contact-filter__count {
+    background: var(--color-verified-text);
+    color: #fff;
+}
+.dash-contact-filter__btn--active[data-filter="pendiente"] .dash-contact-filter__count {
+    background: var(--color-pending-text);
+    color: #fff;
+}
+.dash-contact-filter__btn--active[data-filter="error"] .dash-contact-filter__count {
+    background: var(--color-danger, #dc2626);
+    color: #fff;
+}
+
+/* ── Estado vacío (sin filas para el filtro activo) ── */
+.dash-contact-filter__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-8) var(--spacing-4);
+    color: var(--color-text-muted);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    text-align: center;
+}
+.dash-contact-filter__empty .material-symbols-outlined {
+    font-size: 32px;
+    opacity: 0.3;
+}
+
+
+
+/* ═══════════════════════════════════════════════════
+   Modal — Nueva Lote de clientes
+   ═══════════════════════════════════════════════════ */
+
+/* Overlay / backdrop */
+.lote-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--color-overlay);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-4);
+}
+.lote-modal-overlay[hidden] { display: none; }
+
+/* Modal container */
+.lote-modal {
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-modal);
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: calc(100dvh - var(--spacing-8));
+}
+
+/* ── Header ── */
+.lote-modal__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-4);
+    padding: var(--spacing-6) var(--spacing-8);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+}
+.lote-modal__title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-dark);
+    margin: 0;
+    line-height: 1.2;
+}
+.lote-modal__subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: var(--spacing-1) 0 0;
+}
+.lote-modal__close {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    margin-top: var(--spacing-1);
+}
+.lote-modal__close:hover {
+    background: var(--color-bg-subtle);
+    color: var(--color-primary-dark);
+}
+
+/* ── Tab bar ── */
+.lote-modal__tabs {
+    display: flex;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0 var(--spacing-8);
+    flex-shrink: 0;
+}
+.lote-modal__tab {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+}
+.lote-modal__tab:hover { color: var(--color-primary-dark); }
+.lote-modal__tab--active {
+    color: var(--color-primary-dark);
+    border-bottom-color: var(--color-primary-dark);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* ── Panes ── */
+.lote-modal__pane {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+}
+.lote-modal__pane--active { display: flex; }
+
+/* ── Pane 2: Pegar IDs — body ── */
+.lote-modal__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    padding: var(--spacing-8);
+    background: var(--color-bg-light);
+    flex: 1;
+}
+.lote-modal__section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.lote-modal__section-title {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-dark);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.lote-modal__clear-btn {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary-light);
+    background: transparent;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+.lote-modal__clear-btn:hover { color: var(--color-primary-dark); }
+.lote-modal__textarea {
+    width: 100%;
+    padding: var(--spacing-4);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-surface);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family-base);
+    color: var(--color-text-primary);
+    resize: vertical;
+    box-sizing: border-box;
+    min-height: 200px;
+}
+.lote-modal__textarea::placeholder { color: var(--color-text-muted); }
+.lote-modal__textarea:focus {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 1px;
+}
+.lote-modal__info-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3) var(--spacing-4);
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+.lote-modal__info-banner[hidden] { display: none; }
+.lote-modal__info-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    color: var(--color-primary-light);
+}
+
+/* ── Pane 1: Cargar Archivo — body ── */
+.lote-modal__upload-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  flex: 1;
+  min-height: 0;
+}
+
+/* Regla de visibilidad maestra: ocultar todo por defecto */
+.lote-modal__upload-body > * {
+  display: none;
+}
+
+/* Estado: empty */
+.lote-modal__upload-body[data-state="empty"] .lote-modal__dropzone,
+.lote-modal__upload-body[data-state="empty"] .lote-modal__template-row {
+  display: flex;
+}
+
+/* Estado: loading */
+.lote-modal__upload-body[data-state="loading"] .lote-modal__loading {
+  display: flex;
+}
+
+/* Estado: success */
+.lote-modal__upload-body[data-state="success"] .lote-modal__file-card,
+.lote-modal__upload-body[data-state="success"] .lote-modal__info-banner--file {
+  display: flex;
+}
+
+/* Estado: error */
+.lote-modal__upload-body[data-state="error"] .lote-modal__error-alert,
+.lote-modal__upload-body[data-state="error"] .lote-modal__dropzone,
+.lote-modal__upload-body[data-state="error"] .lote-modal__template-row {
+  display: flex;
+}
+
+/* ── File input oculto (sr-only) ── */
+.lote-modal__file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Dropzone ── */
+.lote-modal__dropzone {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-8) var(--spacing-6);
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+  background-color: var(--color-surface);
+  text-align: center;
+}
+.lote-modal__dropzone:hover,
+.lote-modal__dropzone.is-dragover {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
+}
+/* Label llena toda el área del dropzone para que sea clicable en cualquier punto */
+.lote-modal__dropzone-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-3);
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+}
+.lote-modal__dropzone-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-text-muted);
+}
+.lote-modal__dropzone-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+}
+.lote-modal__dropzone-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* ── Loading spinner ── */
+.lote-modal__loading {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-8);
+}
+.lote-modal__spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: lote-spin 0.75s linear infinite;
+}
+.lote-modal__loading-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+@keyframes lote-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── File card (success state) ── */
+.lote-modal__file-card {
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.lote-modal__file-card-icon {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+.lote-modal__file-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+  min-width: 0;
+}
+.lote-modal__file-card-name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lote-modal__file-card-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+.lote-modal__file-card-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: var(--spacing-1);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background-color 0.15s;
+}
+.lote-modal__file-card-remove:hover {
+  color: var(--color-danger);
+  background-color: var(--color-danger-subtle);
+}
+
+/* ── Info banner (success state) ── */
+.lote-modal__info-banner--file {
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  background-color: var(--color-success-subtle);
+  border: 1px solid var(--color-success-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-success-text);
+}
+.lote-modal__info-banner--file svg {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.125rem;
+}
+
+/* ── Error alert ── */
+.lote-modal__error-alert {
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  background-color: var(--color-danger-subtle);
+  border: 1px solid var(--color-danger-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-danger-text);
+}
+.lote-modal__error-alert svg {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.125rem;
+}
+
+/* ── Template row ── */
+.lote-modal__template-row {
+  align-items: center;
+  justify-content: flex-end;
+}
+.lote-modal__template-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.lote-modal__template-link:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+.lote-modal__template-link svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* ── Footer ── */
+.lote-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-3);
+    padding: var(--spacing-6) var(--spacing-8);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-surface);
+    flex-shrink: 0;
+}
+.lote-modal__cancel {
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary-dark);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+.lote-modal__cancel:hover { background: var(--color-bg-subtle); }
+.lote-modal__submit {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-5);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-inverse);
+    background: var(--color-alert);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: var(--shadow-btn);
+}
+.lote-modal__submit:hover { opacity: 0.88; }
+.lote-modal__submit-icon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+}
+
+/* ═══════════════════════════════════════════════════
+   Responsive — móvil (≤ 767px)
+   Patrón master/detail: lista visible por defecto;
+   al seleccionar cliente la lista se oculta y el
+   panel de detalle ocupa toda la pantalla.
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+    /* ── Page wrapper: scrollable, padding reducido ── */
+    .dash-layout {
+        height: auto;
+        min-height: calc(100dvh - var(--navbar-height));
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: var(--spacing-3);
+        gap: var(--spacing-2);
+    }
+
+    /* ── Top bar: apilado vertical ───────────────── */
+    .dash-topbar {
+        flex-direction: column;
+        gap: var(--spacing-2);
+    }
+
+    .dash-upload-widget {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .dash-upload-widget__right {
+        min-width: unset;
+        flex: 1;
+        padding-right: 0;
+    }
+
+    /* ── Search: pills pueden hacer wrap ─────────── */
+    .ds-search-filters {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    /* ── Body: apilado vertical ───────────────────── */
+    .dash-body {
+        flex-direction: column;
+        overflow: visible;
+        flex: none;
+        gap: var(--spacing-3);
+    }
+
+    /* ── Aside: ancho completo, altura fija para que
+          height:100% de ds-client-list resuelva bien ── */
+    .dash-aside {
+        width: 100%;
+        height: 55vh;
+        min-height: 280px;
+        overflow: visible; /* el scroll lo maneja ds-client-list__body */
+    }
+
+    /* ── Panel detalle: ancho completo ───────────── */
+    .dash-detail {
+        min-height: 420px;
+    }
+
+    /* ── Master/detail: al abrir detalle, ocultar aside ── */
+    .dash-body--detail-open .dash-aside {
+        display: none;
+    }
+
+    .dash-body--detail-open .dash-detail {
+        min-height: calc(100dvh - 180px);
+    }
+
+    /* ── Back button: visible en móvil ───────────── */
+    .dash-detail__back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: var(--spacing-1) 0 var(--spacing-2);
+        font-size: var(--font-size-13);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-primary-dark);
+        background: none;
+        border: none;
+        cursor: pointer;
+        line-height: 1;
+    }
+
+    .dash-detail__back-btn:hover {
+        color: var(--color-primary-dark);
+    }
+
+    /* ── Contact rows: márgenes más pequeños ─────── */
+    .dash-contact-row {
+        margin-left: var(--spacing-2);
+        margin-right: var(--spacing-2);
+    }
+
+    .dash-contact-row__value {
+        font-size: var(--font-size-13);
+    }
+
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ds-search — Dropdown de sugerencias
+   ═══════════════════════════════════════════════════════════ */
+
+/* Posición relativa del widget para que el dropdown use position:absolute */
+.ds-search-widget {
+    position: relative;
+}
+
+/* ── Contenedor dropdown ─────────────────────────────────── */
+.ds-search-dropdown {
+    position:    absolute;
+    top:         calc(100% + 6px);
+    left:        0;
+    right:       0;
+    z-index:     200;
+    background:  var(--color-bg-surface);
+    border:      1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    box-shadow:  var(--shadow-hover);
+    overflow:    hidden;
+    animation:   _dd-fade-in 120ms ease-out both;
+}
+
+@keyframes _dd-fade-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header del dropdown ─────────────────────────────────── */
+.ds-search-dropdown__header {
+    display:     flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:     10px 14px 8px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ds-search-dropdown__label {
+    font-size:   var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color:       var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.ds-search-dropdown__hint {
+    font-size:   var(--font-size-xs);
+    color:       var(--color-text-muted);
+}
+
+.ds-search-dropdown__hint kbd {
+    display:       inline-block;
+    padding:       1px 5px;
+    background:    var(--color-neutral-100);
+    border:        1px solid var(--color-border-strong);
+    border-radius: 4px;
+    font-size:     11px;
+    font-family:   var(--font-family-base);
+}
+
+.ds-search-dropdown__list {
+    list-style:    none;
+    margin:        0;
+    padding:       6px 0;
+    max-height:    320px;
+    overflow-y:    auto;
+    overscroll-behavior: contain;
+}
+
+/* ── Estado vacío ────────────────────────────────────────── */
+.ds-search-dropdown__empty {
+    display:        flex;
+    align-items:    center;
+    gap:            var(--spacing-2);
+    padding:        14px 16px;
+    color:          var(--color-text-muted);
+    font-size:      var(--font-size-sm);
+    font-style:     italic;
+}
+
+/* ── Estado cargando ─────────────────────────────────────── */
+.ds-search-dropdown__loading {
+    display:        flex;
+    align-items:    center;
+    gap:            var(--spacing-2);
+    padding:        14px 16px;
+    color:          var(--color-text-secondary);
+    font-size:      var(--font-size-sm);
+    list-style:     none;
+}
+
+.ds-search-dropdown__loading-spin {
+    animation:      _spin 1s linear infinite;
+    font-size:      18px;
+}
+
+@keyframes _spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Estado error ────────────────────────────────────────── */
+.ds-search-dropdown__error {
+    display:        flex;
+    align-items:    center;
+    gap:            var(--spacing-2);
+    padding:        14px 16px;
+    color:          var(--color-danger);
+    font-size:      var(--font-size-sm);
+    list-style:     none;
+}
+
+/* ── Item de resultado ──────────────────────────────────── */
+.ds-search-dropdown__item {
+    display:     flex;
+    align-items: center;
+    gap:         10px;
+    padding:     8px 14px;
+    cursor:      default;
+    transition:  background var(--transition-fast);
+}
+
+.ds-search-dropdown__item:hover {
+    background: var(--color-pd-04);
+}
+
+.ds-search-dropdown__item--active,
+.ds-search-dropdown__item--active:hover {
+    background: var(--color-primary-10);
+    box-shadow: inset 2px 0 0 var(--color-primary);
+}
+
+.ds-search-dropdown__item-avatar {
+    width:           32px;
+    height:          32px;
+    flex-shrink:     0;
+    border-radius:   50%;
+    background:      var(--color-primary-10);
+    color:           var(--color-primary-dark);
+    font-size:       var(--font-size-xs);
+    font-weight:     var(--font-weight-bold);
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    text-transform:  uppercase;
+    letter-spacing:  0.03em;
+}
+
+.ds-search-dropdown__item-info {
+    flex:        1;
+    min-width:   0;
+    display:     flex;
+    flex-direction: column;
+    gap:         2px;
+}
+
+.ds-search-dropdown__item-name {
+    font-size:   var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color:       var(--color-text-primary);
+    white-space: nowrap;
+    overflow:    hidden;
+    text-overflow: ellipsis;
+}
+
+.ds-search-dropdown__item-id {
+    font-size:   var(--font-size-xs);
+    color:       var(--color-text-muted);
+    font-family: var(--font-family-mono, monospace);
+}
+
+.ds-search-dropdown__item-status {
+    flex-shrink: 0;
+    font-size:   11px;
+}
+
+/* ── Botón "Agregar" ────────────────────────────────────── */
+.ds-search-dropdown__add-btn {
+    flex-shrink:   0;
+    display:       inline-flex;
+    align-items:   center;
+    gap:           4px;
+    padding:       5px 10px;
+    background:    var(--color-primary);
+    color:         #fff;
+    border:        none;
+    border-radius: var(--radius-sm);
+    font-size:     var(--font-size-xs);
+    font-weight:   var(--font-weight-semibold);
+    cursor:        pointer;
+    transition:    background var(--transition-fast), opacity var(--transition-fast);
+    white-space:   nowrap;
+}
+
+.ds-search-dropdown__add-btn .material-symbols-outlined {
+    font-size: 14px;
+}
+
+.ds-search-dropdown__add-btn:hover:not([disabled]) {
+    background: var(--color-primary-dark);
+}
+
+.ds-search-dropdown__add-btn--added,
+.ds-search-dropdown__add-btn[disabled] {
+    background: var(--color-success-bg);
+    color:      var(--color-success);
+    cursor:     default;
+    opacity:    0.85;
+}
+
+/* ── Artículo recién agregado: destello de entrada ──────── */
+@keyframes _article-highlight {
+    0%   { background: var(--color-primary-10); }
+    100% { background: transparent; }
+}
+
+.ds-client-article--highlight {
+    animation: _article-highlight 800ms ease-out forwards;
+}
+
+
+
+/* ═══════════════════════════════════════════════════
+   View Orchestrator — ds-client-view
+   Vista embebida del perfil de cliente. Se superpone
+   sobre todo el shell como overlay de pantalla completa.
+   ═══════════════════════════════════════════════════ */
+
+.ds-client-view {
+    position:        fixed;
+    top:             var(--navbar-height, 64px);
+    left:            0;
+    right:           0;
+    bottom:          0;
+    z-index:         49;   /* debajo del navbar (z-index: 50) para no taparlo */
+    display:         flex;
+    flex-direction:  column;
+    background:      var(--color-bg, #f5f6fa);
+    overflow:        hidden;
+}
+
+/* Topbar: "← Dashboard / Nombre del cliente" */
+.ds-client-view__topbar {
+    display:        flex;
+    align-items:    center;
+    gap:            8px;
+    padding:        10px 20px;
+    background:     var(--color-surface, #fff);
+    border-bottom:  1px solid var(--color-border);
+    flex-shrink:    0;
+    min-height:     48px;
+}
+
+/* Botón de regreso — actúa como primer elemento del breadcrumb */
+.ds-client-view__back-btn {
+    display:        inline-flex;
+    align-items:    center;
+    gap:            6px;
+    padding:        5px 12px;
+    background:     transparent;
+    border:         1px solid var(--color-border);
+    border-radius:  var(--radius-md, 6px);
+    color:          var(--color-text-secondary);
+    font-size:      13px;
+    font-weight:    500;
+    cursor:         pointer;
+    white-space:    nowrap;
+    transition:     background 0.15s, color 0.15s, border-color 0.15s;
+    line-height:    1;
+}
+.ds-client-view__back-btn:hover {
+    background:    var(--color-neutral-100, #f0f1f5);
+    border-color:  var(--color-text-secondary);
+    color:         var(--color-text);
+}
+.ds-client-view__back-btn svg {
+    flex-shrink: 0;
+}
+
+/* Separador "/" entre breadcrumb items */
+.ds-client-view__breadcrumb-sep {
+    color:       var(--color-text-muted, #aaa);
+    font-size:   13px;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+/* Nombre del cliente (ítem activo del breadcrumb) */
+.ds-client-view__breadcrumb-current {
+    font-size:   13px;
+    font-weight: 500;
+    color:       var(--color-text);
+    overflow:    hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width:   0;
+}
+
+/* Área de contenido: scroll independiente — ocupa todo el espacio restante */
+.ds-client-view__content {
+    flex:       1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Estado de carga */
+.ds-client-view__loading {
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+    justify-content: center;
+    gap:             12px;
+    padding:         48px 24px;
+    color:           var(--color-text-secondary);
+    font-size:       14px;
+}
+.ds-client-view__loading-icon {
+    font-size:  2.25rem !important;
+    animation:  ds-spin 0.9s linear infinite;
+}
+
+@keyframes ds-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 767px) {
+    .ds-client-view__topbar {
+        padding: 8px 12px;
+    }
+    .ds-client-view__back-btn {
+        padding:   4px 10px;
+        font-size: 12px;
+    }
+}

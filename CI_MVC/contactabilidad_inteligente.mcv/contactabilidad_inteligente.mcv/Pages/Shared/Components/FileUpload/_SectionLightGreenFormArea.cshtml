@@ -1,0 +1,139 @@
+@using SDH.Application.Models
+@* 
+  Component: Section - Light Green Background Area for Form Content
+  Purpose: Display file upload zone, uploaded file details, and record count alert
+  Dependencies: Tailwind CSS (tw-* prefix), Bootstrap icons
+  Created: 2026-03-09
+  Figma: https://www.figma.com/design/lJSE2H8XeNXlNRFAcJWYzd/Data-Smart-Hub?node-id=116-4291
+*@
+@model SectionLightGreenFormAreaViewModel
+
+<section class="tw-bg-form-light tw-p-8 tw-flex tw-flex-col tw-gap-6 tw-rounded-lg" 
+         data-component="section-light-green-form"
+         role="region"
+         aria-label="Área de carga de archivos Excel">
+
+  <!-- [1] Upload Drop Zone -->
+  <div class="tw-flex tw-flex-col">
+    <div class="tw-bg-white tw-border-2 tw-border-form-border tw-border-dashed tw-rounded-lg tw-p-8 tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-3 tw-cursor-pointer hover:tw-bg-gray-50 tw-transition-colors tw-duration-200"
+         id="dropZone"
+         data-dropzone
+         role="button"
+         tabindex="0"
+         aria-label="Zona de arrastre para cargar archivo Excel">
+      
+      <!-- Cloud Icon SVG -->
+      <div class="tw-mb-1">
+        <svg class="tw-w-8 tw-h-8 tw-text-form-border" 
+             viewBox="0 0 24 24" 
+             fill="none" 
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" 
+                fill="currentColor"/>
+        </svg>
+      </div>
+
+      <!-- Upload Text -->
+      <div class="tw-text-center">
+        <h3 class="tw-text-[14px] tw-font-bold tw-text-[#295136] tw-m-0 tw-mb-1">
+          Arrastra tu archivo Excel aquí
+        </h3>
+        <p class="tw-text-[14px] tw-font-medium tw-text-text-body-muted tw-m-0">
+          o haz clic para buscar
+        </p>
+      </div>
+
+      <!-- Download Template Button -->
+      <button type="button" 
+              class="tw-flex tw-items-center tw-gap-2 tw-text-[12px] tw-font-bold tw-text-[#295136] tw-bg-transparent tw-border-0 tw-p-0 tw-cursor-pointer hover:tw-opacity-75 tw-transition-opacity"
+              id="downloadTemplateBtn"
+              aria-label="Descargar plantilla Excel">
+        <svg class="tw-w-3 tw-h-3" 
+             viewBox="0 0 24 24" 
+             fill="currentColor"
+             aria-hidden="true">
+          <path d="M19 13H5V11H19V13ZM16 18H8V16H16V18ZM17.67 9.59L12 3.92L6.33 9.59H9V15H15V9.59H17.67Z"/>
+        </svg>
+        <span>Descargar Plantilla</span>
+      </button>
+
+      <!-- Hidden File Input -->
+      <input type="file" 
+             id="fileInput" 
+             class="tw-hidden" 
+             accept=".xlsx,.xls,.csv"
+             aria-label="Seleccionar archivo Excel" />
+    </div>
+  </div>
+
+  <!-- [2] File Item Card - Visible when file is uploaded -->
+  @if (Model?.UploadedFile != null)
+  {
+    <div class="tw-bg-white tw-p-4 tw-rounded tw-shadow-sm tw-flex tw-items-center tw-justify-between"
+         data-file-card
+         role="article"
+         aria-label="Archivo cargado: @Model.UploadedFile.FileName">
+      
+      <!-- Left Section: File Icon & Details -->
+      <div class="tw-flex tw-items-center tw-gap-4">
+        
+        <!-- Icon Container -->
+        <div class="tw-bg-form-icon-bg tw-w-10 tw-h-10 tw-rounded-sm tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+             aria-hidden="true">
+          <svg class="tw-w-6 tw-h-6 tw-text-[#22c55e]" 
+               viewBox="0 0 24 24" 
+               fill="currentColor">
+            <path d="M14 2H6A2 2 0 0 0 4 4V20A2 2 0 0 0 6 22H18A2 2 0 0 0 20 20V8L14 2Z"/>
+          </svg>
+        </div>
+
+        <!-- File Details -->
+        <div class="tw-flex tw-flex-col tw-gap-1">
+          <span class="tw-font-bold tw-text-[14px] tw-text-text-dark-body">
+            @Model.UploadedFile.FileName
+          </span>
+          <span class="tw-text-[12px] tw-text-[#9ca3af]">
+            @Model.UploadedFile.FileSize
+          </span>
+        </div>
+      </div>
+
+      <!-- Right Section: Success Checkmark -->
+      <div class="tw-flex-shrink-0">
+        <svg class="tw-w-7 tw-h-5 tw-text-[#22c55e]" 
+             viewBox="0 0 24 24" 
+             fill="currentColor"
+             aria-label="Archivo cargado exitosamente">
+          <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z"/>
+        </svg>
+      </div>
+    </div>
+  }
+
+  <!-- [3] Info Alert Box - Visible when records are detected -->
+  @if (Model?.RecordsDetected > 0)
+  {
+    <div class="tw-bg-form-lighter tw-p-3 tw-px-4 tw-rounded-[6px] tw-flex tw-items-start tw-gap-3"
+         data-alert-box
+         role="status"
+         aria-live="polite"
+         aria-label="Información de registros detectados">
+      
+      <!-- Info Icon -->
+      <svg class="tw-w-[18px] tw-h-[18px] tw-text-text-dark-body tw-flex-shrink-0 tw-mt-[2px]" 
+           viewBox="0 0 24 24" 
+           fill="currentColor"
+           aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+        <path d="M12 16V12M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+
+      <!-- Alert Message -->
+      <p class="tw-text-[14px] tw-text-text-dark-body tw-m-0">
+        <strong>@Model.RecordsDetected.ToString("N0")</strong> registros detectados listos para cargar
+      </p>
+    </div>
+  }
+
+</section>

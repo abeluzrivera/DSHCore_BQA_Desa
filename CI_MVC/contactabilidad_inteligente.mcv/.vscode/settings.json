@@ -1,0 +1,14 @@
+{
+    "csharp-dev-tools.entityFramework.migrationPreferences": {
+        "contactabilidad_inteligente.mcv.sln": {
+            "startupProject": "contactabilidad_inteligente.mcv\\contactabilidad_inteligente.mcv.csproj",
+            "migrationsProject": "contactabilidad_inteligente.mcv\\contactabilidad_inteligente.mcv.csproj",
+            "dbContextClass": "",
+            "fromMigration": "",
+            "toMigration": "",
+            "outputFile": "Update_sql.sql",
+            "idempotent": false,
+            "noTransactions": false
+        }
+    }
+}

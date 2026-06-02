@@ -1,0 +1,636 @@
+﻿@page
+@using System.Text.Json
+@using SDH.Domain.Enums
+@using contactabilidad_inteligente.mcv.Helpers
+@model contactabilidad_inteligente.mcv.Pages.ClientesModel
+@{
+    ViewData["Title"] = "Perfil de Cliente";
+    // Modo embebido: cuando se carga desde el Dashboard sin navegación de página
+    bool _isEmbed = HttpContext.Request.Query.ContainsKey("embed");
+    if (_isEmbed) { Layout = null; }
+}
+
+@if (!_isEmbed)
+{
+@section Styles {
+    <link rel="stylesheet" href="~/css/clientes.css" />
+}
+}
+
+@* =========================================================================
+   FUNCIONES LOCALES DE RAZOR (PLANTILLAS REUTILIZABLES)
+   ========================================================================= *@
+@{
+    // Plantilla para Correos y Teléfonos
+    void RenderContactCard(dynamic contact, string category)
+    {
+        <div class="cp-contact-card cp-contact-card--@contact.State"
+             data-client-id="@Model.Cliente.Id"
+             data-contact-type="@contact.TipoContacto"
+             data-contact-value="@contact.Value" 
+             data-contact-id="@contact.Id"
+             data-contact-state="@contact.State">
+            
+            <div class="cp-contact-card__top">
+                <div class="cp-contact-card__badges">
+                    <span class="cp-label-badge">@contact.Label</span>
+                    <span class="cp-state-icon cp-state-icon--@contact.State" aria-hidden="true">
+                        <span class="material-symbols-outlined">
+                            @(contact.State == "verified" ? "check_circle" : contact.State == "error" ? "cancel" : "pending_actions")
+                        </span>
+                    </span>
+                    <span class="cp-state-icon cp-state-icon--pending" aria-hidden="true">
+                        <span class="material-symbols-outlined">shield</span>
+                    </span>
+                </div>
+                <button class="cp-edit-btn" aria-label="Editar contacto" data-toggle-edit>
+                    <span class="material-symbols-outlined">edit</span>
+                </button>
+            </div>
+
+            <div class="cp-action-pills" hidden>
+                <button class="cp-action-pill cp-action-pill--verify" data-action="verify">
+                    <span class="material-symbols-outlined">check_circle</span> Verificar
+                </button>
+                <button class="cp-action-pill cp-action-pill--reject" data-action="reject-toggle">
+                    <span class="material-symbols-outlined">delete</span> Validación
+                    <span class="material-symbols-outlined">expand_more</span>
+                </button>
+                <button class="cp-action-pill cp-action-pill--lopdp" data-lopdp>
+                    <span class="material-symbols-outlined">description</span> LOPDP
+                    <span class="material-symbols-outlined">expand_more</span>
+                </button>
+            </div>
+
+            <div class="cp-reject-zone" hidden>
+                <div class="cp-reject-zone__label">
+                    <span class="material-symbols-outlined">@(category == "email" ? "mail" : "phone")</span>
+                    Seleccione motivo de rechazo:
+                </div>
+                <div class="cp-reject-pills">
+                    @if (ContactabilityLabelHelper.RejectionPills.TryGetValue(category, out var pills))
+                    {
+                        foreach (var pill in pills)
+                        {
+                            <button class="cp-reject-pill" data-error-code="@pill.Code">@pill.ShortLabel</button>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="cp-contact-card__value-row cp-contact-card__value-row--@contact.State">
+                <div class="cp-contact-card__icon-box tw-border tw-rounded-md tw-p-2 tw-flex tw-items-center tw-justify-center @contact.BgClass @contact.BorderClass @contact.TextClass">
+                    <span class="material-symbols-outlined">@contact.Icon</span>
+                </div>
+                <span class="cp-contact-card__value">@contact.Value</span>
+            </div>
+
+            @if (contact.State == "error" || contact.State == "unknown")
+            {
+                <div class="cp-error-hint">
+                    <span class="material-symbols-outlined">cancel</span> @contact.ErrorLabel
+                </div>
+            }
+        </div>
+    }
+
+    // Plantilla para Direcciones
+    void RenderAddressCard(dynamic addr)
+    {
+        <div class="cp-contact-card cp-contact-card--@addr.State @(addr.HasGps ? "" : "cp-contact-card--no-gps")"
+             data-client-id="@Model.Cliente.Id"
+             data-contact-type="@addr.TipoContacto"
+             data-contact-value="@addr.Value"
+             data-contact-id="@addr.Id"
+             data-contact-state="@addr.State"
+             data-lat="@(addr.Lat?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")"
+             data-lng="@(addr.Lng?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
+
+            <div class="cp-contact-card__top">
+                <div class="cp-contact-card__badges">
+                    <span class="cp-label-badge">@addr.TypeLabel</span>
+                    <span class="cp-state-icon cp-state-icon--@addr.State" aria-hidden="true">
+                        <span class="material-symbols-outlined">
+                            @(addr.State == "verified" ? "check_circle" : addr.State == "error" ? "cancel" : "pending_actions")
+                        </span>
+                    </span>
+                </div>
+                <button class="cp-edit-btn" aria-label="Editar dirección" data-toggle-edit>
+                    <span class="material-symbols-outlined">edit</span>
+                </button>
+            </div>
+
+            <div class="cp-action-pills" hidden>
+                <button class="cp-action-pill cp-action-pill--verify" data-action="verify">
+                    <span class="material-symbols-outlined">check_circle</span> Verificar
+                </button>
+                <button class="cp-action-pill cp-action-pill--reject" data-action="reject-toggle">
+                    <span class="material-symbols-outlined">delete</span> Validación
+                    <span class="material-symbols-outlined">expand_more</span>
+                </button>
+            </div>
+
+            <div class="cp-reject-zone" hidden>
+                <div class="cp-reject-zone__label">
+                    <span class="material-symbols-outlined">location_on</span>
+                    Seleccione motivo de rechazo:
+                </div>
+                <div class="cp-reject-pills">
+                    @if (ContactabilityLabelHelper.RejectionPills.TryGetValue("address", out var pills))
+                    {
+                        foreach (var pill in pills)
+                        {
+                            <button class="cp-reject-pill" data-error-code="@pill.Code">@pill.ShortLabel</button>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="cp-contact-card__value-row cp-contact-card__value-row--@addr.State">
+                <div class="cp-contact-card__icon-box tw-border tw-rounded-md tw-p-2 tw-flex tw-items-center tw-justify-center @addr.BgClass @addr.BorderClass @addr.TextClass">
+                    <span class="material-symbols-outlined">location_on</span>
+                </div>
+                <span class="cp-contact-card__value">@addr.Value</span>
+            </div>
+
+            @* GPS coords — desktop only, read-only display *@
+            <div class="cp-gps-row tw-hidden lg:tw-flex">
+                <div class="cp-gps-field">
+                    <label class="cp-gps-label">LATITUD</label>
+                    <div class="cp-gps-input" data-gps-lat>@(addr.Lat?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "—")</div>
+                </div>
+                <div class="cp-gps-field">
+                    <label class="cp-gps-label">LONGITUD</label>
+                    <div class="cp-gps-input" data-gps-lng>@(addr.Lng?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "—")</div>
+                </div>
+            </div>
+
+            @* Botón unificado de mapa — funciona en mobile y desktop *@
+            @if (addr.HasGps && addr.Lat != null && addr.Lng != null)
+            {
+                <button class="cp-map-trigger cp-map-trigger--active tw-w-full"
+                        type="button"
+                        data-open-map-modal
+                        data-lat="@addr.Lat?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)"
+                        data-lng="@addr.Lng?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)"
+                        data-contact-id="@addr.Id"
+                        data-contact-value="@addr.Value">
+                    <span class="material-symbols-outlined">map</span>
+                    <span>Ver ubicación en mapa</span>
+                    <span class="material-symbols-outlined cp-map-trigger__arrow">arrow_forward_ios</span>
+                </button>
+            }
+            else
+            {
+                <div class="cp-map-trigger cp-map-trigger--disabled tw-w-full" aria-disabled="true">
+                    <span class="material-symbols-outlined">wrong_location</span>
+                    <span>Mapa no disponible (Sin coordenadas)</span>
+                </div>
+            }
+
+            @if (addr.State == "error" || addr.State == "unknown")
+            {
+                <div class="cp-error-hint">
+                    <span class="material-symbols-outlined">cancel</span> @addr.ErrorLabel
+                </div>
+            }
+        </div>
+    }
+
+    // Plantilla reutilizable del filter bar (usada en cada sección)
+    void RenderFilterBar(string ariaLabel)
+    {
+        <div class="ds-contact-filter" role="group" aria-label="@ariaLabel">
+            <button class="ds-contact-filter__btn ds-contact-filter__btn--active"
+                    data-filter="todos" type="button" aria-pressed="true">
+                <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
+                Todos
+            </button>
+            <button class="ds-contact-filter__btn"
+                    data-filter="pendiente" type="button" aria-pressed="false">
+                <span class="material-symbols-outlined" aria-hidden="true">hourglass_empty</span>
+                Pendientes
+                <span class="ds-contact-filter__count" aria-hidden="true"></span>
+            </button>
+            <button class="ds-contact-filter__btn"
+                    data-filter="verificado" type="button" aria-pressed="false">
+                <span class="material-symbols-outlined" aria-hidden="true">verified</span>
+                Verificados
+                <span class="ds-contact-filter__count" aria-hidden="true"></span>
+            </button>
+            <button class="ds-contact-filter__btn"
+                    data-filter="error" type="button" aria-pressed="false">
+                <span class="material-symbols-outlined" aria-hidden="true">error_outline</span>
+                Con error
+                <span class="ds-contact-filter__count" aria-hidden="true"></span>
+            </button>
+        </div>
+    }
+}
+
+
+
+<div class="cp-page">
+
+    @if (Model.Cliente != null)
+    {
+            var phonesCount = Model.Cliente.Phones?.Count ?? 0;
+            var emailsCount = Model.Cliente.Emails?.Count ?? 0;
+            var addrsCount  = Model.Cliente.Addresses?.Count ?? 0;
+            var firstGps    = Model.Cliente.Addresses?
+                .FirstOrDefault(a => a.HasGps && a.Lat != null && a.Lng != null);
+
+        <header class="cp-header">
+            <div class="cp-header__avatar-wrap">
+                <div class="cp-header__avatar" aria-hidden="true">
+                    <span class="cp-header__initials">@Model.Cliente.Iniciales</span>
+                </div>
+                <span class="cp-header__status-badge @(Model.Cliente.EstaVerificado ? "cp-header__status-badge--validated" : "cp-header__status-badge--pending")">
+                    @(Model.Cliente.EstaVerificado ? "Validado" : "Pendiente")
+                </span>
+            </div>
+            <div class="cp-header__info">
+                <div class="cp-header__top-row">
+                    <div>
+                        <h1 class="cp-header__name">@Model.Cliente.Nombre</h1>
+                        <div class="cp-header__meta">
+                            <span class="cp-header__meta-label">Identificación:</span>
+                            <span class="cp-header__meta-value cp-header__client-id">@Model.Cliente.Cedula</span>
+                            <span class="cp-header__meta-dot" aria-hidden="true"></span>
+                            <span class="cp-header__meta-label">ID:</span>
+                            <span class="cp-header__meta-value" data-numeric-id="@Model.Cliente.Id">@Model.Cliente.Id</span>
+                        </div>
+                    </div>
+                    <div class="cp-header__date-box" aria-label="Fecha de creación">
+                        <span class="cp-header__date-label">Created Date</span>
+                        <span class="cp-header__date-value">—</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        @* Mobile: toggle button visible solo en móvil *@
+        <div class="cp-mobile-bar">
+            <button class="cp-mobile-bar__toggle"
+                    id="cp-sidebar-toggle"
+                    aria-label="Abrir menú de navegación"
+                    aria-expanded="false"
+                    aria-controls="cp-sidebar">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <span class="cp-mobile-bar__title" id="cp-mobile-section-title">Contactabilidad</span>
+        </div>
+
+        @* Overlay oscuro detrás del drawer *@
+        <div class="cp-sidebar-overlay" id="cp-sidebar-overlay" aria-hidden="true"></div>
+
+        <div class="cp-body">
+
+            <nav class="cp-sidebar" id="cp-sidebar" aria-label="Secciones del perfil">
+                @* Mobile: botón cerrar drawer *@
+                <button class="cp-sidebar__close" id="cp-sidebar-close" aria-label="Cerrar menú" type="button">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <div class="cp-sidebar__item-wrapper">
+                    <button class="cp-sidebar__item cp-sidebar__item--coming-soon" data-tab="datos-personales" type="button" disabled>
+                        <span class="cp-sidebar__icon material-symbols-outlined" aria-hidden="true">grid_view</span>
+                        <span class="cp-sidebar__label">Datos Personales</span>
+                    </button>
+                    <span class="cp-sidebar__tooltip">Próximamente será habilitada esta opción</span>
+                </div>
+                <button class="cp-sidebar__item cp-sidebar__item--active" data-tab="contactabilidad" type="button">
+                    <span class="cp-sidebar__icon material-symbols-outlined" aria-hidden="true">layers</span>
+                    <span class="cp-sidebar__label">Contactabilidad</span>
+                </button>
+                <div class="cp-sidebar__subnav" role="list">
+                    <button class="cp-sidebar__subitem cp-sidebar__subitem--active" data-sub="phones" role="listitem" type="button">
+                        Teléfonos y Celulares (@phonesCount)
+                    </button>
+                    <button class="cp-sidebar__subitem" data-sub="emails" role="listitem" type="button">
+                        Correos (@emailsCount)
+                    </button>
+                    <button class="cp-sidebar__subitem" data-sub="addresses" role="listitem" type="button">
+                        Direcciones (@addrsCount)
+                    </button>
+                </div>
+                <div class="cp-sidebar__item-wrapper">
+                    <button class="cp-sidebar__item cp-sidebar__item--coming-soon" data-tab="datos-financieros" type="button" disabled>
+                        <span class="cp-sidebar__icon material-symbols-outlined" aria-hidden="true">bar_chart</span>
+                        <span class="cp-sidebar__label">Datos Financieros</span>
+                    </button>
+                    <span class="cp-sidebar__tooltip">Próximamente será habilitada esta opción</span>
+                </div>
+            </nav>
+
+            <main class="cp-main" id="cp-main">
+
+                <div class="cp-tab-panel cp-tab-panel--active" id="tab-contactabilidad">
+
+                    <section class="cp-section" id="section-phones">
+                        <div class="cp-section__header">
+                            <div class="cp-section__title-group">
+                                <span class="cp-section__bullet cp-section__title-icon" aria-hidden="true"></span>
+                                <h2 class="cp-section__title">Teléfonos (@phonesCount)</h2>
+                            </div>
+                            <button class="cp-nuevo-btn" data-modal="modal-nuevo-telefono" aria-label="Agregar teléfono">
+                                <span class="material-symbols-outlined">add</span> NUEVO
+                            </button>
+                        </div>
+                        @if (Model.Cliente.Phones != null && Model.Cliente.Phones.Any())
+                        {
+                            RenderFilterBar("Filtrar teléfonos por estado");
+                        }
+                        <div class="cp-cards-grid cp-cards-grid--phones" id="phones-list">
+                            @if (Model.Cliente.Phones != null && Model.Cliente.Phones.Any())
+                            {
+                                foreach (var contact in Model.Cliente.Phones)
+                                {
+                                    RenderContactCard(contact, "phone");
+                                }
+                            }
+                            else
+                            {
+                                <div class="cp-section__empty">
+                                    <span class="material-symbols-outlined">phone</span>
+                                    <p>Sin teléfonos registrados</p>
+                                </div>
+                            }
+                        </div>
+                    </section>
+
+                    <section class="cp-section" id="section-emails">
+                        <div class="cp-section__header">
+                            <div class="cp-section__title-group">
+                                <span class="cp-section__bullet cp-section__title-icon" aria-hidden="true"></span>
+                                <h2 class="cp-section__title">Correos Electrónicos (@emailsCount)</h2>
+                            </div>
+                            <button class="cp-nuevo-btn" data-modal="modal-nuevo-email" aria-label="Agregar correo">
+                                <span class="material-symbols-outlined">add</span> NUEVO
+                            </button>
+                        </div>
+                        @if (Model.Cliente.Emails != null && Model.Cliente.Emails.Any())
+                        {
+                            RenderFilterBar("Filtrar correos por estado");
+                        }
+                        <div class="cp-cards-grid cp-cards-grid--emails" id="emails-list">
+                            @if (Model.Cliente.Emails != null && Model.Cliente.Emails.Any())
+                            {
+                                foreach (var contact in Model.Cliente.Emails)
+                                {
+                                    RenderContactCard(contact, "email");
+                                }
+                            }
+                            else
+                            {
+                                <div class="cp-section__empty">
+                                    <span class="material-symbols-outlined">mail</span>
+                                    <p>Sin correos registrados</p>
+                                </div>
+                            }
+                        </div>
+                    </section>
+
+                    <section class="cp-section cp-section--has-map" id="section-addresses">
+                        <div class="cp-section__header">
+                            <div class="cp-section__title-group">
+                                <span class="material-symbols-outlined cp-section__title-icon" aria-hidden="true">location_on</span>
+                                <h2 class="cp-section__title">Direcciones (@addrsCount)</h2>
+                            </div>
+                            <button class="cp-nuevo-btn" data-modal="modal-nueva-direccion" aria-label="Agregar dirección">
+                                <span class="material-symbols-outlined">add</span> NUEVO
+                            </button>
+                        </div>
+                        @if (Model.Cliente.Addresses != null && Model.Cliente.Addresses.Any())
+                        {
+                            RenderFilterBar("Filtrar direcciones por estado");
+                        }
+                        <div class="cp-cards-grid cp-cards-grid--addresses" id="addresses-list">
+                                    @if (Model.Cliente.Addresses != null && Model.Cliente.Addresses.Any())
+                                    {
+                                        foreach (var addr in Model.Cliente.Addresses)
+                                        {
+                                            RenderAddressCard(addr);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="cp-section__empty">
+                                            <span class="material-symbols-outlined">location_off</span>
+                                            <p>Sin direcciones registradas</p>
+                                        </div>
+                                    }
+                        </div>
+                    </section>
+
+                </div>
+
+                <div class="cp-tab-panel" id="tab-datos-personales" hidden>
+                    <div class="cp-tab-placeholder">
+                        <span class="material-symbols-outlined">person</span>
+                        <h2>Datos Personales</h2>
+                        <p>Esta sección estará disponible próximamente.</p>
+                    </div>
+                </div>
+
+                <div class="cp-tab-panel" id="tab-datos-financieros" hidden>
+                    <div class="cp-tab-placeholder">
+                        <span class="material-symbols-outlined">bar_chart</span>
+                        <h2>Datos Financieros</h2>
+                        <p>Esta sección estará disponible próximamente.</p>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+
+        @* Mobile Bottom Nav: acceso rápido a las 3 secciones sin abrir el drawer *@
+        <nav class="cp-bottom-nav" aria-label="Navegación rápida">
+            <button class="cp-bottom-nav__item cp-bottom-nav__item--active" data-sub="phones" type="button">
+                <span class="material-symbols-outlined">phone</span>
+                <span>Teléfonos</span>
+            </button>
+            <button class="cp-bottom-nav__item" data-sub="emails" type="button">
+                <span class="material-symbols-outlined">mail</span>
+                <span>Correos</span>
+            </button>
+            <button class="cp-bottom-nav__item" data-sub="addresses" type="button">
+                <span class="material-symbols-outlined">location_on</span>
+                <span>Direcciones</span>
+            </button>
+            <button class="cp-bottom-nav__item cp-bottom-nav__item--menu" id="cp-bottom-nav-menu" type="button" aria-label="Más opciones">
+                <span class="material-symbols-outlined">menu</span>
+                <span>Menú</span>
+            </button>
+        </nav>
+
+        <div id="modal-nuevo-email" class="ds-modal-backdrop" style="display: none;">
+            <div class="ds-modal ds-modal--sm">
+                <div class="ds-modal__header">
+                    <h2>Agregar Correo Electrónico</h2>
+                    <button class="ds-modal__close" data-modal-close="modal-nuevo-email"><span class="material-symbols-outlined">close</span></button>
+                </div>
+                <form class="ds-modal__body" id="form-nuevo-email">
+                    <input type="hidden" name="tipo" value="@((int)EnumContactabilityType.Email)">
+                    <div class="ds-form-group">
+                        <label class="ds-label">Correo Electrónico</label>
+                        <input type="email" name="valor" class="ds-input" placeholder="ejemplo@dominio.com" required>
+                    </div>
+                    <div class="ds-modal__footer" style="display:flex;gap:var(--spacing-2);margin-top:var(--spacing-4);">
+                        <button type="button" class="ds-btn ds-btn--outline" data-modal-close="modal-nuevo-email">Cancelar</button>
+                        <button type="submit" class="ds-btn ds-btn--primary">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="modal-nuevo-telefono" class="ds-modal-backdrop" style="display: none;">
+            <div class="ds-modal ds-modal--sm">
+                <div class="ds-modal__header">
+                    <h2>Agregar Teléfono</h2>
+                    <button class="ds-modal__close" data-modal-close="modal-nuevo-telefono"><span class="material-symbols-outlined">close</span></button>
+                </div>
+                <form class="ds-modal__body" id="form-nuevo-telefono">
+                    <div class="ds-form-group">
+                        <label class="ds-label">Número de Teléfono</label>
+                        <input type="tel" name="valor" class="ds-input" placeholder="+1 (555) 123-4567" required>
+                    </div>
+                    <div class="ds-form-group">
+                        <label class="ds-label">Tipo</label>
+                        <select name="tipo" class="ds-input" required>
+                            <option value="">Seleccionar tipo</option>
+                            <option value="@((int)EnumContactabilityType.Phone)">Celular</option>
+                            <option value="@((int)EnumContactabilityType.Conventional)">Teléfono Convencional</option>
+                            <option value="@((int)EnumContactabilityType.WhatsApp)">WhatsApp</option>
+                        </select>
+                    </div>
+                    <div class="ds-modal__footer" style="display:flex;gap:var(--spacing-2);margin-top:var(--spacing-4);">
+                        <button type="button" class="ds-btn ds-btn--outline" data-modal-close="modal-nuevo-telefono">Cancelar</button>
+                        <button type="submit" class="ds-btn ds-btn--primary">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="modal-nueva-direccion" class="ds-modal-backdrop" style="display: none;">
+            <div class="ds-modal">
+                <div class="ds-modal__header">
+                    <h2>Agregar Dirección</h2>
+                    <button class="ds-modal__close" data-modal-close="modal-nueva-direccion"><span class="material-symbols-outlined">close</span></button>
+                </div>
+                <form class="ds-modal__body" id="form-nueva-direccion">
+                    <div class="ds-form-group">
+                        <label class="ds-label">Dirección Completa <span class="ds-label--required">*</span></label>
+                        <input type="text" name="direccion" class="ds-input" placeholder="Calle, número, apartamento..." required>
+                    </div>
+                    <div class="ds-form-row">
+                        <div class="ds-form-group">
+                            <label class="ds-label">Tipo <span class="ds-label--required">*</span></label>
+                            <select name="tipo" class="ds-input" required>
+                                <option value="@((int)EnumContactabilityType.HomeAddress)">Domicilio</option>
+                                <option value="@((int)EnumContactabilityType.WorkAddress)">Trabajo</option>
+                            </select>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-label">Código Postal</label>
+                            <input type="text" name="codigoPostal" class="ds-input" placeholder="Ej: 170150" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="ds-form-row">
+                        <div class="ds-form-group">
+                            <label class="ds-label">Ciudad</label>
+                            <input type="text" name="ciudad" class="ds-input" placeholder="Ej: Quito" maxlength="100">
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-label">Provincia</label>
+                            <input type="text" name="provincia" class="ds-input" placeholder="Ej: Pichincha" maxlength="100">
+                        </div>
+                    </div>
+                    <div class="ds-form-group">
+                        <label class="ds-label">País</label>
+                        <input type="text" name="pais" class="ds-input" placeholder="Ej: Ecuador" maxlength="100">
+                    </div>
+                    <div class="ds-form-row">
+                        <div class="ds-form-group">
+                            <label class="ds-label">Latitud</label>
+                            <input type="number" name="latitud" class="ds-input" placeholder="Ej: -0.180653" step="0.000001" min="-90" max="90">
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-label">Longitud</label>
+                            <input type="number" name="longitud" class="ds-input" placeholder="Ej: -78.467834" step="0.000001" min="-180" max="180">
+                        </div>
+                    </div>
+                    <div class="ds-modal__footer" style="display:flex;gap:var(--spacing-2);margin-top:var(--spacing-4);">
+                        <button type="button" class="ds-btn ds-btn--outline" data-modal-close="modal-nueva-direccion">Cancelar</button>
+                        <button type="submit" class="ds-btn ds-btn--primary">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @* Modal global de mapa (único, reutilizado por todas las tarjetas de dirección) *@
+        <div id="cp-global-map-modal" class="cp-map-modal-backdrop" hidden aria-modal="true" role="dialog" aria-labelledby="cp-map-modal-title">
+            <div class="cp-map-modal">
+                <div class="cp-map-modal__header">
+                    <span class="material-symbols-outlined">location_on</span>
+                    <h2 class="cp-map-modal__title" id="cp-map-modal-title">Ubicación</h2>
+                    <button class="cp-map-modal__close" id="cp-map-modal-close" type="button" aria-label="Cerrar mapa">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div class="cp-map-modal__address" id="cp-map-modal-address"></div>
+                <div class="cp-map-modal__body">
+                    <iframe id="cp-map-modal-iframe"
+                            class="cp-map-modal__iframe"
+                            src=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            allowfullscreen
+                            title="Mapa de ubicación"></iframe>
+                </div>
+                <div class="cp-map-modal__footer">
+                    <a id="cp-map-modal-external" href="#" target="_blank" rel="noopener noreferrer" class="ds-btn ds-btn--outline">
+                        <span class="material-symbols-outlined">open_in_new</span>
+                        Abrir en Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="clientes-empty-state">
+            <div><span class="material-symbols-outlined" style="font-size:3rem;opacity:.3">person_off</span></div>
+            <h2 class="clientes-empty-state__title">Cliente no encontrado</h2>
+            <p class="clientes-empty-state__text">El cliente que buscas no existe o ha sido eliminado.</p>
+            <a href="/dashboard" class="clientes-empty-state__back-link">
+                <span class="material-symbols-outlined">arrow_back</span> Volver a Búsqueda
+            </a>
+        </div>
+    }
+</div>
+@if (!_isEmbed)
+{
+@section Scripts {
+    <script>
+        window.DS = window.DS || {};
+        window.DS.catalogs = window.DS.catalogs || {};
+        @{
+                var flatErrorLabels = ContactabilityLabelHelper.RejectionPills.Values
+                        .SelectMany(lista => lista)
+                        .ToDictionary(item => item.Code, item => item.ShortLabel);
+                var jsonLabels = JsonSerializer.Serialize(flatErrorLabels);
+        }
+        window.DS.catalogs.errorLabels = @Html.Raw(jsonLabels);
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.alert').forEach(alert => {
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    alert.style.transition = 'opacity 0.3s ease-out';
+                    setTimeout(() => alert.style.display = 'none', 300);
+                }, 5000);
+            });
+        });
+    </script>
+    <script src="~/js/pages/clientes.js"></script>  
+}
+}

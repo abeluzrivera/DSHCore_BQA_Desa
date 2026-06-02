@@ -1,0 +1,599 @@
+﻿@page "/dashboard"
+@using System.Text.Json
+@using SDH.Domain.Enums
+@using SDH.Domain.Extensions
+@using contactabilidad_inteligente.mcv.Pages
+@using contactabilidad_inteligente.mcv.Helpers
+@model DashboardModel
+@{
+    ViewData["Title"] = "Contactabilidad de Clientes";
+    ViewData["WrapperClass"] = "layout-viewport";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/clientes.css" asp-append-version="true" />
+}
+
+<main class="dash-layout" aria-label="Dashboard de contactabilidad">
+    @Html.AntiForgeryToken()
+
+    @* ── Breadcrumb ──────────────────────────────── *@
+    <nav class="dash-breadcrumb" aria-label="Ruta de navegación">
+        <span class="dash-breadcrumb__item">Inicio</span>
+        <span class="dash-breadcrumb__sep" aria-hidden="true">/</span>
+        <span class="dash-breadcrumb__item dash-breadcrumb__item--active">Contactabilidad de Clientes</span>
+    </nav>
+
+    @* ── Top bar: búsqueda global + widget de carga ─── *@
+    @{
+        ViewData["SearchFilter"]      = "todos";
+        ViewData["TotalTodos"]        = Model.TotalTodos;
+        ViewData["TotalPorVerif"]     = Model.TotalPorVerificar;
+        ViewData["TotalVerif"]        = Model.TotalVerificados;
+        ViewData["SearchPlaceholder"] = "Búsqueda en base de datos...";
+        var _pct = Model.TotalTodos > 0
+            ? (int)Math.Round(Model.TotalVerificados * 100.0 / Model.TotalTodos)
+            : 0;
+    }
+    <div class="dash-topbar">
+
+        @* Sección 1 — Búsqueda global *@
+        <div class="dash-topbar__search">
+            <partial name="Shared/Components/_DsClientSearch" />
+        </div>
+
+        @* Sección 2 — Cargar archivo + progreso *@
+        <div class="dash-upload-widget">
+
+            @* Izquierda: botón + nombre del archivo *@
+            <div class="dash-upload-widget__left">
+                <button type="button" class="dash-upload-widget__btn" id="btn-open-lote-modal">
+                    <img src="~/icons/document-upload.svg" class="ds-icon" aria-hidden="true" alt="" />
+                    Cargar
+                </button>
+                @if (!string.IsNullOrEmpty(Model.LastUploadedFile))
+                {
+                    <span class="dash-upload-widget__filename">Archivo: @Model.LastUploadedFile</span>
+                }
+            </div>
+
+            @* Derecha: stats de validación *@
+            <div class="dash-upload-widget__right">
+                <span class="dash-upload-widget__stats-label">Clientes validados</span>
+                <div class="dash-upload-widget__progress-row" id="widget-progress"
+                     role="progressbar" aria-valuenow="@_pct" aria-valuemin="0" aria-valuemax="100"
+                     data-total="@Model.TotalTodos" data-verified="@Model.TotalVerificados">
+                    <div class="dash-upload-widget__bar">
+                        <div id="widget-bar-fill" class="dash-upload-widget__bar-fill" style="width:@_pct%"></div>
+                    </div>
+                    <span id="widget-pct" class="dash-upload-widget__pct">@_pct%</span>
+                </div>
+                <span id="widget-detail" class="dash-upload-widget__detail">@Model.TotalVerificados de @Model.TotalTodos Validados</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    @* ── Two-panel body ──────────────────────────── *@
+    <div class="dash-body">
+
+        @* LEFT — Client list aside (JS-driven via ds-search.js) *@
+        @{
+            ViewData["ClientListTitle"]      = "Resultados";
+            ViewData["ClientListCount"]      = Model.Clients.Count;
+            ViewData["ClientListTotal"]      = Model.TotalTodos;
+            ViewData["ClientListExtraClass"] = "dash-aside";
+        }
+        <partial name="Shared/Components/_DsClientList" />
+
+        @* RIGHT — Detail panel *@
+        <section class="dash-detail" aria-label="Detalle del cliente seleccionado" aria-live="polite">
+
+            @if (!Model.Clients.Any())
+            {
+                <div class="dash-detail__empty" id="dash-detail-empty">
+                    <img src="~/icons/search.svg" class="ds-icon" style="width:40px;height:40px;opacity:.4" aria-hidden="true" alt="" />
+                    <p>Selecciona un cliente de la lista para ver sus datos de contacto.</p>
+                </div>
+            }
+
+            @* One panel per client, shown/hidden by JS *@
+            @foreach (var client in Model.Clients)
+            {
+                <div class="dash-detail__panel"
+                     id="detail-@client.Id"
+                     data-client-id="@client.Id"
+                     data-client-numeric-id="@client.NumericId"
+                     hidden>
+
+                    @* Panel header *@
+                    <div class="dash-detail__header">
+                        <button class="dash-detail__back-btn" type="button" aria-label="Volver a la lista de clientes">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+                            </svg>
+                            Volver
+                        </button>
+                        <div class="dash-detail__client-row">
+                            <div class="dash-detail__avatar" aria-hidden="true">
+                                @if (!string.IsNullOrEmpty(client.AvatarUrl))
+                                {
+                                    <img src="@client.AvatarUrl" alt="" />
+                                }
+                                else
+                                {
+                                    @client.Initials
+                                }
+                            </div>
+                            <div class="dash-detail__client-info">
+                                <div class="dash-detail__name-row">
+                                    <h2 class="dash-detail__name">@client.Name</h2>
+                                    <a href="/clientes?id=@client.Id" class="dash-detail__meta-btn"
+                                       title="Ver perfil completo del cliente"
+                                       data-cliente-perfil-id="@client.Id">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                            <polyline points="15 3 21 3 21 9"/>
+                                            <line x1="10" y1="14" x2="21" y2="3"/>
+                                        </svg>
+                                        MÁS DETALLES
+                                    </a>
+                                </div>
+                                <div class="dash-detail__meta-row">
+                                    <span class="dash-detail__status-pill @(client.Status == "Verificado" ? "dash-detail__status-pill--verified" : "dash-detail__status-pill--pending")">
+                                        ESTADO: @client.Status.ToUpper()
+                                    </span>
+                                    <span class="dash-detail__meta-sep" aria-hidden="true"></span>
+                                    <span class="dash-detail__id-pill">Identificación:&nbsp;@client.Id</span>
+                                    @if (!string.IsNullOrEmpty(client.Location))
+                                    {
+                                        <span class="dash-detail__location">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                            </svg>
+                                            @client.Location
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* ── Barra de filtro por estado de contactabilidad ── *@
+                    <div class="ds-contact-filter" role="group" aria-label="Filtrar contactos por estado">
+                        <button class="ds-contact-filter__btn ds-contact-filter__btn--active"
+                                data-filter="todos" type="button" aria-pressed="true">
+                            <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
+                            Todos
+                        </button>
+                        <button class="ds-contact-filter__btn"
+                                data-filter="pendiente" type="button" aria-pressed="false">
+                            <span class="material-symbols-outlined" aria-hidden="true">hourglass_empty</span>
+                            Pendientes
+                            <span class="ds-contact-filter__count" aria-hidden="true"></span>
+                        </button>
+                        <button class="ds-contact-filter__btn"
+                                data-filter="verificado" type="button" aria-pressed="false">
+                            <span class="material-symbols-outlined" aria-hidden="true">verified</span>
+                            Verificados
+                            <span class="ds-contact-filter__count" aria-hidden="true"></span>
+                        </button>
+                        <button class="ds-contact-filter__btn"
+                                data-filter="error" type="button" aria-pressed="false">
+                            <span class="material-symbols-outlined" aria-hidden="true">error_outline</span>
+                            Con error
+                            <span class="ds-contact-filter__count" aria-hidden="true"></span>
+                        </button>
+                    </div>
+
+                    @* Contact sections *@
+                    <div class="dash-detail__body">
+                        @{
+                            var tiposTelefono = new[] {
+                                EnumContactabilityType.Phone.GetValueCatalog(),
+                                EnumContactabilityType.Conventional.GetValueCatalog(),
+                                EnumContactabilityType.WhatsApp.GetValueCatalog()
+                            };
+                            var tiposDireccion = new[] {
+                                EnumContactabilityType.HomeAddress.GetValueCatalog(),
+                                EnumContactabilityType.WorkAddress.GetValueCatalog()
+                            };
+                            var phones = client.Contacts.Where(c => tiposTelefono.Contains(c.TipoContacto)).ToList();
+                            var addrs  = client.Contacts.Where(c => tiposDireccion.Contains(c.TipoContacto)).ToList();
+                            var emails = client.Contacts.Where(c => c.TipoContacto == EnumContactabilityType.Email.GetValueCatalog()).ToList();
+                        }
+
+                        @if (phones.Any())
+                        {
+                            <div class="dash-detail__section">
+                                <h3 class="dash-detail__section-title">
+                                    <img src="~/icons/section-phone.svg" class="ds-icon ds-icon--sm" aria-hidden="true" alt="" />
+                                    Teléfonos
+                                </h3>
+                                @foreach (var contact in phones)
+                                {
+                                    <div class="dash-contact-row @(contact.Verified ? "dash-contact-row--verified" : "") @(contact.BgClass.Contains("red") ? "dash-contact-row--error" : "")"
+                                         data-contact-id="@contact.Id"
+                                         data-contact-value="@contact.Value"
+                                         data-contact-type="@contact.TipoContacto"
+                                         data-client-id="@client.Id"
+                                         data-client-numeric-id="@client.NumericId"
+                                         data-contact-state="@(contact.Verified ? "verified" : contact.State == "error" ? "error" : "pending")">
+                                        <div class="dash-contact-row__info">
+                                            <img src="~/icons/row-phone.svg" class="ds-icon dash-contact-row__icon" aria-hidden="true" alt="" />
+                                            <span class="dash-contact-row__value">@contact.Value</span>
+                                            <span class="ds-badge ds-badge--neutral dash-contact-row__type-badge">@contact.Label</span>
+                                        </div>
+                                        <div class="dash-contact-row__actions">
+                                            <button class="ds-btn ds-btn--ghost ds-btn--icon ds-btn--sm contact-verify-btn @(contact.Verified ? "contact-verify-btn--verified" : "")"
+                                                    @(contact.Verified ? "disabled" : "")
+                                                    title="@(contact.Verified ? "Verificado" : "Verificar")"
+                                                    aria-label="@(contact.Verified ? "Contacto verificado" : "Verificar contacto")">
+                                                <img src="~/icons/verify-check.svg" class="ds-icon contact-verify-icon @(contact.Verified ? "is-verified" : "")" aria-hidden="true" alt="" />
+                                            </button>
+                                            <button class="ds-btn ds-btn--ghost ds-btn--icon ds-btn--sm contact-reject-btn @(contact.State == "error" ? "is-active" : "")"
+                                                    title="Opciones de validación"
+                                                    aria-label="Abrir opciones de validación">
+                                                <img src="~/icons/note-remove.svg" class="ds-icon" aria-hidden="true" alt="" />
+                                            </button>
+                                            <button class="ds-btn ds-btn--ghost ds-btn--icon ds-btn--sm contact-edit-btn"
+                                                    title="Editar"
+                                                    aria-label="Editar dato de contacto">
+                                                <img src="~/icons/edit.svg" class="ds-icon" aria-hidden="true" alt="" />
+                                            </button>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(contact.ErrorLabel))
+                                        {
+                                            <div class="dash-contact-row__error-hint">
+                                                <span class="material-symbols-outlined" aria-hidden="true">cancel</span>
+                                                <span>@contact.ErrorLabel</span>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                        @if (emails.Any())
+                        {
+                            <div class="dash-detail__section">
+                                <h3 class="dash-detail__section-title">
+                                    <img src="~/icons/section-email.svg" class="ds-icon ds-icon--sm" aria-hidden="true" alt="" />
+                                    Emails
+                                </h3>
+                                @foreach (var contact in emails)
+                                {
+                                    <div class="dash-contact-row @(contact.Verified ? "dash-contact-row--verified" : "") @(contact.BgClass.Contains("red") ? "dash-contact-row--error" : "")"
+                                         data-contact-id="@contact.Id"
+                                         data-contact-value="@contact.Value"
+                                         data-contact-type="@contact.TipoContacto"
+                                         data-client-id="@client.Id"
+                                         data-client-numeric-id="@client.NumericId"
+                                         data-contact-state="@(contact.Verified ? "verified" : contact.State == "error" ? "error" : "pending")">
+                                        <div class="dash-contact-row__info">
+                                            <img src="~/icons/row-email.svg" class="ds-icon dash-contact-row__icon" aria-hidden="true" alt="" />
+                                            <span class="dash-contact-row__value dash-contact-row__value--truncate" title="@contact.Value">@contact.Value</span>
+                                        </div>
+                                        <div class="dash-contact-row__actions">
+                                            <button class="ds-btn ds-btn--ghost ds-btn--icon ds-btn--sm contact-verify-btn @(contact.Verified ? "contact-verify-btn--verified" : "")"
+                                                    @(contact.Verified ? "disabled" : "")
+                                                    title="@(contact.Verified ? "Verificado" : "Verificar")"
+                                                    aria-label="@(contact.Verified ? "Contacto verificado" : "Verificar contacto")">
+                                                <img src="~/icons/verify-check.svg" class="ds-icon contact-verify-icon @(contact.Verified ? "is-verified" : "")" aria-hidden="true" alt="" />
+                                            </button>
+                                            <button class="ds-btn ds-btn--ghost ds-btn--icon ds-btn--sm contact-reject-btn @(contact.State == "error" ? "is-active" : "")"
+                                                    title="Opciones de validación"
+                                                    aria-label="Abrir opciones de validación">
+                                                <img src="~/icons/note-remove.svg" class="ds-icon" aria-hidden="true" alt="" />
+                                            </button>
+                                            <button class="ds-btn ds-btn--ghost ds-btn--icon ds-btn--sm contact-edit-btn"
+                                                    title="Editar"
+                                                    aria-label="Editar dato de contacto">
+                                                <img src="~/icons/edit.svg" class="ds-icon" aria-hidden="true" alt="" />
+                                            </button>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(contact.ErrorLabel))
+                                        {
+                                            <div class="dash-contact-row__error-hint">
+                                                <span class="material-symbols-outlined" aria-hidden="true">cancel</span>
+                                                <span>@contact.ErrorLabel</span>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                        @if (addrs.Any())
+                        {
+                            <div class="dash-detail__section">
+                                <h3 class="dash-detail__section-title">
+                                    <img src="~/icons/section-location.svg" class="ds-icon ds-icon--sm" aria-hidden="true" alt="" />
+                                    Direcciones
+                                </h3>
+                                @foreach (var contact in addrs)
+                                {
+                                    <div class="dash-contact-row @(contact.Verified ? "dash-contact-row--verified" : "") @(contact.BgClass.Contains("red") ? "dash-contact-row--error" : "")"
+                                         data-contact-id="@contact.Id"
+                                         data-contact-value="@contact.Value"
+                                         data-contact-type="@contact.TipoContacto"
+                                         data-client-id="@client.Id"
+                                         data-client-numeric-id="@client.NumericId"
+                                         data-contact-state="@(contact.Verified ? "verified" : contact.State == "error" ? "error" : "pending")">
+                                        <div class="dash-contact-row__info">
+                                            <img src="~/icons/row-location.svg" class="ds-icon dash-contact-row__icon" aria-hidden="true" alt="" />
+                                            <span class="dash-contact-row__value">@contact.Value</span>
+                                        </div>
+                                        <div class="dash-contact-row__actions">
+                                            <button class="ds-btn ds-btn--ghost ds-btn--icon ds-btn--sm contact-verify-btn @(contact.Verified ? "contact-verify-btn--verified" : "")"
+                                                    @(contact.Verified ? "disabled" : "")
+                                                    title="@(contact.Verified ? "Verificado" : "Verificar")"
+                                                    aria-label="@(contact.Verified ? "Contacto verificado" : "Verificar contacto")">
+                                                <img src="~/icons/verify-check.svg" class="ds-icon contact-verify-icon @(contact.Verified ? "is-verified" : "")" aria-hidden="true" alt="" />
+                                            </button>
+                                            <button class="ds-btn ds-btn--ghost ds-btn--icon ds-btn--sm contact-reject-btn @(contact.State == "error" ? "is-active" : "")"
+                                                    title="Opciones de validación"
+                                                    aria-label="Abrir opciones de validación">
+                                                <img src="~/icons/note-remove.svg" class="ds-icon" aria-hidden="true" alt="" />
+                                            </button>
+                                            <button class="ds-btn ds-btn--ghost ds-btn--icon ds-btn--sm contact-edit-btn"
+                                                    title="Editar"
+                                                    aria-label="Editar dato de contacto">
+                                                <img src="~/icons/edit.svg" class="ds-icon" aria-hidden="true" alt="" />
+                                            </button>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(contact.ErrorLabel))
+                                        {
+                                            <div class="dash-contact-row__error-hint">
+                                                <span class="material-symbols-outlined" aria-hidden="true">cancel</span>
+                                                <span>@contact.ErrorLabel</span>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                        @if (!client.Contacts.Any())
+                        {
+                            <div class="dash-detail__empty">
+                                <img src="~/icons/article-open.svg" class="ds-icon" style="width:36px;height:36px;opacity:.4" aria-hidden="true" alt="" />
+                                <p>Sin contactos registrados</p>
+                            </div>
+                        }
+
+                    </div>@* end dash-detail__body *@
+                </div>
+            }
+
+        </section>
+    </div>
+
+    @* ── Modal: Nueva Lote de clientes ─────────────────────────────── *@
+    <div id="lote-modal-overlay"
+         class="lote-modal-overlay"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="lote-modal-title"
+         hidden>
+        <div class="lote-modal">
+
+            @* Header *@
+            <div class="lote-modal__header">
+                <div>
+                    <h2 id="lote-modal-title" class="lote-modal__title">Cargar un lote de Clientes</h2>
+                    <p class="lote-modal__subtitle">Sube un archivo o pega tus datos directamente</p>
+                </div>
+                <button type="button" class="lote-modal__close" id="lote-modal-close" aria-label="Cerrar modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2.5"
+                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            @* Tab bar *@
+            <div class="lote-modal__tabs" role="tablist">
+                <button type="button"
+                        class="lote-modal__tab"
+                        id="lote-tab-archivo"
+                        role="tab"
+                        aria-controls="lote-pane-archivo"
+                        aria-selected="false"
+                        hidden>Cargar Archivo</button>
+                <button type="button"
+                        class="lote-modal__tab lote-modal__tab--active"
+                        id="lote-tab-ids"
+                        role="tab"
+                        aria-controls="lote-pane-ids"
+                        aria-selected="true">Pegar IDs</button>
+            </div>
+
+            @* Pane 1: Cargar Archivo *@
+            <div class="lote-modal__pane" id="lote-pane-archivo"
+                 role="tabpanel" aria-labelledby="lote-tab-archivo" hidden>
+                <div class="lote-modal__upload-body" id="lote-upload-body" data-state="empty">
+
+                    @* ── Estado: EMPTY – dropzone ── *@
+                    <div class="lote-modal__dropzone" id="lote-dropzone" aria-label="Zona de carga de archivo">
+                        <input type="file"
+                               id="lote-file-input"
+                               accept=".xlsx,.xls,.csv"
+                               class="lote-modal__file-input sr-only"
+                               aria-label="Seleccionar archivo" />
+                        <label for="lote-file-input" class="lote-modal__dropzone-label">
+                            <img src="~/icons/document-upload.svg"
+                                 class="lote-modal__dropzone-icon ds-icon"
+                                 aria-hidden="true" alt="" />
+                            <p class="lote-modal__dropzone-title">Arrastra tu archivo aquí</p>
+                            <p class="lote-modal__dropzone-hint">o <span class="lote-modal__dropzone-link">selecciona un archivo</span> desde tu equipo</p>
+                            <p class="lote-modal__dropzone-formats">Formatos aceptados: .xlsx, .xls, .csv</p>
+                        </label>
+                    </div>
+
+                    @* ── Estado: LOADING – spinner ── *@
+                    <div class="lote-modal__loading" id="lote-loading" aria-live="polite" aria-label="Procesando archivo">
+                        <div class="lote-modal__spinner"></div>
+                        <p class="lote-modal__loading-text">Procesando archivo…</p>
+                    </div>
+
+                    @* ── Estado: SUCCESS – tarjeta de archivo ── *@
+                    <div class="lote-modal__file-card" id="lote-file-card">
+                        <img src="~/icons/document-upload.svg" class="lote-modal__file-card-icon ds-icon" aria-hidden="true" alt="" />
+                        <div class="lote-modal__file-card-info">
+                            <p class="lote-modal__file-card-name" id="lote-file-name">—</p>
+                            <p class="lote-modal__file-card-meta" id="lote-file-meta">—</p>
+                        </div>
+                        <button type="button" class="lote-modal__file-card-remove" id="lote-file-remove" aria-label="Eliminar archivo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                 aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    @* ── Banner de resumen (IDs encontrados) ── *@
+                    <div class="lote-modal__info-banner lote-modal__info-banner--file" id="lote-file-banner" role="status" aria-live="polite" hidden>
+                        <svg class="lote-modal__info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        <span class="lote-modal__info-text" id="lote-file-banner-text"></span>
+                    </div>
+
+                    @* ── Estado: ERROR – alerta ── *@
+                    <div class="lote-modal__error-alert" id="lote-error-alert" hidden role="alert">
+                        <svg class="lote-modal__error-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        <span class="lote-modal__error-text" id="lote-error-text">Error al procesar el archivo.</span>
+                    </div>
+
+                    @* ── Botón descargar plantilla ── *@
+                    <div class="lote-modal__template-row">
+                        <a href="/Dashboard?handler=DownloadFileTemplate"
+                           id="lote-download-template"
+                           download
+                           class="lote-modal__template-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" width="16" height="16" aria-hidden="true">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Descargar plantilla
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            @* Pane 2: Pegar IDs *@
+            <div class="lote-modal__pane lote-modal__pane--active" id="lote-pane-ids"
+                 role="tabpanel" aria-labelledby="lote-tab-ids">
+                <div class="lote-modal__body">
+                    <div class="lote-modal__section-header">
+                        <span class="lote-modal__section-title">Listado de identificadores</span>
+                        <button type="button" class="lote-modal__clear-btn" id="lote-clear-btn">Limpiar</button>
+                    </div>
+                    <textarea class="lote-modal__textarea"
+                              id="lote-ids-textarea"
+                              placeholder="Pega aquí los identificadores, uno por línea o separados por comas..."
+                              aria-label="Listado de identificadores"
+                              rows="10"></textarea>
+                    <div class="lote-modal__info-banner" id="lote-info-banner" hidden>
+                        <svg class="lote-modal__info-icon"
+                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <span id="lote-info-text">0 IDs detectados</span>
+                    </div>
+                </div>
+            </div>
+
+            @* Footer *@
+            <div class="lote-modal__footer">
+                <button type="button" class="lote-modal__cancel" id="lote-modal-cancel">Cancelar</button>
+                <button type="button" class="lote-modal__submit" id="lote-modal-submit">
+                    <img src="~/icons/search.svg" class="ds-icon lote-modal__submit-icon" aria-hidden="true" alt="" />
+                    <span class="lote-modal__submit-label">Procesar y Buscar</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+@* ── Vista embebida: Perfil de Cliente (orquestada desde dashboard.js) ── *@
+<div id="ds-view-cliente" class="ds-client-view" hidden>
+    <div class="ds-client-view__topbar">
+        <button type="button" class="ds-client-view__back-btn" id="ds-client-view-back"
+                aria-label="Volver al dashboard">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+            </svg>
+            Dashboard
+        </button>
+        <span class="ds-client-view__breadcrumb-sep" aria-hidden="true">/</span>
+        <span id="ds-client-view-breadcrumb-name" class="ds-client-view__breadcrumb-current">Perfil de Cliente</span>
+    </div>
+    <div id="ds-client-view-content" class="ds-client-view__content">
+        <div class="ds-client-view__loading" id="ds-client-view-loading" hidden>
+            <span class="material-symbols-outlined ds-client-view__loading-icon">autorenew</span>
+            <span>Cargando perfil...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/ds/ds-client-list-store.js" asp-append-version="true"></script>
+    <script>
+        window.CONTACT_TYPE_TO_GROUP = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ContactGroupMap));
+        @if (!string.IsNullOrWhiteSpace(Model.FilterIds))
+        {
+            // Sanitize: keep only alphanumeric chars and commas before injecting into JS
+            var _safeFilterIds = System.Text.RegularExpressions.Regex.Replace(Model.FilterIds, @"[^a-zA-Z0-9,]", "");
+            @:window.DS_FILTER_IDS = '@(_safeFilterIds)';
+            @:DS.clientListStore?.setAll(window.DS_FILTER_IDS.split(',').map(s => s.trim()).filter(Boolean));
+        }
+        else
+        {
+            @:const _persistedIds = DS.clientListStore?.getIds() ?? [];
+            @:if (_persistedIds.length > 0) window.DS_FILTER_IDS = _persistedIds.join(',');
+        }
+    </script>
+    <script src="~/js/components/dashboard-file-modal.js" asp-append-version="true"></script>
+    <script src="~/js/pages/dashboard.js" asp-append-version="true"></script>
+    @{
+        var _errLabels = ContactabilityLabelHelper.RejectionPills.Values
+            .SelectMany(l => l)
+            .ToDictionary(x => x.Code, x => x.ShortLabel);
+    }
+    <script src="~/js/pages/clientes.js" asp-append-version="true"></script>
+    <script>
+        window.DS = window.DS || {};
+        window.DS.catalogs = window.DS.catalogs || {};
+        window.DS.catalogs.errorLabels = @Html.Raw(JsonSerializer.Serialize(_errLabels));
+    </script>
+}
+

@@ -1,0 +1,118 @@
+/* =====================================================
+   ds-contact-filter — Filtro de contactabilidad por estado
+   Componente compartido: Dashboard y Vista Cliente.
+   Clases: .ds-contact-filter, .ds-contact-filter__btn, etc.
+   ===================================================== */
+
+.ds-contact-filter {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding: var(--spacing-2) var(--spacing-4);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.ds-contact-filter::-webkit-scrollbar { display: none; }
+
+.ds-contact-filter__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: var(--radius-full, 999px);
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+    line-height: 1.4;
+}
+.ds-contact-filter__btn:hover {
+    background: var(--color-pd-05);
+    color: var(--color-text-primary);
+}
+.ds-contact-filter__btn .material-symbols-outlined {
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+/* ── Estado activo: Todos ── */
+.ds-contact-filter__btn--active {
+    background: var(--color-pd-08, var(--color-pd-05));
+    color: var(--color-primary-dark);
+    font-weight: var(--font-weight-semibold);
+    border-color: var(--color-pd-18, var(--color-pd-20));
+}
+
+/* ── Estado activo: color semántico por filtro ── */
+.ds-contact-filter__btn--active[data-filter="verificado"] {
+    background: var(--color-verified-bg);
+    color: var(--color-verified-text);
+    border-color: var(--color-verified-border);
+}
+.ds-contact-filter__btn--active[data-filter="pendiente"] {
+    background: var(--color-pending-bg);
+    color: var(--color-pending-text);
+    border-color: var(--color-pending-border);
+}
+.ds-contact-filter__btn--active[data-filter="error"] {
+    background: var(--color-danger-3, #fef2f2);
+    color: var(--color-danger, #dc2626);
+    border-color: var(--color-danger-30, #fca5a5);
+}
+
+/* ── Badge de conteo ── */
+.ds-contact-filter__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    background: var(--color-pd-12, var(--color-pd-10));
+    color: var(--color-primary-dark);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+}
+.ds-contact-filter__btn--active .ds-contact-filter__count {
+    background: var(--color-primary-dark);
+    color: #fff;
+}
+.ds-contact-filter__btn--active[data-filter="verificado"] .ds-contact-filter__count {
+    background: var(--color-verified-text);
+    color: #fff;
+}
+.ds-contact-filter__btn--active[data-filter="pendiente"] .ds-contact-filter__count {
+    background: var(--color-pending-text);
+    color: #fff;
+}
+.ds-contact-filter__btn--active[data-filter="error"] .ds-contact-filter__count {
+    background: var(--color-danger, #dc2626);
+    color: #fff;
+}
+
+/* ── Estado vacío: sin resultados para el filtro activo ── */
+.ds-contact-filter__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-8) var(--spacing-4);
+    color: var(--color-text-muted);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    text-align: center;
+}
+.ds-contact-filter__empty .material-symbols-outlined {
+    font-size: 32px;
+    opacity: 0.3;
+}
