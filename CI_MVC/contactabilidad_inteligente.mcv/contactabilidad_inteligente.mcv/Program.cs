@@ -34,7 +34,6 @@ string connectionString = ConfigCrypto.DecryptFromEnvironment(rawConnectionStrin
 
 Log.Information("environment: {EnvironmentName}", builder.Environment.EnvironmentName);
 
-// Configurar DbContext con opciones seg�n el entorno
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(connectionString, sqlOptions =>
@@ -52,30 +51,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.EnableSensitiveDataLogging();
         options.EnableDetailedErrors();
     }
-
-    // Suprimir advertencia de modelo pendiente durante desarrollo
-    options.ConfigureWarnings(warnings =>
-    {
-        warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning);
-    });
+    
 });
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Registrar cach� en memoria para cat�logos
 builder.Services.AddMemoryCache(options =>
 {
-    // Limita la memoria a un m�ximo de elementos cacheados simult�neamente
     options.SizeLimit = 2000;
 });
 
-// Registrar la capa de persistencia (Repositorios y UnitOfWork)
 builder.Services.AddPersistence(builder.Configuration);
 
-// Registrar la capa de aplicaci�n (Servicios)
 builder.Services.AddApplicationServices();
 
-// Registrar inicializador de cach� de cat�logos
 builder.Services.AddScoped<CatalogosCacheInitializer>();
 
 // Configure Cookie Authentication
