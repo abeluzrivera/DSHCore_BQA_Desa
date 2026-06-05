@@ -1,23 +1,23 @@
 # Plan de Releases — Plataformas de Gestión de Datos
 
-**Fecha de revisión:** 02 de junio de 2026  
+**Fecha de revisión:** 05 de junio de 2026  
 **Estado:** En desarrollo activo
 
 ---
 
 ## Plataformas del Departamento de Gestión de Datos
 
-### DSH 
+### Smart Data Hub — SDH
 
 Sistema web interno para la verificación de contactabilidad de clientes. Permite a los operadores localizar, validar y registrar información de contacto y ubicación de clientes que no han podido ser alcanzados por los canales convencionales. Integra autenticación corporativa, gestión de datos bajo normativa LOPDP y trazabilidad completa de operaciones.
 
-### Slider
+### SNIPER
 
 Motor interno de deduplicación y consolidación de identidades de clientes. Vive dentro del monolito DSH como un servicio de dominio especializado, sin interfaz propia.
 
 Problema que resuelve: un mismo cliente puede ser registrado múltiples veces bajo distintos tipos de documento. El caso más frecuente es que un cliente exista con su cédula de identidad (10 dígitos) y que posteriormente sea creado de nuevo con su RUC de persona natural (los mismos 10 dígitos más el sufijo "001"). El sistema los trata como dos clientes distintos pero en realidad es la misma persona.
 
-Mecanismo: cuando se crea o actualiza un registro en el maestro de clientes, Slider aplica un algoritmo de concordancia que normaliza el número de identificación (extrae la base de 10 dígitos independientemente del tipo de documento) y lo compara contra los registros existentes. Si detecta una coincidencia, vincula ambos registros mediante un identificador canónico y consolida la información de contactos y direcciones hacia el registro maestro.
+Mecanismo: cuando se crea o actualiza un registro en el maestro de clientes, SNIPER aplica un algoritmo de concordancia que normaliza el número de identificación (extrae la base de 10 dígitos independientemente del tipo de documento) y lo compara contra los registros existentes. Si detecta una coincidencia, vincula ambos registros mediante un identificador canónico y consolida la información de contactos y direcciones hacia el registro maestro.
 
 Modelo de datos requerido: agregar la columna `Id_Cliente_Canonico` (BIGINT, FK NULL, autorreferencia sobre `operativo.Tbl_Maest_Cliente`) para identificar cuál es el registro maestro. Un valor NULL indica que el registro es en sí mismo el canónico. Un valor no nulo apunta al registro que concentra la información consolidada. Esto implica una migración EF Core y la actualización del diccionario de datos.
 
@@ -49,16 +49,16 @@ Modelo de datos requerido: agregar la columna `Id_Cliente_Canonico` (BIGINT, FK 
 
 ---
 
-### Release 1.1.0 — Compliance, Operaciones y DT (pendiente de fecha)
+### Release 1.1.0 — Compliance, DT y Operativas SDH (pendiente de fecha)
 
-**Objetivo:** Cerrar las brechas de compliance del MVP, activar el módulo de carga masiva real y sanear la deuda técnica acumulada antes de incorporar nuevas capacidades.
+**Objetivo:** Completar el ciclo operativo de la plataforma cerrando las brechas de compliance del MVP, implementando el módulo LOPDP en su totalidad, activando la carga masiva real y dotando a los equipos de supervisión con métricas, reportes y un mecanismo de comunicación de novedades. En paralelo, resolver la deuda técnica que compromete la mantenibilidad y estandarizar los artefactos del repositorio para sostener el crecimiento del sistema en los siguientes releases.
 
-**Deuda Técnica incluida en este release:**
+**Deuda Técnica:**
 
-1. `ClientFinancial.cs` — La propiedad `ClientId` (string) almacena el valor de `Tipo_Contabilidad` por un error de nomenclatura. Renombrar a `AccountingType` y actualizar la configuración EF Core y todos los puntos de uso.
+1. `ClientFinancial.cs` — La propiedad `ClientId` (string) almacena `Tipo_Contabilidad` por un error de nomenclatura. Renombrar a `AccountingType` y actualizar la configuración EF Core y todos los puntos de uso.
    Archivos: `CI_API/SDH.Domain/Entities/Operative/ClientFinancial.cs`, `CI_API/SDH.infrastructure/Persistence/DataConfigurations/Operativo/FinancieroClienteConfiguration.cs`
 
-2. `CustomerAddresses.Source` — El campo de origen está hardcodeado a `GlobalVariables.SystemUser` en el factory method. Debe recibir el origen como parámetro, alineándose con el comportamiento de `CustomerContacts.Create()`.
+2. `CustomerAddresses.Source` — El campo origen está hardcodeado a `GlobalVariables.SystemUser` en el factory method. Debe recibir el origen como parámetro, alineándose con el comportamiento de `CustomerContacts.Create()`.
    Archivo: `CI_API/SDH.Domain/Entities/Operative/CustomerAddresses.cs`
 
 3. `ClienteConfiguration.cs` — `Identificacion_Cliente` tiene `HasMaxLength(32)` en la configuración EF Core pero la columna SQL está definida como NVARCHAR(20). Corregir a 20.
@@ -67,32 +67,37 @@ Modelo de datos requerido: agregar la columna `Id_Cliente_Canonico` (BIGINT, FK 
 4. `CustomerAddressConfiguration.cs` — El índice `IX_Contacto_Cliente_IdCliente_EstaEliminado` referencia en su nombre la tabla de contactos pero está definido sobre la tabla de direcciones. Renombrar a `IX_Direccion_Cliente_IdCliente_EstaEliminado`.
    Archivo: `CI_API/SDH.infrastructure/Persistence/DataConfigurations/Operativo/CustomerAddressConfiguration.cs` línea 153
 
-5. `Tbl_Direccion_Cliente.estado_LOPDP` — Columna en minúsculas, incumpliendo la convención Snake_Pascal_Case del esquema. Renombrar a `Estado_LOPDP` mediante migración EF Core.
+5. `Tbl_Direccion_Cliente.estado_LOPDP` — Columna en minúsculas, incumpliendo la convención Snake_Pascal_Case. Renombrar a `Estado_LOPDP` mediante migración EF Core.
 
-6. Unificación del prefijo de artefactos — Los proyectos del repositorio usan el prefijo `SDH` (ej. `SDH.Domain`, `SDH.infrastructure`, `SDH.Application`) mientras que el nombre oficial de la plataforma es `DSH`. Renombrar todos los artefactos al prefijo `DSH` para eliminar la ambigüedad. Implica renombrar carpetas, namespaces, referencias en `*.csproj` y `*.sln`, y actualizar cualquier script o pipeline que referencie los nombres actuales.
+
+8. Grupos de seguridad — Renombrar de `G_DSH_*` a `GS_DSH_*` en los ambientes de certificación y desarrollo para homologar la convención de producción.
+   - Coordinar con el equipo de seguridad una arquitectura de implementación centralizada y validar el alcance de las mejoras requeridas.
+
+9. Proyecto de pruebas unitarias — Crear un proyecto de pruebas en la solución para cubrir las funcionalidades existentes y detectar regresiones antes de cada entrega.
+
+10. Pruebas automatizadas con Selenium — Implementar y automatizar pruebas de interfaz que validen los flujos críticos del frontend ante cada cambio.
+
+11. Librería de cifrado centralizada — Extraer la lógica de cifrado a una librería independiente publicada como artefacto del banco, consumida tanto por la solución principal como por la herramienta de secrets.
+
+12. Herramienta de secrets como artefacto general del banco — Renombrar `SDH.SecretTool` con un nombre de alcance institucional y desacoplarla del repositorio SDH para que pueda ser adoptada por otros proyectos.
+
+13. Estandarización del nombre de la plataforma — Unificar el uso de los nombres DSH y SDH en toda la plataforma para eliminar la ambigüedad acumulada.
+    - Actualizar la documentación de usuario para reflejar el nombre definitivo.
 
 **Módulo LOPDP completo:**
 
-- Flujo de registro de consentimiento por cada dato de contacto: el operador confirma si el cliente acepta o rechaza la ley de protección de datos, con registro de fecha y hora por cada valor.
-- Bloqueo de verificación: si el cliente rechaza el consentimiento LOPDP para un medio de contacto, el sistema impide la verificación de ese dato y muestra un mensaje explicativo.
-- Visualización del estado LOPDP en la ficha del cliente por cada contacto y dirección.
+- Flujo de registro de consentimiento por cada dato de contacto: el operador confirma si el cliente acepta o rechaza el tratamiento bajo la ley de protección de datos, con registro de fecha y hora por cada valor.
+- Bloqueo de verificación: si el cliente rechaza el consentimiento LOPDP para un medio de contacto, el sistema impide la verificación de ese dato y muestra un mensaje explicativo al operador.
+- Visualización del estado LOPDP en la ficha del cliente por cada contacto y dirección registrada.
 
 **Módulo de carga masiva operativo:**
 
-- Procesamiento real de archivos Excel/CSV: búsqueda por lote de identificaciones, presentación de coincidencias y registro de los que no existen en la base de datos.
+- Procesamiento real de archivos Excel/CSV: búsqueda por lote de identificaciones, presentación de coincidencias y registro de los identificadores que no existen en la base de datos.
 - El campo `Source` se registra correctamente como identificador del proceso batch en el momento de la carga.
 
 **Geolocalización asistida:**
 
-- Desde la ficha del cliente, el operador captura las coordenadas mediante la API de geolocalización del navegador y las asigna a la dirección activa, eliminando la necesidad de introducirlas manualmente. Requiere HTTPS en el entorno de producción.
-
-**Nota de alcance:** La integración con el Core bancario (Oficializacion_Core) se incluirá en este release únicamente si el equipo Core habilita el endpoint receptor antes del cierre del desarrollo. De lo contrario, se gestiona como tarea independiente.
-
----
-
-### Release 1.2.0 — Visibilidad, Reportes y Novedades (pendiente de fecha)
-
-**Objetivo:** Proveer a supervisores y administradores visibilidad sobre el rendimiento operativo y equipar a todos los usuarios con un mecanismo de novedades que comunique los cambios de la plataforma versión a versión.
+- Desde la ficha del cliente, el operador captura las coordenadas mediante la API de geolocalización del navegador y las asigna a la dirección activa, eliminando la necesidad de ingresarlas manualmente. Requiere HTTPS en el entorno de producción.
 
 **Dashboard de supervisión:**
 
@@ -101,7 +106,7 @@ Modelo de datos requerido: agregar la columna `Id_Cliente_Canonico` (BIGINT, FK 
 
 **Reportes operativos:**
 
-- Exportación en formato Excel de los resultados de verificación: cliente, operador, fecha y hora, resultado (verificado/rechazado) y motivo de rechazo cuando aplica.
+- Reporte dentro de la aplicación de los resultados de verificación: cliente, operador, fecha y hora, resultado (verificado/rechazado) y motivo de rechazo cuando aplica.
 - Filtros disponibles: por operador, por estado de verificación y por rango de fechas.
 
 **Módulo de Changelog / Novedades:**
@@ -116,18 +121,20 @@ Modelo de datos requerido:
 
 Comportamiento esperado:
 
-- Al iniciar sesión, la plataforma compara las versiones publicadas en `Tbl_Release_Nota` con los registros de `Tbl_Usuario_Release_Vista` del usuario. Si existen versiones no vistas, muestra un modal de "Novedades" con el detalle de los cambios.
+- Al iniciar sesión, la plataforma compara las versiones publicadas en `Tbl_Release_Nota` con los registros de `Tbl_Usuario_Release_Vista` del usuario activo. Si existen versiones no vistas, muestra un modal de "Novedades" con el detalle de los cambios.
 - El usuario puede cerrar el modal o marcarlo como leído. En ambos casos se registra la versión en `Tbl_Usuario_Release_Vista`.
-- Una página `/novedades` accesible desde el menú principal permite consultar el historial completo de versiones con sus items agrupados por categoría.
-- La carga de los datos de cada release se realiza mediante seeders versionados, de modo que el contenido queda en control de versiones junto con el código.
+- Una página `/novedades` accesible desde el menú principal permite consultar el historial completo de versiones con sus ítems agrupados por categoría.
+- Los datos de cada release se incorporan mediante seeders versionados, de modo que el contenido queda bajo control de versiones junto con el código.
+
+**Nota de alcance:** La integración con el Core bancario (`Oficializacion_Core`) se incluirá en este release únicamente si el equipo Core habilita el endpoint receptor antes del cierre del desarrollo. De lo contrario, se gestiona como tarea independiente.
 
 ---
 
-### Release 1.3.0 — Slider: Motor de Deduplicación de Clientes (pendiente de fecha)
+### Release 1.2.0 — Slider: Motor de Deduplicación de Clientes (pendiente de fecha)
 
 **Objetivo:** Incorporar el motor Slider dentro del monolito para detectar y consolidar registros duplicados del maestro de clientes originados por diferencias en el tipo de documento de identidad.
 
-**Prerequisito de datos:** Migración que agrega la columna `Id_Cliente_Canonico` (BIGINT, FK NULL autorreferencia) a `operativo.Tbl_Maest_Cliente` y actualiza el diccionario de datos. Esta migración puede prepararse durante 1.2.0 para no bloquear el inicio del desarrollo.
+**Prerequisito de datos:** Migración que agrega la columna `Id_Cliente_Canonico` (BIGINT, FK NULL autorreferencia) a `operativo.Tbl_Maest_Cliente` y actualiza el diccionario de datos. Esta migración puede prepararse durante 1.1.0 para no bloquear el inicio del desarrollo.
 
 **Algoritmo de concordancia:**
 
@@ -155,7 +162,7 @@ Comportamiento esperado:
 
 **Objetivo:** Separar la plataforma en capas independientes desplegables, habilitar el despliegue continuo y escalar la capacidad de ingesta de datos externos.
 
-**Prerequisito:** Completar los releases 1.1.0, 1.2.0 y 1.3.0. Producir un documento de arquitectura que defina la estrategia de despliegue, los contratos de API y el modelo de datos del esquema carga antes de iniciar el desarrollo.
+**Prerequisito:** Completar los releases 1.1.0 y 1.2.0. Producir un documento de arquitectura que defina la estrategia de despliegue, los contratos de API y el modelo de datos del esquema carga antes de iniciar el desarrollo.
 
 **Desacoplamiento frontend/backend:**
 
@@ -176,9 +183,9 @@ Comportamiento esperado:
 
 ## Paquetes de Liberación
 
-### Release 1.1.0 — Paquete A: Deuda Técnica y LOPDP
+### Release 1.1.0 — Paquete A: Correcciones de esquema, dominio y LOPDP
 
-Alcance: Los 5 items de deuda técnica, flujo LOPDP completo con bloqueo de verificación, módulo de carga masiva operativo con asignación correcta del campo Source.  
+Alcance: Ítems de deuda técnica 1 al 5 (renombrados de propiedades, corrección de MaxLength, rename de índice y migración de columna), flujo LOPDP completo con bloqueo de verificación, y módulo de carga masiva operativo con asignación correcta del campo `Source`.  
 Condición de salida: Migración EF generada y aplicada en ambiente de prueba sin regresiones; el operador puede registrar y consultar consentimiento LOPDP; un archivo Excel cargado produce resultados reales.  
 Riesgo: Medio. La deuda técnica incluye renombrado de propiedades de dominio con impacto en capas de aplicación e infraestructura.
 
@@ -187,23 +194,35 @@ Riesgo: Medio. La deuda técnica incluye renombrado de propiedades de dominio co
 Alcance: Captura de coordenadas del dispositivo del operador desde la ficha del cliente mediante la API del navegador.  
 Puede desarrollarse en paralelo con el Paquete A.  
 Condición de salida: El operador puede registrar coordenadas sin introducción manual.  
-Riesgo: Bajo. Funcionalidad de fronted sobre estructura de datos ya existente; requiere HTTPS en producción.
+Riesgo: Bajo. Funcionalidad de frontend sobre estructura de datos ya existente; requiere HTTPS en producción.
+
+### Release 1.1.0 — Paquete C: Dashboard de supervisión y Reportes operativos
+
+Alcance: Panel de métricas consolidadas para perfiles ADMIN y SUPERVISOR segmentado por operador y rango de fechas; reporte dentro de la aplicación con resultados de verificación, filtros y motivos de rechazo.  
+Depende de: Paquete A completado (los reportes requieren datos LOPDP correctos para ser válidos).  
+Condición de salida: Un supervisor visualiza métricas del equipo filtradas por fecha; un operador consulta el reporte de verificaciones con al menos un filtro activo.  
+Riesgo: Bajo. Funcionalidad de lectura sobre datos existentes sin impacto en flujos operativos críticos.
+
+### Release 1.1.0 — Paquete D: Módulo de Changelog / Novedades
+
+Alcance: Tablas `Tbl_Release_Nota`, `Tbl_Release_Nota_Item` y `Tbl_Usuario_Release_Vista`; modal de novedades en login; página `/novedades`; seeder del changelog para los releases 1.0.0 y 1.1.0.  
+Puede desarrollarse en paralelo con el Paquete C.  
+Condición de salida: Un usuario que inicia sesión por primera vez tras la publicación ve el modal de novedades, puede cerrarlo y consultarlo después desde la página de historial.  
+Riesgo: Bajo. Estructuras nuevas sin acoplamiento con flujos operativos existentes.
+
+### Release 1.1.0 — Paquete E: Estandarización y gobernanza de artefactos
+
+Alcance: Ítems de deuda técnica 6 al 12: unificación de prefijos de artefactos, renombrado de grupos de seguridad, creación del proyecto de pruebas unitarias, pruebas Selenium, librería de cifrado centralizada, renombrado de la herramienta de secrets y estandarización definitiva del nombre de la plataforma con actualización de documentación.  
+Puede iniciarse en paralelo con los paquetes anteriores pero su cierre es condición para declarar el release completo.  
+Condición de salida: La solución compila y los tests pasan con los nuevos nombres; la herramienta de secrets es independiente del repositorio; los grupos de seguridad son consistentes en todos los ambientes.  
+Riesgo: Alto. El renombrado masivo de namespaces y artefactos afecta toda la solución y requiere coordinación con el equipo de infraestructura para pipelines y directorios de identidad.
 
 ---
 
-### Release 1.2.0 — Paquete único: Reportes, Dashboard y Changelog
+### Release 1.2.0 — Paquete único: Motor Slider
 
-Alcance: Dashboard de supervisión con métricas por operador y fecha; exportación Excel de verificaciones; tablas `Tbl_Release_Nota`, `Tbl_Release_Nota_Item` y `Tbl_Usuario_Release_Vista`; modal de novedades en login; página `/novedades`; seeder del changelog de los releases 1.0.0, 1.1.0 y 1.2.0.  
-Depende de: Release 1.1.0 completado (los reportes requieren datos LOPDP correctos para ser válidos).  
-Condición de salida: Un supervisor descarga un reporte filtrado; un usuario que ingresa por primera vez después de la publicación ve el modal de novedades y puede cerrarlo o consultarlo luego en la página de historial.  
-Riesgo: Bajo. Funcionalidad de lectura sobre datos existentes más estructuras nuevas sin impacto en flujos operativos críticos.
-
----
-
-### Release 1.3.0 — Paquete único: Motor Slider
-
-Alcance: Migración que agrega `Id_Cliente_Canonico` a `Tbl_Maest_Cliente`; servicio Slider con algoritmo de concordancia cédula/RUC; proceso batch de conciliación histórica; integración en el flujo de creación/actualización de clientes; visualización de identidades vinculadas en la ficha del cliente; seeder del changelog para 1.3.0.  
-Depende de: Release 1.2.0 completado.  
+Alcance: Migración que agrega `Id_Cliente_Canonico` a `Tbl_Maest_Cliente`; servicio Slider con algoritmo de concordancia cédula/RUC; proceso batch de conciliación histórica; integración en el flujo de creación/actualización de clientes; visualización de identidades vinculadas en la ficha del cliente; seeder del changelog para 1.2.0.  
+Depende de: Release 1.1.0 completado.  
 Condición de salida: Al crear un cliente con RUC cuya cédula base ya existe en el sistema, Slider vincula ambos registros y la ficha del cliente canónico muestra las identidades consolidadas.  
 Riesgo: Medio-Alto. El algoritmo de concordancia debe validarse contra el universo de clientes existentes en el batch de conciliación antes de activar el procesamiento en tiempo real, para evitar vínculos incorrectos.
 
@@ -217,4 +236,4 @@ Paquete A: Backend auto-hospedado Kestrel, contrato OpenAPI/Swagger, pipeline CI
 
 Paquete B: Esquema carga, proceso ETL para proveedores externos, integración con procedimiento operativo 4.1. Riesgo: Medio. Depende de la especificación de formato entregada por el proveedor externo. Puede desarrollarse en paralelo con Paquete A.
 
-Paquete C: Formalización de las vistas `vw_Contactabilidad_Clientes` y `vw_Clientes_Contactos_Detalle` con scripts SQL y configuración EF Core. Riesgo: Bajo. Riesgo: Bajo. Puede desarrollarse en paralelo con Paquetes A y B.
+Paquete C: Formalización de las vistas `vw_Contactabilidad_Clientes` y `vw_Clientes_Contactos_Detalle` con scripts SQL y configuración EF Core. Riesgo: Bajo. Puede desarrollarse en paralelo con Paquetes A y B.

@@ -191,7 +191,8 @@ ALTER ROLE db_datareader ADD MEMBER usr_smarthub;
 ALTER ROLE db_datawriter ADD MEMBER usr_smarthub;
 ```
 
-> Para el entorno de staging, repita el proceso sobre la base de datos `DB_ODS_DEV`.
+> Para el entorno de PRE-PRODUCCION, repita el proceso sobre la base de datos `DB_ODS_STG`.  
+> Para el entorno de PRODUCCIÓN, repita el proceso sobre la base de datos `DB_ODS`.
 
 ### 6.2 Identidad del grupo de aplicaciones
 
@@ -268,7 +269,12 @@ Localice la sección `LdapSettings` y ajuste los valores según el entorno. Los 
   "BindDn": "usuario@dominio.local",
   "BindPassword": "ENC:xxxxxxxxxxxxxxxxxxxxxxxx",
   "UserSearchBase": "DC=dominio,DC=local",
-  "UserSearchFilter": "(&(objectClass=user)(sAMAccountName={0}))"
+  "RoleGroupMappings": {
+      "ADMIN": "GS_DSH_SUPAD",
+      "SUPERVISOR": "GS_DSH_AUDIT",
+      "AGENTE": "GS_DSH_USER",
+      "CONSULTA": "GS_DSH_AUDIT"
+    }
 }
 ```
 
@@ -281,9 +287,17 @@ Localice la sección `LdapSettings` y ajuste los valores según el entorno. Los 
 | `BindDn` | Cuenta de servicio para autenticación LDAP | (\*) |
 | `BindPassword` | Contraseña cifrada con SmartHubSecretTool (`ENC:...`) | (\*) |
 | `UserSearchBase` | DN base para búsqueda de usuarios | (\*) |
-| `UserSearchFilter` | Filtro de búsqueda LDAP — mantener valor predeterminado | — |
+| `RoleGroupMappings` | Mapeo de roles de la aplicación a grupos LDAP | (\*)|
+| `ADMIN` | Rol de administrador en la aplicación | Mapeado al grupo LDAP `GS_DSH_SUPAD` |
+| `SUPERVISOR` | Rol de supervisor en la aplicación | Mapeado al grupo LDAP `GS_DSH_AUDIT` |
+| `AGENTE` | Rol de agente en la aplicación | Mapeado al grupo LDAP `GS_DSH_USER` |
+| `CONSULTA` | Rol de consulta en la aplicación | Mapeado al grupo LDAP `GS_DSH_AUDIT` |
+
+
 
 > El valor de `BindPassword` debe generarse usando la herramienta SmartHubSecretTool según el proceso descrito en la [sección 3.3](#33-cifrado-de-valores-sensibles).
+
+
 
 ---
 
