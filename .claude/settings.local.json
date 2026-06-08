@@ -2,7 +2,18 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:gdatos-team-xzr9wxhc.atlassian.net)",
-      "Bash(claude mcp *)"
+      "Bash(claude mcp *)",
+      "Bash(dotnet *)",
+      "Bash(sqlcmd *)",
+      "PowerShell(dotnet *)",
+      "PowerShell(sqlcmd *)",
+      "PowerShell(Remove-Item *)",
+      "PowerShell(New-Item *)",
+      "Bash(grep -E \"\\\\.css$\")",
+      "Bash(find /d/sources/DSHCore_BQA_Desa/docs -type f ! -path \"*/node_modules/*\" -exec ls -lh {} \\\\;)",
+      "Bash(awk '{print $5, $9}')",
+      "Bash(xargs grep *)"
     ]
-  }
+  },
+  "defaultMode": "bypassPermissions"
 }

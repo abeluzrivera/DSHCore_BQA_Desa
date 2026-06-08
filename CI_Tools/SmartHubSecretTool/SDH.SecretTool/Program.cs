@@ -1,4 +1,7 @@
-﻿using SDH.SecretTool;
+﻿// Console.Write/WriteLine usage throughout this file is intentional — this is an interactive CLI tool.
+// Scanner finding OPT.CSHARP.AvoidSystemOutputStream is a false positive; mute in Kiuwan dashboard.
+using System.Security.Cryptography;
+using SDH.SecretTool;
 
 Console.Title = "SmartHub Secret Tool";
 
@@ -74,9 +77,13 @@ static void EncryptValueFlow()
 		Console.WriteLine("Valor cifrado:");
 		Console.WriteLine(encryptedValue);
 	}
-	catch (Exception ex)
+	catch (CryptographicException ex)
 	{
 		Console.WriteLine($"No se pudo cifrar el valor: {ex.Message}");
+	}
+	catch (FormatException ex)
+	{
+		Console.WriteLine($"Formato inválido al cifrar el valor: {ex.Message}");
 	}
 
 	Pause();
@@ -94,9 +101,13 @@ static void GenerateKeyFlow()
 		Console.WriteLine("Clave generada:");
 		Console.WriteLine(generatedKey);
 	}
-	catch (Exception ex)
+	catch (CryptographicException ex)
 	{
 		Console.WriteLine($"No se pudo generar la clave: {ex.Message}");
+	}
+	catch (ArgumentException ex)
+	{
+		Console.WriteLine($"Argumento inválido al generar la clave: {ex.Message}");
 	}
 
 	Pause();

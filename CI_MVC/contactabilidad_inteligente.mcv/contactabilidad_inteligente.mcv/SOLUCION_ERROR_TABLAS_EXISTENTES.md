@@ -8,6 +8,5 @@ Después de la primera ejecución, se crearán estos usuarios automáticamente:
 | usuario@bancomachala.com | Usuario123! | Usuario |
 
 **Nota Importante:** 
-- El sistema valida que todos los correos sean del dominio `@bancomachala.com`
 - El inicio de sesión se realiza con el correo electrónico completo
 - Las contraseñas están hasheadas con BCrypt para mayor seguridad

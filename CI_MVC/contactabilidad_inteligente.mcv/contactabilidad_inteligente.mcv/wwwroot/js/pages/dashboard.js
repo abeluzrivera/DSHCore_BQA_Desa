@@ -11,13 +11,6 @@
      */
     const CONTACT_TYPE_TO_GROUP = window.CONTACT_TYPE_TO_GROUP ?? {};
 
-    const CONTACT_TYPE_TO_ICON = {
-        'TEL_C': 'phone',       'CEL':   'phone',     'WAPP': 'phone',
-        'EMAIL': 'mail',
-        'DIR_D': 'location_on', 'DIR_T': 'location_on',
-        'LINK':  'link',
-    };
-
     /** Numeric priority for "worst-wins" aggregation (higher = worse). */
     const STATE_PRIORITY = { verified: 0, pending: 1, error: 2 };
 
@@ -61,7 +54,13 @@
         DS.events?.on('cliente:seleccionado', ({ id }) => {
             const alreadyActive = !!document.querySelector(
                 `.ds-client-article--active[data-id="${CSS.escape(id)}"]`);
-            if (!alreadyActive) _selectClient(id);
+            if (alreadyActive) return;
+            const inList = !!document.querySelector(`.ds-client-article[data-id="${CSS.escape(id)}"]`);
+            if (inList) {
+                _selectClient(id);
+            } else {
+                _handleClienteAgregar(id);
+            }
         });
 
         DS.events?.on('cliente:agregar', ({ id }) => _handleClienteAgregar(id));
@@ -173,10 +172,16 @@
         if (viewEl)  viewEl.hidden  = true;
         if (dashEl)  dashEl.hidden  = false;
 
+        // Invalidate cached panel so fresh contact data is fetched on return
+        const activeArt = document.querySelector('.ds-client-article--active');
+        const clientId  = activeArt?.dataset.id;
+        if (clientId) {
+            document.querySelector(`.dash-detail__panel[data-client-id="${CSS.escape(clientId)}"]`)?.remove();
+            _selectClientNoHistory(clientId);
+        }
+
         if (updateHistory) {
             // Volver a la URL del panel del cliente activo (sin view=perfil)
-            const activeArt = document.querySelector('.ds-client-article--active');
-            const clientId  = activeArt?.dataset.id;
             if (clientId) {
                 history.replaceState(
                     { clientId, listScrollY: 0 },

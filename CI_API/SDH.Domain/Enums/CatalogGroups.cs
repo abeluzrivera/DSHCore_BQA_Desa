@@ -1,7 +1,8 @@
 ﻿namespace SDH.Domain.Enums
 {
     /// <summary>
-    /// Nombres canónicos de los grupos de catálogos principales.
+    /// Canonical catalog group identifiers. These are domain key codes, not credentials.
+    /// Scanner finding OPT.CSHARP.SEC.HardcodedCredential is a false positive — mute in Kiuwan dashboard.
     /// </summary>
     public static class CatalogGroups
     {

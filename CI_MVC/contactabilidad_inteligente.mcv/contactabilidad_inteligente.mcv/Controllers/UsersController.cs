@@ -4,6 +4,7 @@ using SDH.Application.DTOs.Users;
 using SDH.Application.Ports.Services;
 using SDH.Application.Services;
 using System.Security.Claims;
+using contactabilidad_inteligente.mcv.Filters;
 
 namespace contactabilidad_inteligente.mcv.Controllers
 {
@@ -15,6 +16,7 @@ namespace contactabilidad_inteligente.mcv.Controllers
     [Authorize(Roles = "ADMIN")]
     [ApiController]
     [Route("api/users")]
+    [ApiExceptionFilter]
     public class UsersController(
         ILogger<UsersController> logger,
         UserCommandService commandService,
@@ -32,16 +34,8 @@ namespace contactabilidad_inteligente.mcv.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
-            try
-            {
-                var usuarios = await queryService.GetAllAsync(cancellationToken);
-                return Ok(new { success = true, data = usuarios });
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error al obtener lista de usuarios");
-                return StatusCode(500, new { success = false, message = "Error interno" });
-            }
+            var usuarios = await queryService.GetAllAsync(cancellationToken);
+            return Ok(new { success = true, data = usuarios });
         }
 
         /// <summary>
@@ -55,39 +49,30 @@ namespace contactabilidad_inteligente.mcv.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
-            try
+            var usuario = await queryService.GetByIdAsync(id, cancellationToken);
+
+            if (usuario is null)
+                return NotFound(new { success = false, message = "Usuario no encontrado" });
+
+            var rolesDict = await catalogoService.ObtenerRolesSistemaAsync(cancellationToken);
+            string rolCodigo = rolesDict
+                .FirstOrDefault(r => string.Equals(r.Value, usuario.SystemRole, StringComparison.OrdinalIgnoreCase))
+                .Key ?? string.Empty;
+
+            return Ok(new
             {
-                var usuario = await queryService.GetByIdAsync(id, cancellationToken);
-
-                if (usuario is null)
-                    return NotFound(new { success = false, message = "Usuario no encontrado" });
-
-                // Reverse lookup: texto visual almacenado → código del catálogo para el <select>
-                var rolesDict = await catalogoService.ObtenerRolesSistemaAsync(cancellationToken);
-                string rolCodigo = rolesDict
-                    .FirstOrDefault(r => string.Equals(r.Value, usuario.SystemRole, StringComparison.OrdinalIgnoreCase))
-                    .Key ?? string.Empty;
-
-                return Ok(new
+                success = true,
+                data = new
                 {
-                    success = true,
-                    data = new
-                    {
-                        usuario.Id,
-                        usuario.FullName,
-                        usuario.Username,
-                        usuario.Email,
-                        usuario.SystemRole,
-                        rolCodigo,
-                        usuario.IsActive
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error al obtener usuario {Id}", id);
-                return StatusCode(500, new { success = false, message = "Error interno" });
-            }
+                    usuario.Id,
+                    usuario.FullName,
+                    usuario.Username,
+                    usuario.Email,
+                    usuario.SystemRole,
+                    rolCodigo,
+                    usuario.IsActive
+                }
+            });
         }
 
         // ─── WRITE ─────────────────────────────────────────────────────────────────
@@ -113,32 +98,24 @@ namespace contactabilidad_inteligente.mcv.Controllers
                         .Select(e => e.ErrorMessage)
                 });
 
-            try
-            {
-                string usuarioActual = ObtenerUsuarioActual();
+            string usuarioActual = ObtenerUsuarioActual();
 
-                var command = new CreateUsuarioCommand(
-                    request.FullName,
-                    request.Username,
-                    request.Email,
-                    request.RoleCode,
-                    request.PlainPassword,
-                    request.IsActive,
-                    usuarioActual);
+            var command = new CreateUsuarioCommand(
+                request.FullName,
+                request.Username,
+                request.Email,
+                request.RoleCode,
+                request.PlainPassword,
+                request.IsActive,
+                usuarioActual);
 
-                var result = await commandService.CreateAsync(command, cancellationToken);
+            var result = await commandService.CreateAsync(command, cancellationToken);
 
-                if (!result.IsSuccess)
-                    return BadRequest(new { success = false, message = result.ErrorMessage });
+            if (!result.IsSuccess)
+                return BadRequest(new { success = false, message = result.ErrorMessage });
 
-                return Created($"/api/users/{result.Value}",
-                    new { success = true, message = $"Usuario {request.FullName} creado exitosamente.", id = result.Value });
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error al crear usuario {Codigo}", request.Username);
-                return StatusCode(500, new { success = false, message = "Error interno" });
-            }
+            return Created($"/api/users/{result.Value}",
+                new { success = true, message = $"Usuario {request.FullName} creado exitosamente.", id = result.Value });
         }
 
         /// <summary>
@@ -164,31 +141,23 @@ namespace contactabilidad_inteligente.mcv.Controllers
                         .Select(e => e.ErrorMessage)
                 });
 
-            try
-            {
-                var command = new UpdateUsuarioCommand(
-                    id,
-                    request.FullName,
-                    request.Username,
-                    request.Email,
-                    request.RoleCode,
-                    request.IsActive,
-                    ObtenerUsuarioActual());
+            var command = new UpdateUsuarioCommand(
+                id,
+                request.FullName,
+                request.Username,
+                request.Email,
+                request.RoleCode,
+                request.IsActive,
+                ObtenerUsuarioActual());
 
-                var result = await commandService.UpdateAsync(command, cancellationToken);
+            var result = await commandService.UpdateAsync(command, cancellationToken);
 
-                if (!result.IsSuccess)
-                    return result.ErrorMessage.Contains("no encontrado", StringComparison.OrdinalIgnoreCase)
-                        ? NotFound(new { success = false, message = result.ErrorMessage })
-                        : BadRequest(new { success = false, message = result.ErrorMessage });
+            if (!result.IsSuccess)
+                return result.ErrorMessage.Contains("no encontrado", StringComparison.OrdinalIgnoreCase)
+                    ? NotFound(new { success = false, message = result.ErrorMessage })
+                    : BadRequest(new { success = false, message = result.ErrorMessage });
 
-                return Ok(new { success = true, message = $"Usuario {request.FullName} actualizado exitosamente." });
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error al actualizar usuario {Id}", id);
-                return StatusCode(500, new { success = false, message = "Error interno" });
-            }
+            return Ok(new { success = true, message = $"Usuario {request.FullName} actualizado exitosamente." });
         }
 
         /// <summary>
@@ -201,27 +170,19 @@ namespace contactabilidad_inteligente.mcv.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> ToggleStatus(int id, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                var result = await commandService.ToggleStatusAsync(id, cancellationToken);
+            var result = await commandService.ToggleStatusAsync(id, cancellationToken);
 
-                if (!result.IsSuccess)
-                    return result.ErrorMessage.Contains("no encontrado", StringComparison.OrdinalIgnoreCase)
-                        ? NotFound(new { success = false, message = result.ErrorMessage })
-                        : BadRequest(new { success = false, message = result.ErrorMessage });
+            if (!result.IsSuccess)
+                return result.ErrorMessage.Contains("no encontrado", StringComparison.OrdinalIgnoreCase)
+                    ? NotFound(new { success = false, message = result.ErrorMessage })
+                    : BadRequest(new { success = false, message = result.ErrorMessage });
 
-                return Ok(new
-                {
-                    success = true,
-                    message = $"Usuario {(result.Value!.NewStatus ? "activado" : "desactivado")} exitosamente.",
-                    data = result.Value
-                });
-            }
-            catch (Exception ex)
+            return Ok(new
             {
-                logger.LogError(ex, "Error al cambiar estado del usuario {Id}", id);
-                return StatusCode(500, new { success = false, message = "Error interno" });
-            }
+                success = true,
+                message = $"Usuario {(result.Value!.NewStatus ? "activado" : "desactivado")} exitosamente.",
+                data = result.Value
+            });
         }
 
         /// <summary>

@@ -77,9 +77,16 @@ namespace contactabilidad_inteligente.mcv.Pages.Auth
                 _logger.LogInformation($"User {authResult.User!.Email} logged in.");
                 return RedirectToPage("/Dashboard");
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 _logger.LogError(ex, "Error during login");
+                ShowError = true;
+                ErrorMessage = "Error al procesar la solicitud. Intente más tarde.";
+                return Page();
+            }
+            catch (System.Security.SecurityException ex)
+            {
+                _logger.LogError(ex, "Security error during login");
                 ShowError = true;
                 ErrorMessage = "Error al procesar la solicitud. Intente más tarde.";
                 return Page();

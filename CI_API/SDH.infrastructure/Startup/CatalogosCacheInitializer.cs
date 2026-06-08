@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Data.Common;
+using Microsoft.Extensions.Logging;
 using SDH.Application.Ports.Queries;
 using SDH.Application.Services;
 using SDH.Domain.Enums;
@@ -35,13 +36,10 @@ namespace SDH.infrastructure.Startup
 
                 logger.LogInformation("Caché inicializada e integridad verificada.");
 
-                // 2. Precargar catálogos dinámicos usando tus CONSTANTES seguras
-                await Task.WhenAll(
-                    catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.FileStatus, cancellationToken),
-                    catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.ContactType, cancellationToken),
-                    catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.ContactabilityStatus, cancellationToken)
-                // Puedes agregar TIPO_CONTABILIDAD u otros aquí fácilmente
-                );
+                // 2. Precargar catálogos dinámicos secuencialmente (DbContext no es thread-safe)
+                await catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.FileStatus, cancellationToken);
+                await catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.ContactType, cancellationToken);
+                await catalogoService.ObtenerCatalogoPorGrupoAsync(CatalogGroups.ContactabilityStatus, cancellationToken);
 
                 sw.Stop();
 
@@ -49,9 +47,17 @@ namespace SDH.infrastructure.Startup
                     "Caché de catálogos precargado exitosamente en {Duration}ms",
                     sw.ElapsedMilliseconds);
             }
-            catch (Exception ex)
+            catch (DbException ex)
             {
-                logger.LogError(ex, "Error al inicializar caché de catálogos. Se cargarán bajo demanda.");
+                logger.LogWarning(ex, "Error de base de datos al inicializar caché de catálogos. Se cargarán bajo demanda.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                logger.LogWarning(ex, "Error de configuración al inicializar caché de catálogos. Se cargarán bajo demanda.");
+            }
+            catch (OperationCanceledException ex)
+            {
+                logger.LogWarning(ex, "Inicialización de caché cancelada.");
             }
         }
 

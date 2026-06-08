@@ -30,6 +30,7 @@ namespace SDH.Application.Services
             return await cache.GetOrCreateAsync(CACHE_KEY_ALL_CATALOGOS, async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = _cacheDuration;
+                entry.Size = 1;
                 logger.LogDebug("Cache Miss: Cargando TODOS los catálogos desde la BD.");
 
                 return await queryService.GetActiveAsync(cancellationToken);

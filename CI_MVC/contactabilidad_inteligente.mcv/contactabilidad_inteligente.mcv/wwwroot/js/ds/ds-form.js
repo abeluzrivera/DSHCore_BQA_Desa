@@ -30,6 +30,13 @@ DS.modules.register('form', function () {
      * Valida un formulario según atributos HTML5 (required, minlength, pattern, etc.)
      * y agrega/quita clases ds-input.is-invalid.
      */
+    function _isValidEmail(value) {
+        const at = value.indexOf('@');
+        if (at < 1) return false;
+        const dot = value.lastIndexOf('.');
+        return dot > at + 1 && dot < value.length - 1;
+    }
+
     function validate(formSelector) {
         const form = typeof formSelector === 'string'
             ? document.querySelector(formSelector)
@@ -38,6 +45,20 @@ DS.modules.register('form', function () {
         if (!form) return false;
 
         let valid = true;
+
+        // Helper: perform basic safety checks against potentially vulnerable patterns
+        function isPatternSafe(pattern) {
+            if (!pattern) return true;
+            // Reject excessively long patterns to avoid exponential-time processing
+            if (pattern.length > 200) return false;
+            // Reject lookaround constructs, backreferences and atomic groups which are common sources of ReDoS/backtracking
+            if (/(\(\?[:=!<])/.test(pattern)) return false; // (?=, (?!, (?<=, (?<!) and variations
+            if (/\\\d/.test(pattern) || /\\k</.test(pattern)) return false; // backreferences like \1 or \k<name>
+            if (/\(\?>/.test(pattern)) return false; // atomic group (?> )
+            // Detect nested quantifiers like (.+)+ which can be catastrophic
+            if (pattern.includes(')+') || pattern.includes(')*') || pattern.includes(')?')) return false;
+            return true;
+        }
 
         form.querySelectorAll('[required], [data-ds-validate]').forEach(field => {
             clearError(field);
@@ -48,15 +69,32 @@ DS.modules.register('form', function () {
             if (field.hasAttribute('required') && !value) {
                 fieldValid = false;
                 setError(field, field.dataset.errorRequired ?? 'Este campo es obligatorio');
-            } else if (field.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            } else if (field.type === 'email' && value && !_isValidEmail(value)) {
                 fieldValid = false;
                 setError(field, field.dataset.errorEmail ?? 'Email inválido');
             } else if (field.hasAttribute('minlength') && value.length < +field.getAttribute('minlength')) {
                 fieldValid = false;
                 setError(field, field.dataset.errorMin ?? `Mínimo ${field.getAttribute('minlength')} caracteres`);
-            } else if (field.hasAttribute('pattern') && value && !new RegExp(field.getAttribute('pattern')).test(value)) {
-                fieldValid = false;
-                setError(field, field.dataset.errorPattern ?? 'Formato inválido');
+            } else if (field.hasAttribute('pattern') && value) {
+                const patternStr = field.getAttribute('pattern') ?? '';
+
+                if (!isPatternSafe(patternStr)) {
+                    // If pattern is considered unsafe, fail closed instead of compiling it
+                    fieldValid = false;
+                    setError(field, field.dataset.errorPattern ?? 'Formato inválido');
+                } else {
+                    try {
+                        const re = new RegExp(patternStr);
+                        if (!re.test(value)) {
+                            fieldValid = false;
+                            setError(field, field.dataset.errorPattern ?? 'Formato inválido');
+                        }
+                    } catch (err) {
+                        // Invalid pattern syntax or other RegExp error — treat as validation failure
+                        fieldValid = false;
+                        setError(field, field.dataset.errorPattern ?? 'Formato inválido');
+                    }
+                }
             }
 
             if (!fieldValid) valid = false;

@@ -403,7 +403,8 @@
                         id="lote-tab-archivo"
                         role="tab"
                         aria-controls="lote-pane-archivo"
-                        aria-selected="false">Cargar Archivo</button>
+                        aria-selected="false"
+                        hidden>Cargar Archivo</button>
                 <button type="button"
                         class="lote-modal__tab lote-modal__tab--active"
                         id="lote-tab-ids"
@@ -414,7 +415,7 @@
 
             @* Pane 1: Cargar Archivo *@
             <div class="lote-modal__pane" id="lote-pane-archivo"
-                 role="tabpanel" aria-labelledby="lote-tab-archivo">
+                 role="tabpanel" aria-labelledby="lote-tab-archivo" hidden>
                 <div class="lote-modal__upload-body" id="lote-upload-body" data-state="empty">
 
                     @* ── Estado: EMPTY – dropzone ── *@
