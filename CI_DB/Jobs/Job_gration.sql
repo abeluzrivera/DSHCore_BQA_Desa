@@ -1,4 +1,3 @@
--- Created by GitHub Copilot in SSMS - review carefully before executing
 SET NOCOUNT ON;
 SET XACT_ABORT ON; -- Rollback automático en errores
 
