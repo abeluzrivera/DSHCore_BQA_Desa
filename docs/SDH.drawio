@@ -1,4 +1,4 @@
-<mxfile host="Electron" pages="3">
+<mxfile host="Electron" pages="4">
   <diagram name="Ambientes - Publicacion" id="3PWnaE2S9dJJu3BeCvfY">
     <mxGraphModel dx="1030" dy="722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -13,7 +13,7 @@
         <mxCell id="6iJg09utHfu5VCgsvL5P-3" parent="6iJg09utHfu5VCgsvL5P-1" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/database_server.svg;strokeColor=default;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fillColor=default;" value="(DB:&amp;nbsp;&lt;b style=&quot;color: rgb(34, 34, 34); font-family: tahoma, sans-serif; font-size: small; text-align: start; white-space: normal;&quot;&gt;10.107.41.105&lt;/b&gt;)" vertex="1">
           <mxGeometry height="41.48936170212766" width="34.02127659574468" x="89.66259168704157" y="27.382978723404257" as="geometry" />
         </mxCell>
-        <mxCell id="6iJg09utHfu5VCgsvL5P-4" parent="6iJg09utHfu5VCgsvL5P-1" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/web_server.svg;strokeColor=default;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fillColor=default;" value="" vertex="1">
+        <mxCell id="6iJg09utHfu5VCgsvL5P-4" parent="6iJg09utHfu5VCgsvL5P-1" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/web_server.svg;strokeColor=default;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fillColor=default;" value="&lt;span style=&quot;color: rgb(7, 55, 99); font-family: verdana, sans-serif; font-size: small; font-variant-ligatures: none; text-align: start; white-space: normal;&quot;&gt;10.107.41.60&lt;/span&gt;" vertex="1">
           <mxGeometry height="41.48936170212766" width="33.19148936170213" x="282.06356968215164" y="27.382978723404257" as="geometry" />
         </mxCell>
         <mxCell id="6iJg09utHfu5VCgsvL5P-5" parent="6iJg09utHfu5VCgsvL5P-1" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/windows_server_2.svg;strokeColor=default;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fillColor=default;" value="&lt;b style=&quot;white-space: normal; box-sizing: border-box; font-weight: bold; outline: 0px; font-size: small; text-align: start; color: rgb(34, 34, 34); font-family: &amp;quot;Google Sans Text&amp;quot;, sans-serif; line-height: 1.15; margin-top: 0px; background-color: rgb(255, 255, 255);&quot;&gt;(AD)10.107.41.155&amp;nbsp;&lt;/b&gt;" vertex="1">
@@ -196,7 +196,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="LQCOSMLbwJIiQA0xYBNi-2" parent="1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[1,1,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];rounded=1;absoluteArcSize=1;arcSize=2;html=1;strokeColor=none;gradientColor=none;shadow=0;dashed=0;fontSize=12;fontColor=#9E9E9E;align=left;verticalAlign=top;spacing=10;spacingTop=-4;whiteSpace=wrap;fillColor=#F3E5F5;" value="Infrastructure&#xa;System" vertex="1">
+        <mxCell id="LQCOSMLbwJIiQA0xYBNi-2" parent="1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[1,1,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];rounded=1;absoluteArcSize=1;arcSize=2;html=1;strokeColor=none;gradientColor=none;shadow=0;dashed=0;fontSize=12;fontColor=#9E9E9E;align=left;verticalAlign=top;spacing=10;spacingTop=-4;whiteSpace=wrap;fillColor=#F3E5F5;" value="ROL DAMA" vertex="1">
           <mxGeometry height="550" width="620" x="40" y="20" as="geometry" />
         </mxCell>
         <mxCell id="Vj8u5myFAeQFD6eQTh4N-16" parent="1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[1,1,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];rounded=1;absoluteArcSize=1;arcSize=2;html=1;strokeColor=none;gradientColor=none;shadow=0;dashed=0;fontSize=12;fontColor=#9E9E9E;align=left;verticalAlign=top;spacing=10;spacingTop=-4;whiteSpace=wrap;fillColor=#FFF8E1;" value="Data Integration" vertex="1">
@@ -216,6 +216,47 @@
         </mxCell>
         <mxCell id="LQCOSMLbwJIiQA0xYBNi-1" parent="1" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/App_Services.svg;" value="DSH" vertex="1">
           <mxGeometry height="50" width="50" x="218" y="450" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="ZcvRaPjyqSk9si3vz1-S" name="Página-4">
+    <mxGraphModel dx="1030" dy="1891" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="qkM-7UE0o757T6sWyxb0-11" parent="1" style="fillColor=#dddddd;rounded=0;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="30" width="840" x="60" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="qkM-7UE0o757T6sWyxb0-12" parent="1" style="shape=mxgraph.infographic.ribbonSimple;notch1=7.2;notch2=10;notch=0;html=1;fillColor=#10739E;strokeColor=none;shadow=0;fontSize=17;fontColor=#FFFFFF;align=left;spacingLeft=20;fontStyle=1;whiteSpace=wrap;" value="Producción" vertex="1">
+          <mxGeometry height="50" width="180" x="70" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="qkM-7UE0o757T6sWyxb0-13" parent="1" style="shape=mxgraph.infographic.ribbonSimple;notch1=10;notch2=10;notch=0;html=1;fillColor=#F2931E;strokeColor=none;shadow=0;fontSize=17;fontColor=#FFFFFF;align=left;spacingLeft=20;fontStyle=1;whiteSpace=wrap;" value="Estabilización (20 días)" vertex="1">
+          <mxGeometry height="50" width="380" x="250" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="qkM-7UE0o757T6sWyxb0-14" parent="1" style="shape=mxgraph.infographic.ribbonSimple;notch1=10.8;notch2=10;notch=0;html=1;fillColor=#AE4132;strokeColor=none;shadow=0;fontSize=17;fontColor=#FFFFFF;align=left;spacingLeft=20;fontStyle=1;whiteSpace=wrap;" value="Ejecucion de Piloto" vertex="1">
+          <mxGeometry height="50" width="210" x="250" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="qkM-7UE0o757T6sWyxb0-15" parent="1" style="shape=mxgraph.infographic.ribbonSimple;notch1=12;notch2=10;notch=0;html=1;fillColor=#23445D;strokeColor=none;shadow=0;fontSize=17;fontColor=#FFFFFF;align=left;spacingLeft=20;fontStyle=1;whiteSpace=wrap;" value="Monitoreo" vertex="1">
+          <mxGeometry height="50" width="130" x="460" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="qkM-7UE0o757T6sWyxb0-16" parent="1" style="shape=mxgraph.infographic.ribbonSimple;notch1=12.8;notch2=10;notch=0;html=1;fillColor=#12AAB5;strokeColor=none;shadow=0;fontSize=17;fontColor=#FFFFFF;align=left;spacingLeft=20;fontStyle=1;whiteSpace=wrap;" value="Masificación" vertex="1">
+          <mxGeometry height="50" width="270" x="630" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="qkM-7UE0o757T6sWyxb0-17" parent="1" style="rounded=1;strokeColor=none;fillColor=#DDDDDD;align=center;arcSize=12;verticalAlign=top;whiteSpace=wrap;html=1;fontSize=12;" value="&lt;font style=&quot;font-size: 10px&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot; color=&quot;#10739E&quot;&gt;&lt;b&gt;Producción&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;en esta fase: se colocan los artefactos de la plataforma y se establecen los procesos tecnicos y de seguridad para que los usuarios puedan hacer uso de esta.&lt;/font&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="230" x="30" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="qkM-7UE0o757T6sWyxb0-18" parent="1" style="rounded=1;strokeColor=none;fillColor=#DDDDDD;align=center;arcSize=12;verticalAlign=top;whiteSpace=wrap;html=1;fontSize=12;" value="&lt;font style=&quot;font-size: 10px&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot; color=&quot;#F2931E&quot;&gt;&lt;b&gt;Estabilización&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;en esta fase es necesaria la ejecucion dle plan piloto y el monitoreo riguroso de la plataforma&lt;/font&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="230" x="325" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="qkM-7UE0o757T6sWyxb0-19" parent="1" style="rounded=1;strokeColor=none;fillColor=#DDDDDD;align=center;arcSize=12;verticalAlign=top;whiteSpace=wrap;html=1;fontSize=12;" value="&lt;font style=&quot;font-size: 10px&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot; color=&quot;#AE4132&quot;&gt;&lt;b&gt;PIloto&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;en esta fase se hace un acercamiento continuo a los usuarios sobre el uso de la plataforma dentro de su operativa diaria.&amp;nbsp;&lt;/font&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="200" x="20" y="-30" as="geometry" />
+        </mxCell>
+        <mxCell id="qkM-7UE0o757T6sWyxb0-20" parent="1" style="rounded=1;strokeColor=none;fillColor=#DDDDDD;align=center;arcSize=12;verticalAlign=top;whiteSpace=wrap;html=1;fontSize=12;" value="&lt;font style=&quot;font-size: 10px&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot; color=&quot;#23445D&quot;&gt;&lt;b&gt;Monitoreo&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;Se identifican condiciones no contempladas y se envian parches de seguridad y ajuste en caso de ser necesario&lt;/font&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="200" x="580" y="-80" as="geometry" />
+        </mxCell>
+        <mxCell id="qkM-7UE0o757T6sWyxb0-21" parent="1" style="rounded=1;strokeColor=none;fillColor=#DDDDDD;align=center;arcSize=12;verticalAlign=top;whiteSpace=wrap;html=1;fontSize=12;" value="&lt;font style=&quot;&quot;&gt;&lt;font color=&quot;#12aab5&quot;&gt;&lt;b&gt;Masificación&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font size=&quot;1&quot; style=&quot;font-size: 10px;&quot;&gt;En esta Fase SI agrega el permiso a la plataforma a nivel de rol para evitar el proceso manual de estar solicitando el permiso&lt;/font&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="200" x="665" y="190" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

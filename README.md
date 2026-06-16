@@ -180,3 +180,12 @@ La comunicación entre módulos se realiza a través de `DS.events` (pub/sub des
 | Procedimientos | `docs/Funcional/Procedimientos.md` | Flujos de negocio y control de acceso |
 | Arquitectura | `docs/Archi/` | Diagramas ArchiMate |
 | Assets | `docs/assets/` | Logo, imágenes y recursos compartidos |
+
+## Versionamiento
+Este proyecto sigue las convenciones de Versionamiento Semántico (SemVer) utilizando etiquetas de Git. Las ramas principales son `main` (producción) y `develop` (desarrollo).
+
+Los lanzamientos (releases) se etiquetan utilizando el formato `vX.Y.Z`, donde:
+
+X - Major (Mayor): Introduce cambios incompatibles o que rompen la compatibilidad hacia atrás.
+Y - Minor (Menor): Añade nuevas funcionalidades de manera retrocompatible.
+Z - Patch (Parche): Incluye correcciones de errores compatibles con versiones anteriores.
