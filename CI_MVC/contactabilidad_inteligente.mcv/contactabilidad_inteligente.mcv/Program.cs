@@ -52,20 +52,24 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(connectionString, sqlOptions =>
     {
-        sqlOptions.CommandTimeout(60); // Timeout de 60 segundos
+        sqlOptions.CommandTimeout(60);
         sqlOptions.EnableRetryOnFailure(
             maxRetryCount: 3,
             maxRetryDelay: TimeSpan.FromSeconds(5),
             errorNumbersToAdd: null);
     });
 
-    // Solo habilitar logging detallado en desarrollo
+    // El snapshot fue generado con EF Core 9; al correr con EF Core 10 las convenciones
+    // difieren y disparan PendingModelChangesWarning sin cambios reales de modelo.
+    // Se registra como Warning hasta que se regenere el snapshot con EF 10.
+    options.ConfigureWarnings(w =>
+        w.Log(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+
     if (builder.Environment.IsDevelopment())
     {
         options.EnableSensitiveDataLogging();
         options.EnableDetailedErrors();
     }
-    
 });
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
