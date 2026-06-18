@@ -10,6 +10,20 @@ using SDH.infrastructure.Persistence.Seeders;
 using SDH.infrastructure.Startup;
 using Serilog;
 
+IConfiguration bootstrapConfig = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false)
+    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+    .AddEnvironmentVariables()
+    .Build();
+
+string rawLogPath = bootstrapConfig["SerilogSettings:LogPath"] ?? "Logs/log-.txt";
+int retainedFiles = int.TryParse(bootstrapConfig["SerilogSettings:RetainedFileCountLimit"], out int parsed) ? parsed : 30;
+
+string resolvedLogPath = Path.IsPathRooted(rawLogPath)
+    ? rawLogPath
+    : Path.Combine(Directory.GetCurrentDirectory(), rawLogPath);
+
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
@@ -17,9 +31,9 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
     .WriteTo.Console()
     .WriteTo.File(
-        path: Path.Combine("Logs", "log-.txt"),
+        path: resolvedLogPath,
         rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 30,
+        retainedFileCountLimit: retainedFiles,
         outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
     .CreateLogger();
 
