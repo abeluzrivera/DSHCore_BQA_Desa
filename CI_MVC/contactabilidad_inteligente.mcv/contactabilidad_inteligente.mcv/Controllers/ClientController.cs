@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using contactabilidad_inteligente.mcv.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SDH.Application.DTOs.Clients;
 using SDH.Application.Ports.Services;
@@ -16,7 +17,8 @@ namespace contactabilidad_inteligente.mcv.Controllers
         ILogger<ClientController> _logger,
         CustomerCommandService clientCommandService,
         ICustomerCacheService cacheService,
-        IClienteQueryService queryService) : ControllerBase
+        IClienteQueryService queryService,
+        ICurrentUserService currentUserService) : ControllerBase
     {
 
 
@@ -42,6 +44,12 @@ namespace contactabilidad_inteligente.mcv.Controllers
                 IReadOnlyList<CustomerSearchResultDto> results =
                     await cacheService.SearchByNameAndIdentificationAsync(q.Trim(), cancellationToken);
 
+                _logger.LogInformation(
+                    "AUDITORIA BUSQUEDA_CLIENTE usuario={Usuario} ip={Ip} termino={Termino} resultados={Total}",
+                    currentUserService.ObtenerUsuarioActual(),
+                    currentUserService.ObtenerIpActual(),
+                    q.Trim(),
+                    results.Count);
 
                 var items = results.Take(Math.Clamp(top, 1, 50)).Select(r => new
                 {
@@ -90,8 +98,12 @@ namespace contactabilidad_inteligente.mcv.Controllers
                 if (cliente == null)
                     return NotFound(new { success = false, message = "Cliente no encontrado" });
 
-                // Incluimos verificationState para que el JS pinte iconos correctos en la carga inicial
-                // sin contener lógica de negocio en el frontend.
+                _logger.LogInformation(
+                    "AUDITORIA CONSULTA_DETALLE_CLIENTE usuario={Usuario} ip={Ip} cedula={Cedula}",
+                    currentUserService.ObtenerUsuarioActual(),
+                    currentUserService.ObtenerIpActual(),
+                    id.Trim());
+
                 var state = await _BuildVerificationStateAsync(id.Trim(), cancellationToken);
                 return Ok(new { success = true, data = cliente, verificationState = state });
             }
@@ -150,6 +162,13 @@ namespace contactabilidad_inteligente.mcv.Controllers
                 int total = items.Count;
                 int verificados = items.Count(c => c.VerificationStatus == "verificado");
                 int porVerif = total - verificados;
+
+                _logger.LogInformation(
+                    "AUDITORIA LISTADO_CLIENTES usuario={Usuario} ip={Ip} total={Total} cedulas={Cedulas}",
+                    currentUserService.ObtenerUsuarioActual(),
+                    currentUserService.ObtenerIpActual(),
+                    total,
+                    string.Join(",", cedulas.Select(IdentificationMaskHelper.Mask)));
 
                 return Ok(new
                 {
