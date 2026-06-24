@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
 using System.IO;
@@ -114,6 +115,17 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("TodosLosAgentes", policy => policy.RequireRole("ADMIN", "SUPERVISOR", "AGENTE"));
     options.AddPolicy("AccesoGeneral",   policy => policy.RequireRole("ADMIN", "SUPERVISOR", "AGENTE", "CONSULTA"));
 });
+
+string rawDpPath = builder.Configuration["DataProtection:KeysPath"] ?? "DataProtection-Keys";
+string dataProtectionPath = Path.IsPathRooted(rawDpPath)
+    ? rawDpPath
+    : Path.Combine(Directory.GetCurrentDirectory(), rawDpPath);
+DirectoryInfo dpDirectory = new(dataProtectionPath);
+if (!dpDirectory.Exists)
+    dpDirectory.Create();
+builder.Services.AddDataProtection()
+    .SetApplicationName("SmartDataHub")
+    .PersistKeysToFileSystem(dpDirectory);
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
