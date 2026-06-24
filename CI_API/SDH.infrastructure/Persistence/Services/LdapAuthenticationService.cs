@@ -97,19 +97,33 @@ public class LdapAuthenticationService(
             LdapAttribute? groupAttr = userEntry.GetOrDefault(_settings.GroupAttribute);
             if (groupAttr != null)
             {
-                foreach (string groupDn in groupAttr.StringValueArray)
+                var groupNames = groupAttr.StringValueArray
+                    .Select(dn => dn.Split(',')[0]
+                        .Replace("CN=", "", StringComparison.OrdinalIgnoreCase).Trim())
+                    .ToList();
+
+                logger.LogInformation(
+                    "LOGIN_LDAP_GRUPOS usuario={Usuario} grupos=[{Grupos}]",
+                    username, string.Join(", ", groupNames));
+
+                foreach (string cn in groupNames)
                 {
-                    string cn = groupDn.Split(',')[0]
-                        .Replace("CN=", "", StringComparison.OrdinalIgnoreCase).Trim();
                     mappedRole = _settings.RoleGroupMappings
                         .FirstOrDefault(k => k.Value.Equals(cn, StringComparison.OrdinalIgnoreCase)).Key;
                     if (mappedRole != null) break;
                 }
             }
+            else
+            {
+                logger.LogWarning("LOGIN_LDAP_SIN_ATRIBUTO_GRUPO usuario={Usuario} atributo={Atributo}",
+                    username, _settings.GroupAttribute);
+            }
 
             if (mappedRole == null)
             {
-                logger.LogWarning("LDAP: '{Username}' autenticado pero sin grupo habilitado.", username);
+                logger.LogWarning(
+                    "LOGIN_LDAP_SIN_ROL usuario={Usuario} mensaje=autenticado pero sin grupo mapeado",
+                    username);
                 return Fail("no_group");
             }
 

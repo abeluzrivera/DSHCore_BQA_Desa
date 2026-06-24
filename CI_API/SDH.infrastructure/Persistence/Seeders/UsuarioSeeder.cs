@@ -34,14 +34,6 @@ namespace SDH.infrastructure.Persistence.Seeders
                 string plainPassword = ConfigCrypto.DecryptFromEnvironment(encryptedPassword);
                 string seedHash = BCrypt.Net.BCrypt.HashPassword(plainPassword);
 
-                Users admin = Users.Create(
-                    "ADMIN001",
-                    "pedro.rivera@bmachala.com",
-                    seedHash,
-                    "Administrador del Sistema",
-                    "ADMIN"
-                );
-
                 Users admin2 = Users.Create(
                     "ADMIN002",
                     "admin@bmachala.com",
@@ -58,7 +50,7 @@ namespace SDH.infrastructure.Persistence.Seeders
                     "USER"
                 );
 
-                context.Users.AddRange(admin, admin2, usuario);
+                context.Users.AddRange(admin2, usuario);
 
                 await context.SaveChangesAsync();
 

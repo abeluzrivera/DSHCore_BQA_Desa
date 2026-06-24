@@ -24,6 +24,10 @@ namespace SDH.Application.Services
             string usernameOrEmail, string clave, CancellationToken ct = default)
         {
             bool useLdap = _authSettings.Provider.Equals("LDAP", StringComparison.OrdinalIgnoreCase);
+            logger.LogInformation(
+                "LOGIN_INICIO usuario={Usuario} proveedor={Proveedor}",
+                usernameOrEmail, useLdap ? "LDAP" : "DB");
+
             return useLdap
                 ? await ValidarPorLdapAsync(usernameOrEmail, clave, ct)
                 : await ValidarPorBaseDatosAsync(usernameOrEmail, clave, ct);
@@ -36,6 +40,7 @@ namespace SDH.Application.Services
                 throw new InvalidOperationException(
                     "AuthSettings:Provider = LDAP pero ILdapAuthenticationService no está registrado.");
 
+            logger.LogInformation("LOGIN_LDAP_AUTH usuario={Usuario} intentando autenticacion LDAP", username);
             LdapAuthResult result = await ldapService.AuthenticateAsync(username, password, ct);
 
             if (!result.Success)
@@ -43,8 +48,15 @@ namespace SDH.Application.Services
                 string reason = result.FailureReason == "no_group"
                     ? _authSettings.UnavailableMessage
                     : result.FailureReason ?? "Autenticación fallida.";
+                logger.LogWarning(
+                    "LOGIN_LDAP_FALLIDO usuario={Usuario} razon={Razon}",
+                    username, result.FailureReason);
                 return new LoginResultDto(null, null, null, reason);
             }
+
+            logger.LogInformation(
+                "LOGIN_LDAP_OK usuario={Usuario} email={Email} rol={Rol}",
+                result.Username, result.Email, result.MappedRole);
 
             Users? usuario = await usuarioRepository.GetByUsernameAsync(result.Username!, ct);
 
@@ -53,15 +65,17 @@ namespace SDH.Application.Services
                 usuario = Users.CreateFromLdap(
                     result.Username!, result.Email!, result.FullName!, result.MappedRole!);
                 await usuarioRepository.AddUserAsync(usuario, ct);
-                logger.LogInformation("LDAP: Usuario nuevo registrado '{Username}'", result.Username);
+                logger.LogInformation("LOGIN_LDAP_USUARIO_NUEVO usuario={Username}", result.Username);
             }
             else
             {
+                logger.LogInformation("LOGIN_LDAP_USUARIO_EXISTENTE usuario={Username}", result.Username);
                 usuario.UpdateFromLdap(result.Email!, result.FullName!, result.MappedRole!);
             }
 
             await unitOfWork.SaveChangesAsync(ct);
 
+            logger.LogInformation("LOGIN_EXITOSO usuario={Usuario} metodo=LDAP", result.Username);
             return new LoginResultDto(
                 usuario,
                 tokenGenerator.GenerarJwtToken(usuario),
@@ -73,28 +87,31 @@ namespace SDH.Application.Services
         {
             try
             {
+                logger.LogInformation("LOGIN_DB_BUSQUEDA usuario={Usuario}", usernameOrEmail);
                 Users? usuario = await usuarioRepository.GetByEmailAsync(usernameOrEmail, ct)
                               ?? await usuarioRepository.GetByUsernameAsync(usernameOrEmail, ct);
 
                 if (usuario == null)
                 {
-                    logger.LogWarning("Intento de login fallido: Usuario no encontrado: {UsernameOrEmail}", usernameOrEmail);
+                    logger.LogWarning("LOGIN_DB_NO_ENCONTRADO usuario={Usuario}", usernameOrEmail);
                     return null;
                 }
 
+                logger.LogInformation("LOGIN_DB_VALIDANDO usuario={Usuario} estado={Estado}",
+                    usernameOrEmail, usuario.Estado);
                 usuario.Authenticate(clave, passwordHasher);
                 await unitOfWork.SaveChangesAsync(ct);
 
                 string jwtToken = tokenGenerator.GenerarJwtToken(usuario);
                 var claimsPrincipal = tokenGenerator.GenerarClaimsPrincipal(usuario);
 
-                logger.LogInformation("Usuario autenticado exitosamente: {UsernameOrEmail}", usernameOrEmail);
-
+                logger.LogInformation("LOGIN_EXITOSO usuario={Usuario} metodo=DB", usernameOrEmail);
                 return new LoginResultDto(usuario, jwtToken, claimsPrincipal);
             }
             catch (Exception ex) when (ex is UnauthorizedAccessException || ex is InvalidOperationException)
             {
-                logger.LogWarning("Intento de login fallido/rechazado para {UsernameOrEmail}. Razón: {Reason}", usernameOrEmail, ex.Message);
+                logger.LogWarning("LOGIN_DB_FALLIDO usuario={Usuario} razon={Razon}",
+                    usernameOrEmail, ex.Message);
                 return null;
             }
         }
