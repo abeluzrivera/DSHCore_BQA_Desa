@@ -1445,7 +1445,7 @@ data-contact-state="${isVerified ? 'verified' : isError ? 'error' : 'pending'}">
                     <span class="${valCls}" ${titleAttr}>${DS.utils.escapeHtml(contact.value)}</span>
                     ${badgeHTML}
                 </div>
-                <div class="dash-contact-row__actions">
+                ${document.body.dataset.userCanEdit === 'true' ? `<div class="dash-contact-row__actions">
                     <button class="ds-btn ds-btn--ghost ds-btn--icon ds-btn--sm contact-verify-btn${isVerified ? ' contact-verify-btn--verified' : ''}"
                             ${isVerified ? 'disabled' : ''}
                             title="${isVerified ? 'Verificado' : 'Verificar'}"
@@ -1462,7 +1462,7 @@ data-contact-state="${isVerified ? 'verified' : isError ? 'error' : 'pending'}">
                             aria-label="Editar dato de contacto">
                         <img src="/icons/edit.svg" class="ds-icon" aria-hidden="true" alt="" />
                     </button>
-                </div>
+                </div>` : ''}
                 ${hintHTML}
             </div>`;
     }

@@ -8,7 +8,7 @@ using SDH.Application.Services;
 
 namespace contactabilidad_inteligente.mcv.Pages
 {
-    [Authorize]
+    [Authorize(Policy = "TodosLosAgentes")]
     public class BulkUploadModel : PageModel
     {
         private readonly ILogger<BulkUploadModel> _logger;

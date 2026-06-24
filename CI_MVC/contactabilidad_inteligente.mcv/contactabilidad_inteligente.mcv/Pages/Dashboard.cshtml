@@ -48,10 +48,13 @@
 
             @* Izquierda: botón + nombre del archivo *@
             <div class="dash-upload-widget__left">
-                <button type="button" class="dash-upload-widget__btn" id="btn-open-lote-modal">
-                    <img src="~/icons/document-upload.svg" class="ds-icon" aria-hidden="true" alt="" />
-                    Cargar
-                </button>
+                @if (User.IsInRole("ADMIN") || User.IsInRole("SUPERVISOR") || User.IsInRole("AGENTE"))
+                {
+                    <button type="button" class="dash-upload-widget__btn" id="btn-open-lote-modal">
+                        <img src="~/icons/document-upload.svg" class="ds-icon" aria-hidden="true" alt="" />
+                        Cargar
+                    </button>
+                }
                 @if (!string.IsNullOrEmpty(Model.LastUploadedFile))
                 {
                     <span class="dash-upload-widget__filename">Archivo: @Model.LastUploadedFile</span>

@@ -69,18 +69,18 @@
     })(window, document, "clarity", "script", "vt3srohvh8");
 </script>
 </head>
-<body>
+<body data-user-can-edit="@(User.IsInRole("ADMIN") || User.IsInRole("SUPERVISOR") || User.IsInRole("AGENTE") ? "true" : "false")">
     <div class="d-flex flex-column @(ViewData["WrapperClass"]?.ToString())" style="min-height: 100vh;">
         <!-- Navigation Bar -->
         <nav class="navbar-custom" aria-label="Navegación principal">
             <div class="nav-container">
 
                 @* ── Brand ── *@
-                <a class="navbar-brand" href="/dashboard" aria-label="Data Smart Hub - Inicio">
+                <a class="navbar-brand" href="/dashboard" aria-label="Data Hub - Inicio">
                     <div class="navbar-icon">
                         <span class="material-symbols-outlined" style="font-size: 20px;">hub</span>
                     </div>
-                    <span class="navbar-brand-name">Data Smart Hub</span>
+                    <span class="navbar-brand-name">Data Hub</span>
                 </a>
 
                 @* ── Nav links (desktop) ── *@

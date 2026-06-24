@@ -21,6 +21,7 @@
    FUNCIONES LOCALES DE RAZOR (PLANTILLAS REUTILIZABLES)
    ========================================================================= *@
 @{
+    bool canEdit = User.IsInRole("ADMIN") || User.IsInRole("SUPERVISOR") || User.IsInRole("AGENTE");
     // Plantilla para Correos y Teléfonos
     void RenderContactCard(dynamic contact, string category)
     {
@@ -43,40 +44,46 @@
                         <span class="material-symbols-outlined">shield</span>
                     </span>
                 </div>
-                <button class="cp-edit-btn" aria-label="Editar contacto" data-toggle-edit>
-                    <span class="material-symbols-outlined">edit</span>
-                </button>
+                @if (canEdit)
+                {
+                    <button class="cp-edit-btn" aria-label="Editar contacto" data-toggle-edit>
+                        <span class="material-symbols-outlined">edit</span>
+                    </button>
+                }
             </div>
 
-            <div class="cp-action-pills" hidden>
-                <button class="cp-action-pill cp-action-pill--verify" data-action="verify">
-                    <span class="material-symbols-outlined">check_circle</span> Verificar
-                </button>
-                <button class="cp-action-pill cp-action-pill--reject" data-action="reject-toggle">
-                    <span class="material-symbols-outlined">delete</span> Validación
-                    <span class="material-symbols-outlined">expand_more</span>
-                </button>
-                <button class="cp-action-pill cp-action-pill--lopdp" data-lopdp>
-                    <span class="material-symbols-outlined">description</span> LOPDP
-                    <span class="material-symbols-outlined">expand_more</span>
-                </button>
-            </div>
-
-            <div class="cp-reject-zone" hidden>
-                <div class="cp-reject-zone__label">
-                    <span class="material-symbols-outlined">@(category == "email" ? "mail" : "phone")</span>
-                    Seleccione motivo de rechazo:
+            @if (canEdit)
+            {
+                <div class="cp-action-pills" hidden>
+                    <button class="cp-action-pill cp-action-pill--verify" data-action="verify">
+                        <span class="material-symbols-outlined">check_circle</span> Verificar
+                    </button>
+                    <button class="cp-action-pill cp-action-pill--reject" data-action="reject-toggle">
+                        <span class="material-symbols-outlined">delete</span> Validación
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <button class="cp-action-pill cp-action-pill--lopdp" data-lopdp>
+                        <span class="material-symbols-outlined">description</span> LOPDP
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
                 </div>
-                <div class="cp-reject-pills">
-                    @if (ContactabilityLabelHelper.RejectionPills.TryGetValue(category, out var pills))
-                    {
-                        foreach (var pill in pills)
+
+                <div class="cp-reject-zone" hidden>
+                    <div class="cp-reject-zone__label">
+                        <span class="material-symbols-outlined">@(category == "email" ? "mail" : "phone")</span>
+                        Seleccione motivo de rechazo:
+                    </div>
+                    <div class="cp-reject-pills">
+                        @if (ContactabilityLabelHelper.RejectionPills.TryGetValue(category, out var pills))
                         {
-                            <button class="cp-reject-pill" data-error-code="@pill.Code">@pill.ShortLabel</button>
+                            foreach (var pill in pills)
+                            {
+                                <button class="cp-reject-pill" data-error-code="@pill.Code">@pill.ShortLabel</button>
+                            }
                         }
-                    }
+                    </div>
                 </div>
-            </div>
+            }
 
             <div class="cp-contact-card__value-row cp-contact-card__value-row--@contact.State">
                 <div class="cp-contact-card__icon-box tw-border tw-rounded-md tw-p-2 tw-flex tw-items-center tw-justify-center @contact.BgClass @contact.BorderClass @contact.TextClass">
@@ -115,36 +122,42 @@
                         </span>
                     </span>
                 </div>
-                <button class="cp-edit-btn" aria-label="Editar dirección" data-toggle-edit>
-                    <span class="material-symbols-outlined">edit</span>
-                </button>
+                @if (canEdit)
+                {
+                    <button class="cp-edit-btn" aria-label="Editar dirección" data-toggle-edit>
+                        <span class="material-symbols-outlined">edit</span>
+                    </button>
+                }
             </div>
 
-            <div class="cp-action-pills" hidden>
-                <button class="cp-action-pill cp-action-pill--verify" data-action="verify">
-                    <span class="material-symbols-outlined">check_circle</span> Verificar
-                </button>
-                <button class="cp-action-pill cp-action-pill--reject" data-action="reject-toggle">
-                    <span class="material-symbols-outlined">delete</span> Validación
-                    <span class="material-symbols-outlined">expand_more</span>
-                </button>
-            </div>
-
-            <div class="cp-reject-zone" hidden>
-                <div class="cp-reject-zone__label">
-                    <span class="material-symbols-outlined">location_on</span>
-                    Seleccione motivo de rechazo:
+            @if (canEdit)
+            {
+                <div class="cp-action-pills" hidden>
+                    <button class="cp-action-pill cp-action-pill--verify" data-action="verify">
+                        <span class="material-symbols-outlined">check_circle</span> Verificar
+                    </button>
+                    <button class="cp-action-pill cp-action-pill--reject" data-action="reject-toggle">
+                        <span class="material-symbols-outlined">delete</span> Validación
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
                 </div>
-                <div class="cp-reject-pills">
-                    @if (ContactabilityLabelHelper.RejectionPills.TryGetValue("address", out var pills))
-                    {
-                        foreach (var pill in pills)
+
+                <div class="cp-reject-zone" hidden>
+                    <div class="cp-reject-zone__label">
+                        <span class="material-symbols-outlined">location_on</span>
+                        Seleccione motivo de rechazo:
+                    </div>
+                    <div class="cp-reject-pills">
+                        @if (ContactabilityLabelHelper.RejectionPills.TryGetValue("address", out var pills))
                         {
-                            <button class="cp-reject-pill" data-error-code="@pill.Code">@pill.ShortLabel</button>
+                            foreach (var pill in pills)
+                            {
+                                <button class="cp-reject-pill" data-error-code="@pill.Code">@pill.ShortLabel</button>
+                            }
                         }
-                    }
+                    </div>
                 </div>
-            </div>
+            }
 
             <div class="cp-contact-card__value-row cp-contact-card__value-row--@addr.State">
                 <div class="cp-contact-card__icon-box tw-border tw-rounded-md tw-p-2 tw-flex tw-items-center tw-justify-center @addr.BgClass @addr.BorderClass @addr.TextClass">
@@ -332,9 +345,12 @@
                                 <span class="cp-section__bullet cp-section__title-icon" aria-hidden="true"></span>
                                 <h2 class="cp-section__title">Teléfonos (@phonesCount)</h2>
                             </div>
-                            <button class="cp-nuevo-btn" data-modal="modal-nuevo-telefono" aria-label="Agregar teléfono">
-                                <span class="material-symbols-outlined">add</span> NUEVO
-                            </button>
+                            @if (canEdit)
+                            {
+                                <button class="cp-nuevo-btn" data-modal="modal-nuevo-telefono" aria-label="Agregar teléfono">
+                                    <span class="material-symbols-outlined">add</span> NUEVO
+                                </button>
+                            }
                         </div>
                         @if (Model.Cliente.Phones != null && Model.Cliente.Phones.Any())
                         {
@@ -364,9 +380,12 @@
                                 <span class="cp-section__bullet cp-section__title-icon" aria-hidden="true"></span>
                                 <h2 class="cp-section__title">Correos Electrónicos (@emailsCount)</h2>
                             </div>
-                            <button class="cp-nuevo-btn" data-modal="modal-nuevo-email" aria-label="Agregar correo">
-                                <span class="material-symbols-outlined">add</span> NUEVO
-                            </button>
+                            @if (canEdit)
+                            {
+                                <button class="cp-nuevo-btn" data-modal="modal-nuevo-email" aria-label="Agregar correo">
+                                    <span class="material-symbols-outlined">add</span> NUEVO
+                                </button>
+                            }
                         </div>
                         @if (Model.Cliente.Emails != null && Model.Cliente.Emails.Any())
                         {
@@ -396,9 +415,12 @@
                                 <span class="material-symbols-outlined cp-section__title-icon" aria-hidden="true">location_on</span>
                                 <h2 class="cp-section__title">Direcciones (@addrsCount)</h2>
                             </div>
-                            <button class="cp-nuevo-btn" data-modal="modal-nueva-direccion" aria-label="Agregar dirección">
-                                <span class="material-symbols-outlined">add</span> NUEVO
-                            </button>
+                            @if (canEdit)
+                            {
+                                <button class="cp-nuevo-btn" data-modal="modal-nueva-direccion" aria-label="Agregar dirección">
+                                    <span class="material-symbols-outlined">add</span> NUEVO
+                                </button>
+                            }
                         </div>
                         @if (Model.Cliente.Addresses != null && Model.Cliente.Addresses.Any())
                         {
