@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -100,7 +101,7 @@ namespace SDH.infrastructure.Migrations
                 {
                     Id_Cliente = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Identificacion_Cliente = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Identificacion_Cliente = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
                     Id_Tipo_Identificacion = table.Column<int>(type: "int", nullable: false),
                     Nombre_Completo = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Esta_Verificado = table.Column<bool>(type: "bit", nullable: false),
@@ -348,7 +349,7 @@ namespace SDH.infrastructure.Migrations
                 column: "Id_Tipo_Contacto");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContactoCliente_IdCliente_EstaEliminado",
+                name: "IX_Contacto_Cliente_IdCliente_EstaEliminado",
                 schema: "operativo",
                 table: "Tbl_Direccion_Cliente",
                 columns: new[] { "Id_Cliente", "Esta_Eliminado" });
@@ -357,7 +358,7 @@ namespace SDH.infrastructure.Migrations
                 name: "IX_Direccion_Cliente_IdCliente",
                 schema: "operativo",
                 table: "Tbl_Direccion_Cliente",
-                columns: new[] { "Id_Direccion_Cliente", "Es_Principal" })
+                columns: new[] { "Id_Cliente", "Es_Principal" })
                 .Annotation("SqlServer:Include", new[] { "Direccion_Completa", "Ciudad", "Latitud", "Longitud" });
 
             migrationBuilder.CreateIndex(
