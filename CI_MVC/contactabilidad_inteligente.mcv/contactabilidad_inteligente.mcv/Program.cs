@@ -103,6 +103,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
             ? CookieSecurePolicy.SameAsRequest
             : CookieSecurePolicy.Always;
         options.Cookie.SameSite = SameSiteMode.Strict;
+
+        options.Events.OnRedirectToLogin = context =>
+        {
+            if (context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            }
+            context.Response.Redirect(context.RedirectUri);
+            return Task.CompletedTask;
+        };
     });
 
 builder.Services.AddAuthorization(options =>
