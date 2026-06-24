@@ -10,6 +10,7 @@ using SDH.infrastructure.Persistence.Services;
 using SDH.infrastructure.Persistence.Seeders;
 using SDH.infrastructure.Startup;
 using Serilog;
+using Serilog.Context;
 
 IConfiguration bootstrapConfig = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -35,7 +36,7 @@ Log.Logger = new LoggerConfiguration()
         path: resolvedLogPath,
         rollingInterval: RollingInterval.Day,
         retainedFileCountLimit: retainedFiles,
-        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{CorrelationId}] {Message:lj}{NewLine}{Exception}")
     .CreateLogger();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -187,6 +188,16 @@ try
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();
+
+    app.Use(async (context, next) =>
+    {
+        var correlationId = context.TraceIdentifier;
+        using (LogContext.PushProperty("CorrelationId", correlationId))
+        {
+            context.Response.Headers["X-Correlation-Id"] = correlationId;
+            await next();
+        }
+    });
 
     // Security headers
     app.Use(async (context, next) =>
