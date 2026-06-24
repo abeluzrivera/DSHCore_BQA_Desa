@@ -98,12 +98,7 @@ namespace SDH.Domain.Entities.Seguridad
         // ──────────────────────────────────────────────────
 
 
-        /// <summary>
-        /// Factory method para usuarios LDAP.
-        /// Crea un objeto Users en memoria — NO debe persistirse en la BD.
-        /// Cada autenticación LDAP genera una instancia nueva desde el servicio LDAP.
-        /// </summary>
-        public static Users CreateTransient(
+        public static Users CreateFromLdap(
             string username, string email, string fullName, string role)
         {
             return new Users
@@ -113,8 +108,20 @@ namespace SDH.Domain.Entities.Seguridad
                 PasswordHash = string.Empty,
                 FullName = fullName,
                 SystemRole = role,
-                IsActive = true
+                IsActive = true,
+                IsLockedOut = false,
+                IsDeleted = false,
+                CreatedAt = DateTime.Now,
+                CreatedBy = "LDAP"
             };
+        }
+
+        public void UpdateFromLdap(string email, string fullName, string role)
+        {
+            Email = email;
+            FullName = fullName;
+            SystemRole = role;
+            UpdateLastLogin();
         }
 
         public void Authenticate(string clavePlana, IPasswordHasher hasher)

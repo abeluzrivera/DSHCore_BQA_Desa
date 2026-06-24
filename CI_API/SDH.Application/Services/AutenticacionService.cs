@@ -46,12 +46,21 @@ namespace SDH.Application.Services
                 return new LoginResultDto(null, null, null, reason);
             }
 
-            // STATELESS — objeto transitorio en memoria, sin escritura en BD
-            var usuario = Users.CreateTransient(
-                result.Username!, result.Email!, result.FullName!, result.MappedRole!);
+            Users? usuario = await usuarioRepository.GetByUsernameAsync(result.Username!, ct);
 
-            logger.LogInformation("LDAP OK (stateless): '{Username}' → rol '{Role}'",
-                result.Username, result.MappedRole);
+            if (usuario == null)
+            {
+                usuario = Users.CreateFromLdap(
+                    result.Username!, result.Email!, result.FullName!, result.MappedRole!);
+                await usuarioRepository.AddUserAsync(usuario, ct);
+                logger.LogInformation("LDAP: Usuario nuevo registrado '{Username}'", result.Username);
+            }
+            else
+            {
+                usuario.UpdateFromLdap(result.Email!, result.FullName!, result.MappedRole!);
+            }
+
+            await unitOfWork.SaveChangesAsync(ct);
 
             return new LoginResultDto(
                 usuario,

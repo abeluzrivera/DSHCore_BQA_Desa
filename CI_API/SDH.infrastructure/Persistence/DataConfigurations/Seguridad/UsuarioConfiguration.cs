@@ -5,7 +5,7 @@ using SDH.Domain.Entities.Seguridad;
 namespace SDH.infrastructure.Persistence.DataConfigurations.Seguridad
 {
     /// <summary>
-    /// Configuración de EF Core para la entidad Usuario - Solo configuraciones no soportadas por Data Annotations
+    /// Configuraciï¿½n de EF Core para la entidad Usuario - Solo configuraciones no soportadas por Data Annotations
     /// </summary>
     public class UsuarioConfiguration : IEntityTypeConfiguration<Users>
     {
@@ -63,7 +63,7 @@ namespace SDH.infrastructure.Persistence.DataConfigurations.Seguridad
                    .HasColumnName("Fecha_Ultimo_Acceso")
                    .HasColumnType("datetime2(7)");
 
-            // 4. Auditoría
+            // 4. Auditorï¿½a
             builder.Property(u => u.CreatedAt)
                    .HasColumnName("Fecha_Creacion")
                    .HasColumnType("datetime2(7)")
@@ -81,7 +81,7 @@ namespace SDH.infrastructure.Persistence.DataConfigurations.Seguridad
                    .HasColumnName("Usuario_Modificacion")
                    .HasMaxLength(50);
 
-            // 5. Índices Recomendados (Opcional, pero muy recomendado para seguridad)
+            // 5. ï¿½ndices Recomendados (Opcional, pero muy recomendado para seguridad)
             builder.HasIndex(u => u.Email)
                    .IsUnique()
                    .HasDatabaseName("IX_Usuario_Email");
@@ -90,12 +90,12 @@ namespace SDH.infrastructure.Persistence.DataConfigurations.Seguridad
                    .IsUnique()
                    .HasDatabaseName("IX_Usuario_CodigoUsuario");
 
-            // Índices únicos (no soportado por Data Annotations)
+            // ï¿½ndices ï¿½nicos (no soportado por Data Annotations)
             builder.HasIndex(u => u.Username)
                 .IsUnique()
                 .HasDatabaseName("IX_Usuario_CodigoUsuario");
 
-            // Configuración adicional para búsquedas
+            // Configuraciï¿½n adicional para bï¿½squedas
             builder.HasIndex(u => u.IsActive)
                 .HasDatabaseName("IX_Usuario_EstaActivo");
         }

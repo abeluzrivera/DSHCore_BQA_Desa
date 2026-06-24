@@ -49,7 +49,6 @@ namespace SDH.infrastructure.Persistence.Services
         // Método privado para NO duplicar la lista de Claims entre MVC y JWT
         private static List<Claim> ConstruirClaimsBasicos(Users usuario)
         {
-            // Para usuarios LDAP (CreateTransient) el Id es 0 — usamos Username como identificador único
             string identifier = usuario.Id > 0
                 ? usuario.Id.ToString()
                 : usuario.Username;
