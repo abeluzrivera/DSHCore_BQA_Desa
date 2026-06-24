@@ -197,24 +197,19 @@ try
         context.Response.Headers["Referrer-Policy"]        = "strict-origin-when-cross-origin";
         context.Response.Headers["Permissions-Policy"]     = "camera=(), microphone=(), geolocation=()";
 
-        // CSP: in Development allow VS Browser Link (localhost) and Hot Reload (ws://localhost)
-        string csp = app.Environment.IsDevelopment()
-            ? "default-src 'self'; " +
-              "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
-              "font-src 'self' https://fonts.gstatic.com; " +
-              "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com https://c.clarity.ms; " +
-              "connect-src 'self' http://localhost:* ws://localhost:* https://*.clarity.ms https://cdn.jsdelivr.net; " +
-              "frame-src https://www.google.com https://maps.google.com https://www.google.com.ec; " +
-              "frame-ancestors 'none';"
-            : "default-src 'self'; " +
-              "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
-              "font-src 'self' https://fonts.gstatic.com; " +
-              "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com https://c.clarity.ms; " +
-              "connect-src 'self' https://*.clarity.ms; " +
-              "frame-src https://www.google.com https://maps.google.com https://www.google.com.ec; " +
-              "frame-ancestors 'none';";
+        var connectSrc = app.Environment.IsDevelopment()
+            ? "connect-src 'self' http://localhost:* ws://localhost:* https://*.clarity.ms https://cdn.jsdelivr.net"
+            : "connect-src 'self' https://*.clarity.ms";
+
+        string csp =
+            "default-src 'self'; " +
+            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.clarity.ms https://scripts.clarity.ms; " +
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
+            "font-src 'self' https://fonts.gstatic.com; " +
+            "img-src 'self' data: https://lh3.googleusercontent.com https://maps.gstatic.com https://*.googleapis.com https://c.clarity.ms https://*.bing.com; " +
+            $"{connectSrc}; " +
+            "frame-src https://www.google.com https://maps.google.com https://www.google.com.ec; " +
+            "frame-ancestors 'none';";
 
         context.Response.Headers["Content-Security-Policy"] = csp;
         await next();

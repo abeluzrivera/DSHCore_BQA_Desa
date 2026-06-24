@@ -102,7 +102,7 @@ namespace contactabilidad_inteligente.mcv.Controllers
                     "AUDITORIA CONSULTA_DETALLE_CLIENTE usuario={Usuario} ip={Ip} cedula={Cedula}",
                     currentUserService.ObtenerUsuarioActual(),
                     currentUserService.ObtenerIpActual(),
-                    id.Trim());
+                    IdentificationMaskHelper.Mask(id.Trim()));
 
                 var state = await _BuildVerificationStateAsync(id.Trim(), cancellationToken);
                 return Ok(new { success = true, data = cliente, verificationState = state });
