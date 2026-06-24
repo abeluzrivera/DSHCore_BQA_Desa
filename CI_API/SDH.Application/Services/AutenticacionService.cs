@@ -97,8 +97,8 @@ namespace SDH.Application.Services
                     return null;
                 }
 
-                logger.LogInformation("LOGIN_DB_VALIDANDO usuario={Usuario} estado={Estado}",
-                    usernameOrEmail, usuario.Estado);
+                logger.LogInformation("LOGIN_DB_VALIDANDO usuario={Usuario}",
+                    usernameOrEmail);
                 usuario.Authenticate(clave, passwordHasher);
                 await unitOfWork.SaveChangesAsync(ct);
 
