@@ -4,22 +4,22 @@ Proyecto Razor Pages en .NET 9 que implementa una arquitectura Hexagonal (Ports 
 
 ## Estructura principal
 
-- `Domain/` - Entidades de dominio (Clientes, Contactos, Financiero, Usuarios, Catálogos, etc.).
-- `Application/` - Puertos (interfaces) y servicios de aplicación (use-cases).
+- `Domain/` - Entidades de dominio (Clientes, Contactos, Financiero, Usuarios, Catï¿½logos, etc.).
+- `Application/` - Puertos (interfaces) y servicios de aplicaciï¿½n (use-cases).
 - `Infrastructure/Persistence/` - Implementaciones con EF Core: configuraciones Fluent, repositorios y UnitOfWork.
 - `Data/ApplicationDbContext.cs` - `DbContext` central con `DbSet<>` y carga de configuraciones.
 - `Pages/` - Razor Pages de la UI (ej. `Clientes`).
-- `ARCHITECTURE.md` - Documentación detallada de la implementación y decisiones de arquitectura.
+- `ARCHITECTURE.md` - Documentaciï¿½n detallada de la implementaciï¿½n y decisiones de arquitectura.
 
-## Características principales
+## Caracterï¿½sticas principales
 
 - .NET 9 / C# 13
 - Razor Pages
 - EF Core (SQL Server) con **Data Annotations** (atributos) en las entidades del dominio
-- Fluent API solo para configuraciones avanzadas (índices, relaciones con DeleteBehavior, valores por defecto)
+- Fluent API solo para configuraciones avanzadas (ï¿½ndices, relaciones con DeleteBehavior, valores por defecto)
 - Repositorios e interfaces (Ports) para separar dominio e infraestructura
 - Unit of Work para manejo de transacciones
-- Servicios de aplicación (Application Services) que usan los puertos
+- Servicios de aplicaciï¿½n (Application Services) que usan los puertos
 - Patrones: Repository, Unit of Work, Result Pattern, Factory Methods
 
 ## Estrategia de mapeo EF Core
@@ -27,22 +27,22 @@ Proyecto Razor Pages en .NET 9 que implementa una arquitectura Hexagonal (Ports 
 ### Data Annotations (en entidades)
 Las entidades del dominio usan Data Annotations para:
 - ? Mapeo de tablas y esquemas (`[Table]`, `[Column]`)
-- ? Definición de claves primarias (`[Key]`)
-- ? Tipos de generación de valores (`[DatabaseGenerated]`)
+- ? Definiciï¿½n de claves primarias (`[Key]`)
+- ? Tipos de generaciï¿½n de valores (`[DatabaseGenerated]`)
 - ? Restricciones de longitud (`[MaxLength]`)
 - ? Campos requeridos (`[Required]`)
 - ? Tipos de datos SQL (`TypeName` en `[Column]`)
-- ? Relaciones básicas (`[ForeignKey]`)
+- ? Relaciones bï¿½sicas (`[ForeignKey]`)
 
 ### Fluent API (en configuraciones)
-Las clases de configuración (`IEntityTypeConfiguration<T>`) usan Fluent API **solo** para:
-- ? Índices simples y compuestos
-- ? Índices únicos
-- ? Comportamiento de eliminación en relaciones (`DeleteBehavior.Restrict`)
+Las clases de configuraciï¿½n (`IEntityTypeConfiguration<T>`) usan Fluent API **solo** para:
+- ? ï¿½ndices simples y compuestos
+- ? ï¿½ndices ï¿½nicos
+- ? Comportamiento de eliminaciï¿½n en relaciones (`DeleteBehavior.Restrict`)
 - ? Nombres de constraints y foreign keys
 - ? Valores por defecto de base de datos (`HasDefaultValue`, `HasDefaultValueSql`)
 
-Esta estrategia mantiene las entidades autodescriptivas y reduce la configuración externa al mínimo necesario.
+Esta estrategia mantiene las entidades autodescriptivas y reduce la configuraciï¿½n externa al mï¿½nimo necesario.
 
 ## Esquemas y tablas mapeadas
 
@@ -62,16 +62,16 @@ Esta estrategia mantiene las entidades autodescriptivas y reduce la configuració
   - `Tbl_Cat_Grupo`
   - `Tbl_Cat_Item`
 
-Las entidades y configuraciones están diseñadas para reflejar las columnas y relaciones indicadas en los scripts SQL base.
+Las entidades y configuraciones estï¿½n diseï¿½adas para reflejar las columnas y relaciones indicadas en los scripts SQL base.
 
 ## Requisitos
 
 - .NET 9 SDK
 - SQL Server (o LocalDB)
 
-## Configuración y ejecución
+## Configuraciï¿½n y ejecuciï¿½n
 
-1. Configurar la cadena de conexión en `appsettings.json` bajo `ConnectionStrings:DefaultConnection`:
+1. Configurar la cadena de conexiï¿½n en `appsettings.json` bajo `ConnectionStrings:DefaultConnection`:
 
 ```json
 {
@@ -87,48 +87,50 @@ Las entidades y configuraciones están diseñadas para reflejar las columnas y rel
 dotnet tool install --global dotnet-ef
 ```
 
-3. Crear la migración inicial y aplicar al servidor de base de datos:
+3. Crear la migraciï¿½n inicial y aplicar al servidor de base de datos:
 
 ```bash
 dotnet ef migrations add InitialCreate -p contactabilidad_inteligente.mcv -s contactabilidad_inteligente.mcv --output-dir Data/Migrations
 dotnet ef database update -p contactabilidad_inteligente.mcv -s contactabilidad_inteligente.mcv
 ```
 
-> Nota: Ajustar los parámetros `-p` y `-s` si ejecutas desde la raíz del repositorio.
+> Nota: Ajustar los parï¿½metros `-p` y `-s` si ejecutas desde la raï¿½z del repositorio.
 
-4. Ejecutar la aplicación:
+4. Ejecutar la aplicaciï¿½n:
 
 ```bash
 dotnet run --project contactabilidad_inteligente.mcv
 ```
 
-Abrir el navegador en `https://localhost:5001/Clientes` (la aplicación redirige a `/login` por defecto).
+Abrir el navegador en `https://localhost:5001/Clientes` (la aplicaciï¿½n redirige a `/login` por defecto).
 
 ## Dependencias y DI
 
-- Las implementaciones de persistencia y servicios de aplicación se registran en `Program.cs` mediante las extensiones `AddPersistence()` y `AddApplicationServices()`.
+- Las implementaciones de persistencia y servicios de aplicaciï¿½n se registran en `Program.cs` mediante las extensiones `AddPersistence()` y `AddApplicationServices()`.
 - Repositorios disponibles: `IClienteRepository`, `IUsuarioRepository`, `ICatalogoRepository`.
 - `IUnitOfWork` proporciona transacciones y acceso a repositorios.
 
-## Buenas prácticas / próximos pasos
+## Buenas prï¿½cticas / prï¿½ximos pasos
 
-- Revisar y ajustar `ARCHITECTURE.md` para políticas de despliegue y pruebas.
+- Revisar y ajustar `ARCHITECTURE.md` para polï¿½ticas de despliegue y pruebas.
 - Agregar pruebas unitarias para servicios y repositorios (usar `InMemory` o `Sqlite` en memoria para EF Core).
-- Añadir validaciones y manejo de errores más detallado en la capa de UI.
+- Aï¿½adir validaciones y manejo de errores mï¿½s detallado en la capa de UI.
 - Considerar migraciones incrementalmente por cambios en el dominio.
 
 ## Ventajas del enfoque Data Annotations + Fluent API
 
-1. **Entidades autodescriptivas**: El código de dominio contiene su propia metadata
-2. **Menos archivos de configuración**: Solo se crean configuraciones para casos especiales
+1. **Entidades autodescriptivas**: El cï¿½digo de dominio contiene su propia metadata
+2. **Menos archivos de configuraciï¿½n**: Solo se crean configuraciones para casos especiales
 3. **Mejor IntelliSense**: Los atributos son visibles directamente en las propiedades
 4. **Facilita el Code-First**: Las migraciones se generan directamente desde las entidades
-5. **Clean Code**: Separación clara entre configuraciones simples (annotations) y complejas (fluent)
+5. **Clean Code**: Separaciï¿½n clara entre configuraciones simples (annotations) y complejas (fluent)
 
 ## Archivo de referencia
 
-- `ARCHITECTURE.md` – Documentación de diseño y decisiones arquitectónicas.
+- `ARCHITECTURE.md` ï¿½ Documentaciï¿½n de diseï¿½o y decisiones arquitectï¿½nicas.
 
 ---
 
-**Compilación verificada**: ? Exitosa
+**Compilaciï¿½n verificada**: ? Exitosa
+
+//"DefaultConnection": "Server=192.168.250.109;Database=DB_ODS;User ID=tu_usuario;Password=tu_contraseÃ±a;Persist Security Info=False;TrustServerCertificate=True;"
