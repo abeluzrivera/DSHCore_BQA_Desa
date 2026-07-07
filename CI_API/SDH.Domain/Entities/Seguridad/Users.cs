@@ -132,6 +132,9 @@ namespace SDH.Domain.Entities.Seguridad
             if (IsLockedOut == true)
                 throw new InvalidOperationException("El usuario está bloqueado.");
 
+            if (string.IsNullOrWhiteSpace(PasswordHash))
+                throw new UnauthorizedAccessException("Credenciales incorrectas.");
+
             if (!hasher.Verificar(clavePlana, PasswordHash))
                 throw new UnauthorizedAccessException("Credenciales incorrectas.");
 

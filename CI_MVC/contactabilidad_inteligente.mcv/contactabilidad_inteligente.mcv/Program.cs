@@ -260,30 +260,38 @@ try
     app.MapRazorPages()
        .WithStaticAssets();
 
+    var urls = app.Urls.Any()
+        ? string.Join(", ", app.Urls)
+        : "URLs aun no disponibles (se asignaran al iniciar)";
+
+    app.Lifetime.ApplicationStarted.Register(() =>
+    {
+        var listenUrls = app.Urls.Any()
+            ? string.Join(", ", app.Urls)
+            : urls;
+        Log.Information("Aplicacion iniciada. Escuchando en: {Urls}", listenUrls);
+    });
+
     app.Run();
 }
 catch (DbException ex)
 {
-    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
-    logger.LogCritical(ex, "Database error during host startup.");
+    Log.Fatal(ex, "Database error during host startup.");
     throw;
 }
 catch (IOException ex)
 {
-    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
-    logger.LogCritical(ex, "I/O error during host startup.");
+    Log.Fatal(ex, "I/O error during host startup.");
     throw;
 }
 catch (OperationCanceledException ex)
 {
-    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
-    logger.LogWarning(ex, "Startup was canceled.");
+    Log.Warning(ex, "Startup was canceled.");
     throw;
 }
 catch (Exception ex)
 {
-    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
-    logger.LogCritical(ex, "Unhandled exception during host startup.");
+    Log.Fatal(ex, "Unhandled exception during host startup.");
     throw;
 }
 finally
