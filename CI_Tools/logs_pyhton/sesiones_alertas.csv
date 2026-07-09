@@ -1,0 +1,8 @@
+﻿fecha_hora,tipo,usuario,detalle
+2026-06-30 16:39:14.288000,error_login,pedro.rivera,Excepcion durante el proceso de login (ver log original para detalle)
+2026-07-02 11:59:03.750000,sin_grupo_habilitado,julaysi.bonoso,Autenticado en LDAP pero sin grupo habilitado en la aplicacion
+2026-07-02 12:28:57.884000,sin_grupo_habilitado,julaysi.bonoso,Autenticado en LDAP pero sin grupo habilitado en la aplicacion
+2026-07-02 12:34:44.486000,sin_grupo_habilitado,julaysi.bonoso,Autenticado en LDAP pero sin grupo habilitado en la aplicacion
+2026-07-03 12:16:45.971000,sin_grupo_habilitado,danny.serrano,Autenticado en LDAP pero sin grupo habilitado en la aplicacion
+2026-07-03 13:46:20.593000,sin_grupo_habilitado,brenda.dominguez,Autenticado en LDAP pero sin grupo habilitado en la aplicacion
+2026-07-07 15:54:07.866000,sin_grupo_habilitado,julaysi.bonoso,Autenticado en LDAP pero sin grupo habilitado en la aplicacion

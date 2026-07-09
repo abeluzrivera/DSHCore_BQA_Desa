@@ -1,0 +1,42 @@
+﻿usuario,nombre_completo,rol,fecha,hora_login,hora_logout,duracion_minutos,dashboard_accesos,sesion_completa
+pedro.rivera,Pedro Rivera Vera,ADMIN,2026-07-01,09:46:01,,,3,NO (sin logout registrado)
+edwin.cordova,Edwin Cordova Guaman,AGENTE,2026-07-01,09:47:54,,,1,NO (sin logout registrado)
+carmen.tinoco,Carmen Tinoco Espinoza,AGENTE,2026-07-01,09:49:58,09:53:36,3.63,1,SI
+tpacheco,Tannia Pacheco Montenegro,,2026-07-01,09:54:56,,,1,NO (sin logout registrado)
+aldo.saldana,Aldo Saldana Rodriguez,ADMIN,2026-07-01,10:00:57,,,1,NO (sin logout registrado)
+jose.salvatierra,Jose Salvatierra Hidalgo,ADMIN,2026-07-01,12:03:17,,,1,NO (sin logout registrado)
+kevin.freire,Kevin Freire Andrade,AGENTE,2026-07-01,12:04:11,,,1,NO (sin logout registrado)
+edwin.cordova,Edwin Cordova Guaman,AGENTE,2026-07-01,12:15:19,,,1,NO (sin logout registrado)
+jenny.castro,Jenny Castro Wong,AGENTE,2026-07-01,12:57:18,,,2,NO (sin logout registrado)
+pedro.rivera,Pedro Rivera Vera,ADMIN,2026-07-01,16:18:55,,,2,NO (sin logout registrado)
+kevin.erazo,Kevin Erazo Pineda,AGENTE,2026-07-01,17:13:24,,,1,NO (sin logout registrado)
+michelle.espinoza,Michelle Espinoza Balladares,AGENTE,2026-07-01,17:13:45,17:14:16,0.51,5,SI
+rocio.duran,Rocio Duran Vera,AGENTE,2026-07-01,17:42:27,,,1,NO (sin logout registrado)
+michelle.espinoza,Michelle Espinoza Balladares,AGENTE,2026-07-02,11:13:07,,,1,NO (sin logout registrado)
+rocio.duran,Rocio Duran Vera,AGENTE,2026-07-02,11:47:17,,,2,NO (sin logout registrado)
+rocio.duran,Rocio Duran Vera,AGENTE,2026-07-02,12:38:06,,,1,NO (sin logout registrado)
+aldo.saldana,Aldo Saldana Rodriguez,ADMIN,2026-07-02,12:40:35,,,1,NO (sin logout registrado)
+jenny.castro,Jenny Castro Wong,AGENTE,2026-07-02,12:43:29,,,1,NO (sin logout registrado)
+kevin.freire,Kevin Freire Andrade,AGENTE,2026-07-02,12:43:40,,,2,NO (sin logout registrado)
+magno.salazar,Magno Salazar Maldonado,AGENTE,2026-07-02,12:43:58,12:46:05,2.12,3,SI
+magno.salazar,Magno Salazar Maldonado,AGENTE,2026-07-02,12:46:21,,,1,NO (sin logout registrado)
+pedro.rivera,Pedro Rivera Vera,ADMIN,2026-07-03,11:14:32,,,1,NO (sin logout registrado)
+rocio.duran,Rocio Duran Vera,AGENTE,2026-07-03,11:33:58,,,1,NO (sin logout registrado)
+magno.salazar,Magno Salazar Maldonado,AGENTE,2026-07-03,11:37:33,11:41:42,4.15,2,SI
+magno.salazar,Magno Salazar Maldonado,AGENTE,2026-07-03,11:41:58,11:42:43,0.75,1,SI
+magno.salazar,Magno Salazar Maldonado,AGENTE,2026-07-03,11:42:57,11:45:32,2.58,1,SI
+magno.salazar,Magno Salazar Maldonado,AGENTE,2026-07-03,11:46:12,11:50:07,3.91,3,SI
+pedro.rivera,Pedro Rivera Vera,ADMIN,2026-07-03,11:49:21,11:49:30,0.15,1,SI
+magno.salazar,Magno Salazar Maldonado,AGENTE,2026-07-03,11:49:48,11:50:02,0.22,1,SI
+pedro.rivera,Pedro Rivera Vera,ADMIN,2026-07-03,11:50:19,,,1,NO (sin logout registrado)
+pedro.rivera,Pedro Rivera Vera,ADMIN,2026-07-03,11:50:52,11:53:20,2.46,2,SI
+pedro.rivera,Pedro Rivera Vera,ADMIN,2026-07-03,11:55:44,11:55:53,0.16,1,SI
+magno.salazar,Magno Salazar Maldonado,AGENTE,2026-07-03,11:57:59,11:58:44,0.74,1,SI
+magno.salazar,Magno Salazar Maldonado,AGENTE,2026-07-03,12:02:05,12:03:01,0.93,1,SI
+pedro.rivera,Pedro Rivera Vera,ADMIN,2026-07-03,12:17:11,,,2,NO (sin logout registrado)
+pedro.rivera,Pedro Rivera Vera,ADMIN,2026-07-03,12:35:08,,,1,NO (sin logout registrado)
+pedro.rivera,Pedro Rivera Vera,ADMIN,2026-07-03,15:30:31,,,2,NO (sin logout registrado)
+rocio.duran,Rocio Duran Vera,AGENTE,2026-07-03,17:30:21,,,1,NO (sin logout registrado)
+edwin.cordova,Edwin Cordova Guaman,AGENTE,2026-07-07,09:20:58,,,1,NO (sin logout registrado)
+magno.salazar,Magno Salazar Maldonado,AGENTE,2026-07-07,15:52:03,,,1,NO (sin logout registrado)
+julaysi.bonoso,Julaysi Bonoso Fernandez,AGENTE,2026-07-07,16:09:05,,,2,NO (sin logout registrado)
