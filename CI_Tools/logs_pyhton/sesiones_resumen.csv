@@ -1,18 +1,20 @@
 ﻿usuario,nombre_completo,rol,dias_activos,logins_exitosos,intentos_login,intentos_fallidos,sesiones_sin_cierre,dashboard_accesos_total,duracion_total_minutos,duracion_promedio_minutos,alertas_sin_grupo
 aldo.saldana,Aldo Saldana Rodriguez,ADMIN,2,2,2,0,2,2,,,0
 brenda.dominguez,,,0,0,2,2,0,0,,,1
-carmen.tinoco,Carmen Tinoco Espinoza,AGENTE,1,1,1,0,0,1,3.63,3.63,0
+carmen.tinoco,Carmen Tinoco Espinoza,AGENTE,4,4,4,0,3,4,3.63,3.63,0
 danny.serrano,,,0,0,1,1,0,0,,,1
-edwin.cordova,Edwin Cordova Guaman,AGENTE,2,3,5,2,3,3,,,0
+edwin.cordova,Edwin Cordova Guaman,AGENTE,7,13,15,2,13,13,,,0
 jbonoso,,,0,0,3,3,0,0,,,0
 jenny.castro,Jenny Castro Wong,AGENTE,2,2,2,0,2,3,,,0
 jose.salvatierra,Jose Salvatierra Hidalgo,ADMIN,1,1,3,2,1,1,,,0
+juan.cortez,,,0,0,4,4,0,0,,,1
 julaysi.bonoso,Julaysi Bonoso Fernandez,AGENTE,1,1,10,9,1,2,,,4
-kevin.erazo,Kevin Erazo Pineda,AGENTE,1,1,2,1,1,1,,,0
+kevin.erazo,Kevin Erazo Pineda,AGENTE,3,3,5,2,3,3,,,0
 kevin.freire,Kevin Freire Andrade,AGENTE,2,2,3,1,2,3,,,0
-magno.salazar,Magno Salazar Maldonado,AGENTE,3,10,11,1,2,15,15.40,1.93,0
-michelle.espinoza,Michelle Espinoza Balladares,AGENTE,2,2,2,0,1,6,0.51,0.51,0
-pedro.rivera,Pedro Rivera Vera,ADMIN,2,10,12,2,7,16,2.77,0.92,0
+magno.salazar,Magno Salazar Maldonado,AGENTE,4,11,12,1,3,16,15.40,1.93,0
+marlon.moya,Marlon Moya Sornoza,ADMIN,1,1,2,1,1,1,,,0
+michelle.espinoza,Michelle Espinoza Balladares,AGENTE,3,4,4,0,1,10,6.09,2.03,0
+pedro.rivera,Pedro Rivera Vera,ADMIN,3,11,14,3,8,17,2.77,0.92,0
 rocio.duran,Rocio Duran Vera,AGENTE,3,5,5,0,5,6,,,0
 tannia.pacheco,,,0,0,1,1,0,0,,,0
 tpacheco,Tannia Pacheco Montenegro,,1,1,0,0,1,1,,,0

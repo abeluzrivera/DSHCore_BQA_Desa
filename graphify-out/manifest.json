@@ -1,0 +1,1252 @@
+{
+  ".vscode/launch.json": {
+    "mtime": 1783374104.6915684,
+    "ast_hash": "c45e146810a1df0bc3b9aedddd122087",
+    "semantic_hash": "c45e146810a1df0bc3b9aedddd122087"
+  },
+  ".vscode/settings.json": {
+    "mtime": 1774299384.5950527,
+    "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
+    "semantic_hash": "99914b932bd37a50b983c5e7c90ae93b"
+  },
+  ".vscode/tasks.json": {
+    "mtime": 1783374158.3468673,
+    "ast_hash": "01c92bdba6f9bf519a28dde44796eb0c",
+    "semantic_hash": "01c92bdba6f9bf519a28dde44796eb0c"
+  },
+  "CI_API/SDH.Application/AppServiceInjection.cs": {
+    "mtime": 1774996164.214542,
+    "ast_hash": "733e8bea8dd1ccab635f7657b2d63352",
+    "semantic_hash": "733e8bea8dd1ccab635f7657b2d63352"
+  },
+  "CI_API/SDH.Application/Common/Result.cs": {
+    "mtime": 1774299384.5987089,
+    "ast_hash": "9e6ec279625fb865c8caf4cc7a09aee7",
+    "semantic_hash": "9e6ec279625fb865c8caf4cc7a09aee7"
+  },
+  "CI_API/SDH.Application/DTOs/Auth/LdapAuthResult.cs": {
+    "mtime": 1782414478.1843789,
+    "ast_hash": "c335ef1f0482d096fbb708a4295cc7e1",
+    "semantic_hash": "c335ef1f0482d096fbb708a4295cc7e1"
+  },
+  "CI_API/SDH.Application/DTOs/Auth/LoginResultDto.cs": {
+    "mtime": 1782414478.1864357,
+    "ast_hash": "72a7dccc0f512142ad5abd710ed90005",
+    "semantic_hash": "72a7dccc0f512142ad5abd710ed90005"
+  },
+  "CI_API/SDH.Application/DTOs/CatalogDetail.cs": {
+    "mtime": 1776174144.0911713,
+    "ast_hash": "3061b43511279bd18d29cc8c46c440f0",
+    "semantic_hash": "3061b43511279bd18d29cc8c46c440f0"
+  },
+  "CI_API/SDH.Application/DTOs/CatalogDiscrepancyDto.cs": {
+    "mtime": 1774977495.7592568,
+    "ast_hash": "7e386ac8f3ec14633a420b0fcd548b9d",
+    "semantic_hash": "7e386ac8f3ec14633a420b0fcd548b9d"
+  },
+  "CI_API/SDH.Application/DTOs/Clients/AddAddressRequest.cs": {
+    "mtime": 1774978718.8587468,
+    "ast_hash": "7a369a6e69b5c5b20f76c80d53f3edb3",
+    "semantic_hash": "7a369a6e69b5c5b20f76c80d53f3edb3"
+  },
+  "CI_API/SDH.Application/DTOs/Clients/AddContactRequest.cs": {
+    "mtime": 1774978567.4930332,
+    "ast_hash": "128c7256e080c1c1829d0b970071ff26",
+    "semantic_hash": "128c7256e080c1c1829d0b970071ff26"
+  },
+  "CI_API/SDH.Application/DTOs/Clients/ClientDTO.cs": {
+    "mtime": 1776354226.968177,
+    "ast_hash": "114b1271ee6dcadcaa001164b7775503",
+    "semantic_hash": "114b1271ee6dcadcaa001164b7775503"
+  },
+  "CI_API/SDH.Application/DTOs/Clients/CustomerListItemDto.cs": {
+    "mtime": 1774978503.773241,
+    "ast_hash": "f8cddc0f3faf76e47bd5683a4f80e13e",
+    "semantic_hash": "f8cddc0f3faf76e47bd5683a4f80e13e"
+  },
+  "CI_API/SDH.Application/DTOs/Clients/SaveGpsRequest.cs": {
+    "mtime": 1774977795.4749691,
+    "ast_hash": "3c6e101457be233f9c0ff3c3291e0170",
+    "semantic_hash": "3c6e101457be233f9c0ff3c3291e0170"
+  },
+  "CI_API/SDH.Application/DTOs/Users/UserDtos.cs": {
+    "mtime": 1774977769.9270532,
+    "ast_hash": "b8e77cf5a5a4c81ae3c15a5478461abd",
+    "semantic_hash": "b8e77cf5a5a4c81ae3c15a5478461abd"
+  },
+  "CI_API/SDH.Application/Models/CustomerCacheModel.cs": {
+    "mtime": 1774978926.6557636,
+    "ast_hash": "440b5ddb5425ee4abe0a58d92d44b56a",
+    "semantic_hash": "440b5ddb5425ee4abe0a58d92d44b56a"
+  },
+  "CI_API/SDH.Application/Models/SectionLightGreenFormAreaViewModel.cs": {
+    "mtime": 1774299384.6098535,
+    "ast_hash": "5575465a1b022a44d92535a569c828bb",
+    "semantic_hash": "5575465a1b022a44d92535a569c828bb"
+  },
+  "CI_API/SDH.Application/Ports/Queries/ICatalogQueryService.cs": {
+    "mtime": 1774986651.9848852,
+    "ast_hash": "4fb0aae38690aa79e9ef9d67eb61c502",
+    "semantic_hash": "4fb0aae38690aa79e9ef9d67eb61c502"
+  },
+  "CI_API/SDH.Application/Ports/Services/IClienteQueryService.cs": {
+    "mtime": 1774978100.0451245,
+    "ast_hash": "b973cbd432e33aede15b62f626ac05c2",
+    "semantic_hash": "b973cbd432e33aede15b62f626ac05c2"
+  },
+  "CI_API/SDH.Application/Ports/Services/IConfigDecryptionService.cs": {
+    "mtime": 1776380866.454115,
+    "ast_hash": "40498f528630be733ffc5198c74650d1",
+    "semantic_hash": "40498f528630be733ffc5198c74650d1"
+  },
+  "CI_API/SDH.Application/Ports/Services/ICurrentUserService.cs": {
+    "mtime": 1774299384.6194186,
+    "ast_hash": "0eedd8bd562b2ce5500d5e80b499ab7b",
+    "semantic_hash": "0eedd8bd562b2ce5500d5e80b499ab7b"
+  },
+  "CI_API/SDH.Application/Ports/Services/ICustomerCacheService.cs": {
+    "mtime": 1774994176.69093,
+    "ast_hash": "9a83b0ecbcf1daf26e28a0965258eb0a",
+    "semantic_hash": "9a83b0ecbcf1daf26e28a0965258eb0a"
+  },
+  "CI_API/SDH.Application/Ports/Services/IFileExtractionService.cs": {
+    "mtime": 1774299384.6212628,
+    "ast_hash": "17f963ebffa513fa492c26f059ced2fb",
+    "semantic_hash": "17f963ebffa513fa492c26f059ced2fb"
+  },
+  "CI_API/SDH.Application/Ports/Services/ILdapAuthenticationService.cs": {
+    "mtime": 1782414478.188575,
+    "ast_hash": "4bb3a2afb670c1baf82be4af111872c3",
+    "semantic_hash": "4bb3a2afb670c1baf82be4af111872c3"
+  },
+  "CI_API/SDH.Application/Ports/Services/ITokenGenerator.cs": {
+    "mtime": 1774977146.1434972,
+    "ast_hash": "43f9f655073a9530ec2fc650c5e5ceca",
+    "semantic_hash": "43f9f655073a9530ec2fc650c5e5ceca"
+  },
+  "CI_API/SDH.Application/Ports/Services/IUnitOfWork.cs": {
+    "mtime": 1774299384.6212628,
+    "ast_hash": "f9afce0703118ccbecb77606c3135f7f",
+    "semantic_hash": "f9afce0703118ccbecb77606c3135f7f"
+  },
+  "CI_API/SDH.Application/Ports/Services/IUserQueryService.cs": {
+    "mtime": 1774986536.9692998,
+    "ast_hash": "2355e0358381a1891ae07b565c99ae1f",
+    "semantic_hash": "2355e0358381a1891ae07b565c99ae1f"
+  },
+  "CI_API/SDH.Application/SDH.Application.csproj": {
+    "mtime": 1782414478.1905925,
+    "ast_hash": "2f24fb16f5db7cde06a3b3cca95ca613",
+    "semantic_hash": "2f24fb16f5db7cde06a3b3cca95ca613"
+  },
+  "CI_API/SDH.Application/Services/AutenticacionService.cs": {
+    "mtime": 1782749502.0327227,
+    "ast_hash": "2015cd7353104f41c83ad6b60c7900d1",
+    "semantic_hash": "2015cd7353104f41c83ad6b60c7900d1"
+  },
+  "CI_API/SDH.Application/Services/CatalogoCommandService.cs": {
+    "mtime": 1774976882.1666627,
+    "ast_hash": "0f81cd4c25cb822bea303c6519fbe01e",
+    "semantic_hash": "0f81cd4c25cb822bea303c6519fbe01e"
+  },
+  "CI_API/SDH.Application/Services/CatalogoService.cs": {
+    "mtime": 1782414478.1946342,
+    "ast_hash": "f431058e703d226e8c1c8eb06d9c82a6",
+    "semantic_hash": "f431058e703d226e8c1c8eb06d9c82a6"
+  },
+  "CI_API/SDH.Application/Services/CustomerCommandService.cs": {
+    "mtime": 1775053942.6903906,
+    "ast_hash": "5f01d0cdb967d5367615669b4a4d3185",
+    "semantic_hash": "5f01d0cdb967d5367615669b4a4d3185"
+  },
+  "CI_API/SDH.Application/Services/FileExtractionService.cs": {
+    "mtime": 1774299384.6314535,
+    "ast_hash": "27327fbdd8b9d65a59320da25b62f348",
+    "semantic_hash": "27327fbdd8b9d65a59320da25b62f348"
+  },
+  "CI_API/SDH.Application/Services/FileValidationService.cs": {
+    "mtime": 1774299384.6314535,
+    "ast_hash": "cce067e5c42c4dead353ac7e025730bb",
+    "semantic_hash": "cce067e5c42c4dead353ac7e025730bb"
+  },
+  "CI_API/SDH.Application/Services/UserCommandService.cs": {
+    "mtime": 1782414478.1946342,
+    "ast_hash": "b43a06b3bb764ed13dade7afe1a46304",
+    "semantic_hash": "b43a06b3bb764ed13dade7afe1a46304"
+  },
+  "CI_API/SDH.Application/Settings/AuthSettings.cs": {
+    "mtime": 1782414478.1966555,
+    "ast_hash": "061b4cc2f973488e9a41f03efe3d75bb",
+    "semantic_hash": "061b4cc2f973488e9a41f03efe3d75bb"
+  },
+  "CI_API/SDH.Domain/Attributes/MappedCatalogAttribute.cs": {
+    "mtime": 1774299384.6314535,
+    "ast_hash": "9eb617c0b8325d08644b0e1e24242949",
+    "semantic_hash": "9eb617c0b8325d08644b0e1e24242949"
+  },
+  "CI_API/SDH.Domain/Contracts/IAuditableEntity.cs": {
+    "mtime": 1774889176.6705873,
+    "ast_hash": "9908524f8f96e3e33c3f1294c3e2ebdc",
+    "semantic_hash": "9908524f8f96e3e33c3f1294c3e2ebdc"
+  },
+  "CI_API/SDH.Domain/Contracts/IVerificableEntity.cs": {
+    "mtime": 1774974281.5537453,
+    "ast_hash": "8a4bcbf6bac659b9e4a2749b24dd2c3a",
+    "semantic_hash": "8a4bcbf6bac659b9e4a2749b24dd2c3a"
+  },
+  "CI_API/SDH.Domain/Entities/Operative/Client.cs": {
+    "mtime": 1774997142.774712,
+    "ast_hash": "ae33e3451e1bc49fc2a435c7b9394fd8",
+    "semantic_hash": "ae33e3451e1bc49fc2a435c7b9394fd8"
+  },
+  "CI_API/SDH.Domain/Entities/Operative/ClientFinancial.cs": {
+    "mtime": 1774975166.5907178,
+    "ast_hash": "9c2770a25c48dc04d8ee82a176a31180",
+    "semantic_hash": "9c2770a25c48dc04d8ee82a176a31180"
+  },
+  "CI_API/SDH.Domain/Entities/Operative/CoreOfficializations.cs": {
+    "mtime": 1774977274.2332587,
+    "ast_hash": "7665d923fb505af8e77a57d7b7fd382c",
+    "semantic_hash": "7665d923fb505af8e77a57d7b7fd382c"
+  },
+  "CI_API/SDH.Domain/Entities/Operative/CustomerAddresses.cs": {
+    "mtime": 1774977302.5629911,
+    "ast_hash": "798bd510f25fbf75ea54ad257e6876eb",
+    "semantic_hash": "798bd510f25fbf75ea54ad257e6876eb"
+  },
+  "CI_API/SDH.Domain/Entities/Operative/CustomerContacts.cs": {
+    "mtime": 1776204702.3681867,
+    "ast_hash": "b347bd4cdacade48cb7c668564d21165",
+    "semantic_hash": "b347bd4cdacade48cb7c668564d21165"
+  },
+  "CI_API/SDH.Domain/Entities/Parametro/CatalogGroup.cs": {
+    "mtime": 1774976882.6185937,
+    "ast_hash": "136983fd16f40c0e9bc73d07d0337012",
+    "semantic_hash": "136983fd16f40c0e9bc73d07d0337012"
+  },
+  "CI_API/SDH.Domain/Entities/Parametro/CatalogItem.cs": {
+    "mtime": 1774976882.5173783,
+    "ast_hash": "7e1355f57f439b34a1c8e744f6304c9c",
+    "semantic_hash": "7e1355f57f439b34a1c8e744f6304c9c"
+  },
+  "CI_API/SDH.Domain/Entities/Seguridad/Users.cs": {
+    "mtime": 1783374925.345677,
+    "ast_hash": "7f524cd102c8af5500080c20d1072bc0",
+    "semantic_hash": "7f524cd102c8af5500080c20d1072bc0"
+  },
+  "CI_API/SDH.Domain/Enums/CatalogGroups.cs": {
+    "mtime": 1782414478.2006967,
+    "ast_hash": "8c689981eab7b0968aad25f36045ae21",
+    "semantic_hash": "8c689981eab7b0968aad25f36045ae21"
+  },
+  "CI_API/SDH.Domain/Enums/EnumContactabilityStatus.cs": {
+    "mtime": 1774976175.395921,
+    "ast_hash": "fba0ff15f07b96781cbac25dca0877a6",
+    "semantic_hash": "fba0ff15f07b96781cbac25dca0877a6"
+  },
+  "CI_API/SDH.Domain/Enums/EnumContactabilityType.cs": {
+    "mtime": 1774986245.3753543,
+    "ast_hash": "736546b1c77e6f83377fba77d44723b4",
+    "semantic_hash": "736546b1c77e6f83377fba77d44723b4"
+  },
+  "CI_API/SDH.Domain/Enums/EnumCustomerStatus.cs": {
+    "mtime": 1774976189.9598477,
+    "ast_hash": "8aa8817e6a22f07c4513707c219894e6",
+    "semantic_hash": "8aa8817e6a22f07c4513707c219894e6"
+  },
+  "CI_API/SDH.Domain/Enums/EnumFileStatus.cs": {
+    "mtime": 1774976155.5317743,
+    "ast_hash": "9dba948f600d14ffbea1dbfd062b7c7c",
+    "semantic_hash": "9dba948f600d14ffbea1dbfd062b7c7c"
+  },
+  "CI_API/SDH.Domain/Enums/EnumIdentificationType.cs": {
+    "mtime": 1774976196.531179,
+    "ast_hash": "5c728ac27827ccc1b8d394fed9d6ddf0",
+    "semantic_hash": "5c728ac27827ccc1b8d394fed9d6ddf0"
+  },
+  "CI_API/SDH.Domain/Enums/EnumSystemRole.cs": {
+    "mtime": 1777914752.161749,
+    "ast_hash": "8a16d5332fc50d8ebf61052f669bc881",
+    "semantic_hash": "8a16d5332fc50d8ebf61052f669bc881"
+  },
+  "CI_API/SDH.Domain/Enums/EnumUserStatus.cs": {
+    "mtime": 1774976150.2342026,
+    "ast_hash": "d5774a1996354d2538705bed6cb8489c",
+    "semantic_hash": "d5774a1996354d2538705bed6cb8489c"
+  },
+  "CI_API/SDH.Domain/Enums/GlobalVariables.cs": {
+    "mtime": 1782414478.2024918,
+    "ast_hash": "97870adf9952ac1fdd8f389b93b12336",
+    "semantic_hash": "97870adf9952ac1fdd8f389b93b12336"
+  },
+  "CI_API/SDH.Domain/Enums/LogicaNegocio/EnumQueryClientType.cs": {
+    "mtime": 1774299384.6593473,
+    "ast_hash": "ca2b665e13e2d15d487adc8d45cdbe5e",
+    "semantic_hash": "ca2b665e13e2d15d487adc8d45cdbe5e"
+  },
+  "CI_API/SDH.Domain/Enums/TiposContabilidad.cs": {
+    "mtime": 1774976169.0043068,
+    "ast_hash": "ee61bcbdfa8e6cf97de9ba961ff0c668",
+    "semantic_hash": "ee61bcbdfa8e6cf97de9ba961ff0c668"
+  },
+  "CI_API/SDH.Domain/Extensions/EnumContactabilityStatusExtensions.cs": {
+    "mtime": 1774975873.6453712,
+    "ast_hash": "34d8827ff465a0217d0d0554c2a8b60d",
+    "semantic_hash": "34d8827ff465a0217d0d0554c2a8b60d"
+  },
+  "CI_API/SDH.Domain/Extensions/EnumExtensions.cs": {
+    "mtime": 1774902616.0308924,
+    "ast_hash": "cddd3991a064370aa31cdae05e4587b9",
+    "semantic_hash": "cddd3991a064370aa31cdae05e4587b9"
+  },
+  "CI_API/SDH.Domain/Ports/IPasswordHasher.cs": {
+    "mtime": 1774299384.6618853,
+    "ast_hash": "d64a290a4e2ea4fbd6cc811b641ba362",
+    "semantic_hash": "d64a290a4e2ea4fbd6cc811b641ba362"
+  },
+  "CI_API/SDH.Domain/Repositories/ICatalogRepository.cs": {
+    "mtime": 1774976823.0672927,
+    "ast_hash": "5efc16bc2b30f0db29abbe85a56c1be8",
+    "semantic_hash": "5efc16bc2b30f0db29abbe85a56c1be8"
+  },
+  "CI_API/SDH.Domain/Repositories/ICustomerRepository.cs": {
+    "mtime": 1774976561.4661956,
+    "ast_hash": "427b67eefb2d1df5113866502fcd27a5",
+    "semantic_hash": "427b67eefb2d1df5113866502fcd27a5"
+  },
+  "CI_API/SDH.Domain/Repositories/IUserRepository.cs": {
+    "mtime": 1774977146.220107,
+    "ast_hash": "4b86398b99a5d6274c27fe0a35aa7368",
+    "semantic_hash": "4b86398b99a5d6274c27fe0a35aa7368"
+  },
+  "CI_API/SDH.Domain/SDH.Domain.csproj": {
+    "mtime": 1776353968.011385,
+    "ast_hash": "46b0780bd56312ea2d1bab391f179e89",
+    "semantic_hash": "46b0780bd56312ea2d1bab391f179e89"
+  },
+  "CI_API/SDH.infrastructure/Migrations/20260624173938_InitCreate.Designer.cs": {
+    "mtime": 1782749502.040041,
+    "ast_hash": "9f4982582fdb70360f947def7830b397",
+    "semantic_hash": "9f4982582fdb70360f947def7830b397"
+  },
+  "CI_API/SDH.infrastructure/Migrations/20260624173938_InitCreate.cs": {
+    "mtime": 1782749502.0445418,
+    "ast_hash": "f078f68d9adebc6429f5806953ed40bb",
+    "semantic_hash": "f078f68d9adebc6429f5806953ed40bb"
+  },
+  "CI_API/SDH.infrastructure/Migrations/ApplicationDbContextModelSnapshot.cs": {
+    "mtime": 1782749502.0469594,
+    "ast_hash": "5aa4a9f008a9a4d9391edbe9a63a18e5",
+    "semantic_hash": "5aa4a9f008a9a4d9391edbe9a63a18e5"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Cache/CustomerCacheImplementation.cs": {
+    "mtime": 1774994367.7519803,
+    "ast_hash": "4aa645aac9129257b2304f47f8d0796d",
+    "semantic_hash": "4aa645aac9129257b2304f47f8d0796d"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Configuration/DatabaseOptions.cs": {
+    "mtime": 1774299384.675385,
+    "ast_hash": "d5cd67552c86352db32ce7a47076129a",
+    "semantic_hash": "d5cd67552c86352db32ce7a47076129a"
+  },
+  "CI_API/SDH.infrastructure/Persistence/DataConfigurations/Operativo/ClienteConfiguration.cs": {
+    "mtime": 1776110656.408094,
+    "ast_hash": "2dbeadc16e9e633714a041fd40ba3486",
+    "semantic_hash": "2dbeadc16e9e633714a041fd40ba3486"
+  },
+  "CI_API/SDH.infrastructure/Persistence/DataConfigurations/Operativo/ContactoClienteConfiguration.cs": {
+    "mtime": 1774977216.9351828,
+    "ast_hash": "d7c821ce4e3cc5e9079d30cf5d2b24da",
+    "semantic_hash": "d7c821ce4e3cc5e9079d30cf5d2b24da"
+  },
+  "CI_API/SDH.infrastructure/Persistence/DataConfigurations/Operativo/CustomerAddressConfiguration.cs": {
+    "mtime": 1774987220.5117059,
+    "ast_hash": "2a06161da9163534579d04d57b16b99f",
+    "semantic_hash": "2a06161da9163534579d04d57b16b99f"
+  },
+  "CI_API/SDH.infrastructure/Persistence/DataConfigurations/Operativo/FinancieroClienteConfiguration.cs": {
+    "mtime": 1774975137.8934567,
+    "ast_hash": "28c9645624dbb99a226916f9b0b2f859",
+    "semantic_hash": "28c9645624dbb99a226916f9b0b2f859"
+  },
+  "CI_API/SDH.infrastructure/Persistence/DataConfigurations/Operativo/OficializacionCoreConfiguration.cs": {
+    "mtime": 1774977274.204861,
+    "ast_hash": "e302c3de1d5a0a9480344ea355551272",
+    "semantic_hash": "e302c3de1d5a0a9480344ea355551272"
+  },
+  "CI_API/SDH.infrastructure/Persistence/DataConfigurations/Parametro/GrupoCatalogoConfiguration.cs": {
+    "mtime": 1774976822.9353771,
+    "ast_hash": "28e2788913f0b72afc6f8804668168de",
+    "semantic_hash": "28e2788913f0b72afc6f8804668168de"
+  },
+  "CI_API/SDH.infrastructure/Persistence/DataConfigurations/Parametro/ItemCatalogoConfiguration.cs": {
+    "mtime": 1774976882.4921188,
+    "ast_hash": "70421799fb54fc0523c82bce37de961b",
+    "semantic_hash": "70421799fb54fc0523c82bce37de961b"
+  },
+  "CI_API/SDH.infrastructure/Persistence/DataConfigurations/Parametro/VwCatalogoDetalleConfiguration.cs": {
+    "mtime": 1774299384.6918895,
+    "ast_hash": "01f5d1493d7cdae28b1dba2d8a7a2190",
+    "semantic_hash": "01f5d1493d7cdae28b1dba2d8a7a2190"
+  },
+  "CI_API/SDH.infrastructure/Persistence/DataConfigurations/Seguridad/UsuarioConfiguration.cs": {
+    "mtime": 1782749502.0508945,
+    "ast_hash": "0aaf6fdc871de4379ad7425942866cc4",
+    "semantic_hash": "0aaf6fdc871de4379ad7425942866cc4"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Data/ApplicationDbContext.cs": {
+    "mtime": 1774985978.6285121,
+    "ast_hash": "55e04b7c8d8789c3819e47e336a19622",
+    "semantic_hash": "55e04b7c8d8789c3819e47e336a19622"
+  },
+  "CI_API/SDH.infrastructure/Persistence/DependencyInjection.cs": {
+    "mtime": 1782414478.2038329,
+    "ast_hash": "9cb0c18db425e7ea912a9e4ff028797f",
+    "semantic_hash": "9cb0c18db425e7ea912a9e4ff028797f"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Ports/Services/BcryptPasswordHasher.cs": {
+    "mtime": 1774299384.695851,
+    "ast_hash": "ff3fae864e3e3566a821a76ac7d5058a",
+    "semantic_hash": "ff3fae864e3e3566a821a76ac7d5058a"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Queries/CatalogQueryService.cs": {
+    "mtime": 1782749502.0548077,
+    "ast_hash": "32f77699eeb1d0a207efae6f95ce3406",
+    "semantic_hash": "32f77699eeb1d0a207efae6f95ce3406"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Queries/ClienteQueryService.cs": {
+    "mtime": 1776354226.9125469,
+    "ast_hash": "1763d3319f9a9ddc7def480c86ee3c64",
+    "semantic_hash": "1763d3319f9a9ddc7def480c86ee3c64"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Queries/UserQueryService.cs": {
+    "mtime": 1774986536.976011,
+    "ast_hash": "2cadfc840d83a8d4279c91cb57e411a1",
+    "semantic_hash": "2cadfc840d83a8d4279c91cb57e411a1"
+  },
+  "CI_API/SDH.infrastructure/Persistence/ReadModels/Parametro/VwCatalogoDetalle.cs": {
+    "mtime": 1776174133.4079177,
+    "ast_hash": "bc12a4e85e3911bcefe1879fc10945c6",
+    "semantic_hash": "bc12a4e85e3911bcefe1879fc10945c6"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Repositories/CatalogRepository.cs": {
+    "mtime": 1774976909.2885935,
+    "ast_hash": "591dcb81b7cd260fc2b7d2ea2f46b392",
+    "semantic_hash": "591dcb81b7cd260fc2b7d2ea2f46b392"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Repositories/CustomerRepository.cs": {
+    "mtime": 1774977165.1778805,
+    "ast_hash": "6397357ae491de4161fd0aec60b65260",
+    "semantic_hash": "6397357ae491de4161fd0aec60b65260"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Repositories/UnitOfWork.cs": {
+    "mtime": 1782414478.204595,
+    "ast_hash": "4503865a7552965e92d16bcd6166a882",
+    "semantic_hash": "4503865a7552965e92d16bcd6166a882"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Repositories/UserRepository.cs": {
+    "mtime": 1774977155.7891266,
+    "ast_hash": "f57201d6ba57058a1e28667645dadbee",
+    "semantic_hash": "f57201d6ba57058a1e28667645dadbee"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Seeders/CatalogoSeeder.cs": {
+    "mtime": 1782414478.2066174,
+    "ast_hash": "0797870b18662658965263ce6a85dccd",
+    "semantic_hash": "0797870b18662658965263ce6a85dccd"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Seeders/UsuarioSeeder.cs": {
+    "mtime": 1782749502.058424,
+    "ast_hash": "bddcf06681f7ac61e18c1745dd30a478",
+    "semantic_hash": "bddcf06681f7ac61e18c1745dd30a478"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Seeders/ViewSeeder.cs": {
+    "mtime": 1782749502.0604494,
+    "ast_hash": "d2ba01799075fdb16a7f10bc1d49637c",
+    "semantic_hash": "d2ba01799075fdb16a7f10bc1d49637c"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Services/ConfigCrypto.cs": {
+    "mtime": 1779995932.3223886,
+    "ast_hash": "482af924c1b953af851b98008c1d94c8",
+    "semantic_hash": "482af924c1b953af851b98008c1d94c8"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Services/ConfigDecryptionService.cs": {
+    "mtime": 1776380866.454115,
+    "ast_hash": "b581103ea1c39879934e9f660588ad59",
+    "semantic_hash": "b581103ea1c39879934e9f660588ad59"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Services/CurrentUserService.cs": {
+    "mtime": 1774299384.707098,
+    "ast_hash": "7a1db777c4d988c3d382389b2a336360",
+    "semantic_hash": "7a1db777c4d988c3d382389b2a336360"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Services/LdapAuthenticationService.cs": {
+    "mtime": 1782749502.0604494,
+    "ast_hash": "f52350188ddfbdd12842a8882c9b48be",
+    "semantic_hash": "f52350188ddfbdd12842a8882c9b48be"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Services/TokenGenerator.cs": {
+    "mtime": 1782749502.0706208,
+    "ast_hash": "923f0c462ba29a379317fde18e369e8f",
+    "semantic_hash": "923f0c462ba29a379317fde18e369e8f"
+  },
+  "CI_API/SDH.infrastructure/SDH.infrastructure.csproj": {
+    "mtime": 1782749502.0731542,
+    "ast_hash": "51ca90dfc5c81eb1fb84f232ae5f9359",
+    "semantic_hash": "51ca90dfc5c81eb1fb84f232ae5f9359"
+  },
+  "CI_API/SDH.infrastructure/Startup/CatalogosCacheInitializer.cs": {
+    "mtime": 1782749502.077285,
+    "ast_hash": "6f6923c4d740ca20e3919a112fad36d4",
+    "semantic_hash": "6f6923c4d740ca20e3919a112fad36d4"
+  },
+  "CI_DB/.vscode/settings.json": {
+    "mtime": 1774295949.6694295,
+    "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
+    "semantic_hash": "99914b932bd37a50b983c5e7c90ae93b"
+  },
+  "CI_DB/DB_ODS/SP/SP_Baseline_Carga_Inicial.sql": {
+    "mtime": 1783372879.8871827,
+    "ast_hash": "23dc6a71fe91adcccf862a170b2d3807",
+    "semantic_hash": "23dc6a71fe91adcccf862a170b2d3807"
+  },
+  "CI_DB/DB_ODS/SP/SP_EliminarClientes_Correlacionados.SQL": {
+    "mtime": 1782749502.0852869,
+    "ast_hash": "b72320351d0ad97515fc1ee39d89d5b5",
+    "semantic_hash": "b72320351d0ad97515fc1ee39d89d5b5"
+  },
+  "CI_DB/DB_ODS/SP/SP_Reporte_Actividad_Diaria.sql": {
+    "mtime": 1783372909.1167686,
+    "ast_hash": "697badb8530142f953e89229055d1880",
+    "semantic_hash": "697badb8530142f953e89229055d1880"
+  },
+  "CI_DB/DB_ODS/Scripts/02_Schema_Tablas_Reportes.sql": {
+    "mtime": 1783372864.4444642,
+    "ast_hash": "b28d05e030a0ed4f3e50fea404e58a3a",
+    "semantic_hash": "b28d05e030a0ed4f3e50fea404e58a3a"
+  },
+  "CI_DB/DB_ODS/Scripts/03_Backfill_Actividad_Historica.sql": {
+    "mtime": 1783373271.1007028,
+    "ast_hash": "1021c5dcf65e761160e3a6c100996572",
+    "semantic_hash": "1021c5dcf65e761160e3a6c100996572"
+  },
+  "CI_DB/DB_ODS/Scripts/DB_ODS_1.0.0.sql": {
+    "mtime": 1782749502.0909157,
+    "ast_hash": "b6b33185f617cfae035057eebb1905cd",
+    "semantic_hash": "b6b33185f617cfae035057eebb1905cd"
+  },
+  "CI_DB/DB_ODS/Scripts/Insert_Clientes_Prueba.sql": {
+    "mtime": 1782769887.866931,
+    "ast_hash": "e0a1c4a1506172ba6d543853d9e5a1d1",
+    "semantic_hash": "e0a1c4a1506172ba6d543853d9e5a1d1"
+  },
+  "CI_DB/DB_STAGING/SP/SP_ActualizarIdentificacion_Empleados.sql": {
+    "mtime": 1782749502.0950415,
+    "ast_hash": "90ee865e5d5a5536f539932378a9f521",
+    "semantic_hash": "90ee865e5d5a5536f539932378a9f521"
+  },
+  "CI_DB/Jobs/Job_Baseline_Carga_Inicial.sql": {
+    "mtime": 1783372920.1803932,
+    "ast_hash": "02f5b12c01e75b7700e5dececd78dda3",
+    "semantic_hash": "02f5b12c01e75b7700e5dececd78dda3"
+  },
+  "CI_DB/Jobs/Job_Reporte_Actividad_Diaria.sql": {
+    "mtime": 1783372932.9511673,
+    "ast_hash": "5cd5521d21acc78e97ca845f7db61fa6",
+    "semantic_hash": "5cd5521d21acc78e97ca845f7db61fa6"
+  },
+  "CI_DB/Jobs/Job_Reporte_Actividad_Diaria_STG.sql": {
+    "mtime": 1783376106.8196998,
+    "ast_hash": "9db55bfb89ab01f7d984a0140e95a75e",
+    "semantic_hash": "9db55bfb89ab01f7d984a0140e95a75e"
+  },
+  "CI_DB/Jobs/Job_gration.sql": {
+    "mtime": 1782749502.0998864,
+    "ast_hash": "05ff804450163819789f9d9004ae1ad3",
+    "semantic_hash": "05ff804450163819789f9d9004ae1ad3"
+  },
+  "CI_DB/SDH.SQL.DB/Consulta_Actividad_Hoy.sql": {
+    "mtime": 1783375225.8778648,
+    "ast_hash": "c18927c82b74225640a2d9ad86954815",
+    "semantic_hash": "c18927c82b74225640a2d9ad86954815"
+  },
+  "CI_DB/SDH.SQL.DB/GetAddressByIdentification.sql": {
+    "mtime": 1774973641.2289507,
+    "ast_hash": "02bceac970ad9249569b6f0a8b525226",
+    "semantic_hash": "02bceac970ad9249569b6f0a8b525226"
+  },
+  "CI_DB/SDH.SQL.DB/GetContactosByIdentification.sql": {
+    "mtime": 1774973644.5907097,
+    "ast_hash": "72bf1751554b29d263d9342f6d280375",
+    "semantic_hash": "72bf1751554b29d263d9342f6d280375"
+  },
+  "CI_DB/SDH.SQL.DB/GetDataComplete.sql": {
+    "mtime": 1775486151.0889056,
+    "ast_hash": "007afd7acb4a4356f82b2262d2c51448",
+    "semantic_hash": "007afd7acb4a4356f82b2262d2c51448"
+  },
+  "CI_DB/SDH.SQL.DB/Insert_Clientes_Prueba.sql": {
+    "mtime": 1782414478.219156,
+    "ast_hash": "f17b89af36fc01a84a40e97a28c32656",
+    "semantic_hash": "f17b89af36fc01a84a40e97a28c32656"
+  },
+  "CI_DB/SDH.SQL.DB/SDH.SQL.DB.slnx": {
+    "mtime": 1774993163.2365239,
+    "ast_hash": "1e37cb8146090904a3b8541f2d1fa591",
+    "semantic_hash": "1e37cb8146090904a3b8541f2d1fa591"
+  },
+  "CI_DB/SDH.SQL.DB/SQLQuery1.sql": {
+    "mtime": 1774472598.817316,
+    "ast_hash": "65b7719736db20063d49cc7af4d5503b",
+    "semantic_hash": "65b7719736db20063d49cc7af4d5503b"
+  },
+  "CI_DB/SDH.SQL.DB/SQLQuery13.sql": {
+    "mtime": 1774993158.7932398,
+    "ast_hash": "4dc980e2df1d6cabaf6a6bfd73e5a838",
+    "semantic_hash": "4dc980e2df1d6cabaf6a6bfd73e5a838"
+  },
+  "CI_DB/SDH.SQL.DB/Vw_Cat_Detalle_General.sql": {
+    "mtime": 1782414478.2211754,
+    "ast_hash": "fdd9e26e1bdd94f9a180ed571e6d11c9",
+    "semantic_hash": "fdd9e26e1bdd94f9a180ed571e6d11c9"
+  },
+  "CI_DB/Scripts_Initials/1_Vista_Catalogos.sql": {
+    "mtime": 1774910173.8191464,
+    "ast_hash": "61822c78a850b344cdb016708770d388",
+    "semantic_hash": "61822c78a850b344cdb016708770d388"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/.vscode/launch.json": {
+    "mtime": 1783374015.2357078,
+    "ast_hash": "4d85e8378d58e5ddfdbf3c6a0839616f",
+    "semantic_hash": "4d85e8378d58e5ddfdbf3c6a0839616f"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/.vscode/settings.json": {
+    "mtime": 1774295949.680148,
+    "ast_hash": "49bf6b66381f6c6fc0c32940a0adc729",
+    "semantic_hash": "49bf6b66381f6c6fc0c32940a0adc729"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/.vscode/tasks.json": {
+    "mtime": 1774295949.680148,
+    "ast_hash": "d20bedb2d11d09b017b66c2fe96ae78d",
+    "semantic_hash": "d20bedb2d11d09b017b66c2fe96ae78d"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/Scripts_Testing/ConsultaClientes.sql": {
+    "mtime": 1774295949.680148,
+    "ast_hash": "b74731588135fa3dc3acaef2ff6644c2",
+    "semantic_hash": "b74731588135fa3dc3acaef2ff6644c2"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/Scripts_Testing/Seed_Clientes_Dashboard.sql": {
+    "mtime": 1774295949.680148,
+    "ast_hash": "3074fab3cd518cc772fc5e7ad19de919",
+    "semantic_hash": "3074fab3cd518cc772fc5e7ad19de919"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv.sln": {
+    "mtime": 1779831707.511068,
+    "ast_hash": "6225a17ee37d86ff4e0c05c23c810245",
+    "semantic_hash": "6225a17ee37d86ff4e0c05c23c810245"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Areas/Identity/Pages/_ViewStart.cshtml": {
+    "mtime": 1774295949.6910093,
+    "ast_hash": "9c893e05d6d9013bc6ac3c48c3795254",
+    "semantic_hash": "9c893e05d6d9013bc6ac3c48c3795254"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/COMANDOS_UTILES.ps1": {
+    "mtime": 1774295949.6910093,
+    "ast_hash": "cb130d9c2d5bfd6424e2109a67dab455",
+    "semantic_hash": "cb130d9c2d5bfd6424e2109a67dab455"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Controllers/AuthController.cs": {
+    "mtime": 1774454282.988503,
+    "ast_hash": "f72f45ac5c09a53776ff55e6d0930daa",
+    "semantic_hash": "f72f45ac5c09a53776ff55e6d0930daa"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Controllers/CatalogosController.cs": {
+    "mtime": 1774986652.0250468,
+    "ast_hash": "1d746d17af6b451b64c72317ed2ea833",
+    "semantic_hash": "1d746d17af6b451b64c72317ed2ea833"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Controllers/ClientController.cs": {
+    "mtime": 1782749502.1110182,
+    "ast_hash": "65c765ae13b16e19f78c05a34524854e",
+    "semantic_hash": "65c765ae13b16e19f78c05a34524854e"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Controllers/UsersController.cs": {
+    "mtime": 1782414478.2265658,
+    "ast_hash": "eb484ecb09987d4135303572aa8ac9b0",
+    "semantic_hash": "eb484ecb09987d4135303572aa8ac9b0"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Filters/ApiExceptionFilterAttribute.cs": {
+    "mtime": 1782414478.229903,
+    "ast_hash": "5a51349d80dba8fb50b931d7cc8e78a1",
+    "semantic_hash": "5a51349d80dba8fb50b931d7cc8e78a1"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Generate-MigrationScript.ps1": {
+    "mtime": 1774295949.6989396,
+    "ast_hash": "e501880556946da27ed8005e1e852ac3",
+    "semantic_hash": "e501880556946da27ed8005e1e852ac3"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Helpers/ContactabilityLabelHelper.cs": {
+    "mtime": 1782414478.2320464,
+    "ast_hash": "9cabace9d56572529a7c3a7da19346b9",
+    "semantic_hash": "9cabace9d56572529a7c3a7da19346b9"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Helpers/IdentificationMaskHelper.cs": {
+    "mtime": 1782749502.1145055,
+    "ast_hash": "7abe2b8f950c63713829592eef8ec1a9",
+    "semantic_hash": "7abe2b8f950c63713829592eef8ec1a9"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Mappers/ClientViewModelMapper.cs": {
+    "mtime": 1782414478.2363303,
+    "ast_hash": "83b6bf4dc43fc45544a557c6ef9029cc",
+    "semantic_hash": "83b6bf4dc43fc45544a557c6ef9029cc"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Models/Client/ClientViewModel.cs": {
+    "mtime": 1774385932.0987177,
+    "ast_hash": "b1ad9a16f980be41fed72cdf93cecbf6",
+    "semantic_hash": "b1ad9a16f980be41fed72cdf93cecbf6"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Models/Client/ClientePerfilViewModel.cs": {
+    "mtime": 1774299384.7216423,
+    "ast_hash": "33a352c5a130d86bfbcd28525030a3b4",
+    "semantic_hash": "33a352c5a130d86bfbcd28525030a3b4"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Models/Client/ContactViewModel.cs": {
+    "mtime": 1774906700.4122002,
+    "ast_hash": "fa13824089f6aea67d96394083f3e0cd",
+    "semantic_hash": "fa13824089f6aea67d96394083f3e0cd"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Models/Client/DireccionPerfilViewModel.cs": {
+    "mtime": 1774299384.7253819,
+    "ast_hash": "99d11f72477758d6d254e6ae3efda09b",
+    "semantic_hash": "99d11f72477758d6d254e6ae3efda09b"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Models/ErrorViewModel.cs": {
+    "mtime": 1774295949.7030463,
+    "ast_hash": "c33ace43e8bd2aaeb9a2bb5b97750795",
+    "semantic_hash": "c33ace43e8bd2aaeb9a2bb5b97750795"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Auth/Login.cshtml": {
+    "mtime": 1782749502.1188147,
+    "ast_hash": "110a09830bfa6ac3e103b363cf133cff",
+    "semantic_hash": "110a09830bfa6ac3e103b363cf133cff"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Auth/Login.cshtml.cs": {
+    "mtime": 1782414478.2403393,
+    "ast_hash": "86bcfa6ea2874878b9e9d3d32bc6976f",
+    "semantic_hash": "86bcfa6ea2874878b9e9d3d32bc6976f"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Auth/SecurityConfig.cs": {
+    "mtime": 1782414478.242359,
+    "ast_hash": "a6a0a57dce0ab18f34b9d10eada8ad28",
+    "semantic_hash": "a6a0a57dce0ab18f34b9d10eada8ad28"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/BulkUpload.cshtml": {
+    "mtime": 1774371072.7978034,
+    "ast_hash": "bc6cdb1171b05b657b971b08724c80c7",
+    "semantic_hash": "bc6cdb1171b05b657b971b08724c80c7"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/BulkUpload.cshtml.cs": {
+    "mtime": 1782749502.1243703,
+    "ast_hash": "13894d952a457cbf8ece70fecab94924",
+    "semantic_hash": "13894d952a457cbf8ece70fecab94924"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Clientes.cshtml": {
+    "mtime": 1782749502.1288445,
+    "ast_hash": "2bafdd817408c7922dba4bf29f1c657f",
+    "semantic_hash": "2bafdd817408c7922dba4bf29f1c657f"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Clientes.cshtml.cs": {
+    "mtime": 1782414478.2496634,
+    "ast_hash": "5a597463a3eec8e369aec5fd1d8bb739",
+    "semantic_hash": "5a597463a3eec8e369aec5fd1d8bb739"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Dashboard.cshtml": {
+    "mtime": 1782749502.1342056,
+    "ast_hash": "292a29fcdfc09a5c3cad76d3338e255c",
+    "semantic_hash": "292a29fcdfc09a5c3cad76d3338e255c"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Dashboard.cshtml.cs": {
+    "mtime": 1782414478.2544308,
+    "ast_hash": "d9724c5b7c21f99f26662cdf41769914",
+    "semantic_hash": "d9724c5b7c21f99f26662cdf41769914"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Shared/Components/FileUpload/_SectionLightGreenFormArea.cshtml": {
+    "mtime": 1774295949.716433,
+    "ast_hash": "5121396eb1ff6cf8ef6d19801a0f860d",
+    "semantic_hash": "5121396eb1ff6cf8ef6d19801a0f860d"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Shared/Components/_DsBadge.cshtml": {
+    "mtime": 1774295949.716433,
+    "ast_hash": "c1fd6ca5f851c5c70afcd32f069625ff",
+    "semantic_hash": "c1fd6ca5f851c5c70afcd32f069625ff"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Shared/Components/_DsCard.cshtml": {
+    "mtime": 1774295949.7215972,
+    "ast_hash": "df6a3b12ea67b627cec53ecd36a9207a",
+    "semantic_hash": "df6a3b12ea67b627cec53ecd36a9207a"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Shared/Components/_DsClientList.cshtml": {
+    "mtime": 1782414478.2564502,
+    "ast_hash": "9c6ef1e05f544b393a275cb52d90efe6",
+    "semantic_hash": "9c6ef1e05f544b393a275cb52d90efe6"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Shared/Components/_DsClientSearch.cshtml": {
+    "mtime": 1775502795.7274492,
+    "ast_hash": "80e48bf7bebaec0d00d18452c4ba8bb9",
+    "semantic_hash": "80e48bf7bebaec0d00d18452c4ba8bb9"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Shared/Components/_DsModal.cshtml": {
+    "mtime": 1774295949.7234,
+    "ast_hash": "11aec5e9f9054d232172ead87058b532",
+    "semantic_hash": "11aec5e9f9054d232172ead87058b532"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Shared/Components/_DsPageHeader.cshtml": {
+    "mtime": 1774295949.7234,
+    "ast_hash": "5f886a3e8d768a8ab070ea5db680ab88",
+    "semantic_hash": "5f886a3e8d768a8ab070ea5db680ab88"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Shared/_Layout.cshtml": {
+    "mtime": 1782749502.1385145,
+    "ast_hash": "ed31140db20ba1b31590bbf392696141",
+    "semantic_hash": "ed31140db20ba1b31590bbf392696141"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Users.cshtml": {
+    "mtime": 1774455461.7933123,
+    "ast_hash": "34e9c5d36a797943a81acc9fa81a99a5",
+    "semantic_hash": "34e9c5d36a797943a81acc9fa81a99a5"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/Users.cshtml.cs": {
+    "mtime": 1782414478.2631533,
+    "ast_hash": "bab96dd147ca04b46c190938c73101ab",
+    "semantic_hash": "bab96dd147ca04b46c190938c73101ab"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/_ViewImports.cshtml": {
+    "mtime": 1774295949.7291076,
+    "ast_hash": "6476ca27b6fcc387449c1ab5f8c6a314",
+    "semantic_hash": "6476ca27b6fcc387449c1ab5f8c6a314"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Pages/_ViewStart.cshtml": {
+    "mtime": 1774295949.7291076,
+    "ast_hash": "9abb0e0e53f1550e468ea7c69a24def1",
+    "semantic_hash": "9abb0e0e53f1550e468ea7c69a24def1"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Program.cs": {
+    "mtime": 1783373640.1899052,
+    "ast_hash": "65f90f68eb95b838e3b6ba8b250f5b7f",
+    "semantic_hash": "65f90f68eb95b838e3b6ba8b250f5b7f"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Properties/launchSettings.json": {
+    "mtime": 1780437278.425634,
+    "ast_hash": "b157bbec433949749089c5b7704f89ec",
+    "semantic_hash": "b157bbec433949749089c5b7704f89ec"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Properties/serviceDependencies.json": {
+    "mtime": 1774295949.7311237,
+    "ast_hash": "2c2a95853c0a4b2860ad4741ef5eb575",
+    "semantic_hash": "2c2a95853c0a4b2860ad4741ef5eb575"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Properties/serviceDependencies.local.json": {
+    "mtime": 1774295949.7311237,
+    "ast_hash": "9aba72141e97682c2250d46b7bb74e61",
+    "semantic_hash": "9aba72141e97682c2250d46b7bb74e61"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Views/Home/Privacy.cshtml": {
+    "mtime": 1774295949.7311237,
+    "ast_hash": "6ac68e2b0d9ab26bd02a905a365a2bcc",
+    "semantic_hash": "6ac68e2b0d9ab26bd02a905a365a2bcc"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Views/Shared/Error.cshtml": {
+    "mtime": 1774295949.7371693,
+    "ast_hash": "939096be653d41fb8a147fb4ff36bfb5",
+    "semantic_hash": "939096be653d41fb8a147fb4ff36bfb5"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Views/Shared/_LoginPartial.cshtml": {
+    "mtime": 1774295949.7371693,
+    "ast_hash": "864a70f814b95407c63e587476acf934",
+    "semantic_hash": "864a70f814b95407c63e587476acf934"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Views/Shared/_ValidationScriptsPartial.cshtml": {
+    "mtime": 1774295949.7371693,
+    "ast_hash": "e44d1ba7aa6fc476b40834e79a00fd81",
+    "semantic_hash": "e44d1ba7aa6fc476b40834e79a00fd81"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Views/_ViewImports.cshtml": {
+    "mtime": 1774299384.7490036,
+    "ast_hash": "99c1c833e104c761bcb9014f1d972877",
+    "semantic_hash": "99c1c833e104c761bcb9014f1d972877"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Views/_ViewStart.cshtml": {
+    "mtime": 1774295949.7371693,
+    "ast_hash": "e4cd881cf745e1e88cf2c5f6eceae943",
+    "semantic_hash": "e4cd881cf745e1e88cf2c5f6eceae943"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/appsettings.Development.json": {
+    "mtime": 1783374556.4677322,
+    "ast_hash": "4715125245e200f3f0d9858b2b3e6396",
+    "semantic_hash": "4715125245e200f3f0d9858b2b3e6396"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/appsettings.json": {
+    "mtime": 1782765643.7106206,
+    "ast_hash": "db325de0b1c391ecf721dfc7e9ea8130",
+    "semantic_hash": "db325de0b1c391ecf721dfc7e9ea8130"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv.csproj": {
+    "mtime": 1782749502.1563828,
+    "ast_hash": "595ddef559ebf1abaafae8386017051f",
+    "semantic_hash": "595ddef559ebf1abaafae8386017051f"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/dotnet-tools.json": {
+    "mtime": 1776353693.9525476,
+    "ast_hash": "bcc51108a7b5663f7757e4ee044376c4",
+    "semantic_hash": "bcc51108a7b5663f7757e4ee044376c4"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/package.json": {
+    "mtime": 1774367039.5430112,
+    "ast_hash": "128732dd8b437538a7c65fd1c6931dd2",
+    "semantic_hash": "128732dd8b437538a7c65fd1c6931dd2"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/postcss.config.js": {
+    "mtime": 1774295949.743673,
+    "ast_hash": "9a248c780e4c76f85b0f492f63a3d417",
+    "semantic_hash": "9a248c780e4c76f85b0f492f63a3d417"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/scripts/ActualizarEstadoVerificacionClientes.sql": {
+    "mtime": 1774295949.7443829,
+    "ast_hash": "ad5157a8ca9764883fe737fde7c7cbf8",
+    "semantic_hash": "ad5157a8ca9764883fe737fde7c7cbf8"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/scripts/scrip1.sql": {
+    "mtime": 1777306248.2070553,
+    "ast_hash": "f5264361b64ed50199e9323eb7dc5440",
+    "semantic_hash": "f5264361b64ed50199e9323eb7dc5440"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/scripts/validate-bootstrap-only.ps1": {
+    "mtime": 1774295949.7453985,
+    "ast_hash": "d63f734b3d6eaec970b801302e35341c",
+    "semantic_hash": "d63f734b3d6eaec970b801302e35341c"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/tailwind.config.js": {
+    "mtime": 1774299384.757821,
+    "ast_hash": "2e8681a97add5c3e29caca001209b452",
+    "semantic_hash": "2e8681a97add5c3e29caca001209b452"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/components/dashboard-file-modal.js": {
+    "mtime": 1774299384.761099,
+    "ast_hash": "7d779012a318ca84792d64b501e8210f",
+    "semantic_hash": "7d779012a318ca84792d64b501e8210f"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/components/file-upload-component.js": {
+    "mtime": 1774299384.761099,
+    "ast_hash": "f0b8720bd2dd6c008803ca170fb02143",
+    "semantic_hash": "f0b8720bd2dd6c008803ca170fb02143"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/ds/ds-api.js": {
+    "mtime": 1774383069.4833884,
+    "ast_hash": "c86e8204bb0cca2649dc7ff1864df46d",
+    "semantic_hash": "c86e8204bb0cca2649dc7ff1864df46d"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/ds/ds-catalogs.js": {
+    "mtime": 1782414478.276686,
+    "ast_hash": "6bada59286f80bb03e3ec78fdd192e87",
+    "semantic_hash": "6bada59286f80bb03e3ec78fdd192e87"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/ds/ds-client-list-store.js": {
+    "mtime": 1775494437.2147906,
+    "ast_hash": "ab39f574af4fd7882aafbdd5697e8194",
+    "semantic_hash": "ab39f574af4fd7882aafbdd5697e8194"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/ds/ds-core.js": {
+    "mtime": 1775140322.223277,
+    "ast_hash": "33e196f232561256bc5504d2c234918c",
+    "semantic_hash": "33e196f232561256bc5504d2c234918c"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/ds/ds-endpoints.js": {
+    "mtime": 1775054491.6093166,
+    "ast_hash": "997c2695f7a55dd97c4e4817ce0e2a50",
+    "semantic_hash": "997c2695f7a55dd97c4e4817ce0e2a50"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/ds/ds-form.js": {
+    "mtime": 1782414478.2792346,
+    "ast_hash": "d9f6a9922fabb6155a4930c165815734",
+    "semantic_hash": "d9f6a9922fabb6155a4930c165815734"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/ds/ds-modal.js": {
+    "mtime": 1774295949.8018181,
+    "ast_hash": "e287bbb54375550857f904b4fef30549",
+    "semantic_hash": "e287bbb54375550857f904b4fef30549"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/ds/ds-notifications.js": {
+    "mtime": 1774295949.809836,
+    "ast_hash": "a4da020b0857750e1f8ce084a695ed18",
+    "semantic_hash": "a4da020b0857750e1f8ce084a695ed18"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/ds/ds-search.js": {
+    "mtime": 1782414478.2802584,
+    "ast_hash": "e33eb3c6c55bd6a4096d7afce250414e",
+    "semantic_hash": "e33eb3c6c55bd6a4096d7afce250414e"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/pages/bulkupload.js": {
+    "mtime": 1782414478.2843099,
+    "ast_hash": "52179b320a870c5b31e84714bcdef53f",
+    "semantic_hash": "52179b320a870c5b31e84714bcdef53f"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/pages/clientes.js": {
+    "mtime": 1782414478.2863507,
+    "ast_hash": "b99dc1694bce344de0fec27d4ee29317",
+    "semantic_hash": "b99dc1694bce344de0fec27d4ee29317"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/pages/dashboard.js": {
+    "mtime": 1782749502.161987,
+    "ast_hash": "5c68918fa1b1d410e072167103f58499",
+    "semantic_hash": "5c68918fa1b1d410e072167103f58499"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/pages/layout.js": {
+    "mtime": 1774299384.7707522,
+    "ast_hash": "f2485977b0294d782a5abafdc0a031c6",
+    "semantic_hash": "f2485977b0294d782a5abafdc0a031c6"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/pages/login.js": {
+    "mtime": 1774299384.7707522,
+    "ast_hash": "58ba095fa82a58d47178658333f1a9ea",
+    "semantic_hash": "58ba095fa82a58d47178658333f1a9ea"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/pages/site.js": {
+    "mtime": 1774299384.7747378,
+    "ast_hash": "53e309eeca51b3b6de20c4d24e1b2b63",
+    "semantic_hash": "53e309eeca51b3b6de20c4d24e1b2b63"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/pages/users.js": {
+    "mtime": 1775054542.459253,
+    "ast_hash": "54f26f66825df80f72cc76a130da96fd",
+    "semantic_hash": "54f26f66825df80f72cc76a130da96fd"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/services/api-auth.js": {
+    "mtime": 1774299384.7747378,
+    "ast_hash": "ecaa88f7fa0bf610a5a26cf545dcd3aa",
+    "semantic_hash": "ecaa88f7fa0bf610a5a26cf545dcd3aa"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/js/services/api-clientes.js": {
+    "mtime": 1774299384.7800043,
+    "ast_hash": "ecaa88f7fa0bf610a5a26cf545dcd3aa",
+    "semantic_hash": "ecaa88f7fa0bf610a5a26cf545dcd3aa"
+  },
+  "CI_Tools/SmartHubSecretTool/SDH.SecretTool/AesEncryptor.cs": {
+    "mtime": 1776380866.454115,
+    "ast_hash": "8bbef38f6a1f5b2042c5cd4f714a3100",
+    "semantic_hash": "8bbef38f6a1f5b2042c5cd4f714a3100"
+  },
+  "CI_Tools/SmartHubSecretTool/SDH.SecretTool/Program.cs": {
+    "mtime": 1782414478.3024602,
+    "ast_hash": "2507ee81ed6f2aa727c924da5ed48f16",
+    "semantic_hash": "2507ee81ed6f2aa727c924da5ed48f16"
+  },
+  "CI_Tools/SmartHubSecretTool/SDH.SecretTool/SDH.SecretTool.csproj": {
+    "mtime": 1776380866.454115,
+    "ast_hash": "0b9b823cf2652c0d4a52e8a2dab1aee1",
+    "semantic_hash": "0b9b823cf2652c0d4a52e8a2dab1aee1"
+  },
+  "CI_Tools/logs_pyhton/main.py": {
+    "mtime": 1783633882.2018282,
+    "ast_hash": "4a971a47c6a8f4339619cae3ac74a9db",
+    "semantic_hash": "4a971a47c6a8f4339619cae3ac74a9db"
+  },
+  "docs/Tecnica/Scripts/Creacion_DataBase.sql": {
+    "mtime": 1782414478.3221416,
+    "ast_hash": "a13c1afb9503e67d426779e806d19351",
+    "semantic_hash": "a13c1afb9503e67d426779e806d19351"
+  },
+  "CI_API/SDH.Domain/Enums/CatalogosEnum.txt": {
+    "mtime": 1774969316.4369297,
+    "ast_hash": "38df36af582f9b47139a8e1ce0d4eff9",
+    "semantic_hash": "38df36af582f9b47139a8e1ce0d4eff9"
+  },
+  "CI_API/SDH.infrastructure/Persistence/Data/Migrations/Scripts/README.md": {
+    "mtime": 1774295949.6481938,
+    "ast_hash": "03740dd7eb2c825e588c8140b8621f07",
+    "semantic_hash": "03740dd7eb2c825e588c8140b8621f07"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/.github/ISSUES/parametrizar-catalogos-codigos-error.md": {
+    "mtime": 1774295949.6781325,
+    "ast_hash": "9c8e4cbed0f0c9db87a8eeea869268f7",
+    "semantic_hash": "9c8e4cbed0f0c9db87a8eeea869268f7"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/ARCHITECTURE.md": {
+    "mtime": 1782749502.106774,
+    "ast_hash": "968d3b152c1091f63c318774c20581cd",
+    "semantic_hash": "968d3b152c1091f63c318774c20581cd"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Docs/DESIGN_SYSTEM.md": {
+    "mtime": 1782414478.2285874,
+    "ast_hash": "7a9aad325332bd70ed40e624bcc4dec9",
+    "semantic_hash": "7a9aad325332bd70ed40e624bcc4dec9"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/Docs/DS-Back.md": {
+    "mtime": 1774386879.0329952,
+    "ast_hash": "f00c36fc767c1940a4c51392945781b8",
+    "semantic_hash": "f00c36fc767c1940a4c51392945781b8"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/README.md": {
+    "mtime": 1782765638.859619,
+    "ast_hash": "4b343032aef1e312e60e15d6533c532a",
+    "semantic_hash": "4b343032aef1e312e60e15d6533c532a"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/SOLUCION_ERROR_TABLAS_EXISTENTES.md": {
+    "mtime": 1782749502.1446335,
+    "ast_hash": "a6a16762d6844e3aaf855f75b0859b3e",
+    "semantic_hash": "a6a16762d6844e3aaf855f75b0859b3e"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/lib/jquery-validation-unobtrusive/LICENSE.txt": {
+    "mtime": 1774295949.9479604,
+    "ast_hash": "ba2bed45d99b13d4c31485d0631ae675",
+    "semantic_hash": "ba2bed45d99b13d4c31485d0631ae675"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/lib/jquery-validation/LICENSE.md": {
+    "mtime": 1774295949.9479604,
+    "ast_hash": "41ef1b919db5e3aeaf47308518e7bcee",
+    "semantic_hash": "41ef1b919db5e3aeaf47308518e7bcee"
+  },
+  "CI_MVC/contactabilidad_inteligente.mcv/contactabilidad_inteligente.mcv/wwwroot/lib/jquery/LICENSE.txt": {
+    "mtime": 1774295949.964172,
+    "ast_hash": "f661402a551136dbe74282edc5bea28d",
+    "semantic_hash": "f661402a551136dbe74282edc5bea28d"
+  },
+  "CI_Tools/SmartHubSecretTool/README.md": {
+    "mtime": 1782414478.2999723,
+    "ast_hash": "dcde6f90a28035b22597f84a7ad4a576",
+    "semantic_hash": "dcde6f90a28035b22597f84a7ad4a576"
+  },
+  "README.md": {
+    "mtime": 1782749502.1658137,
+    "ast_hash": "95147600636d92c74ad6d0518a59c1a8",
+    "semantic_hash": "95147600636d92c74ad6d0518a59c1a8"
+  },
+  "docs/Archi/release_PGD.md": {
+    "mtime": 1782749502.185287,
+    "ast_hash": "567a1f31374185c070d33e485b8b88cf",
+    "semantic_hash": "567a1f31374185c070d33e485b8b88cf"
+  },
+  "docs/Funcional/IPGestionDeDatos.md": {
+    "mtime": 1782414478.3070319,
+    "ast_hash": "7409d2939bbef40669e73c316aa1e2f3",
+    "semantic_hash": "7409d2939bbef40669e73c316aa1e2f3"
+  },
+  "docs/Funcional/Versionamiento/pase_1.1.0.md": {
+    "mtime": 1782749502.188799,
+    "ast_hash": "4c2102d5c069675b68fd7029bbea6501",
+    "semantic_hash": "4c2102d5c069675b68fd7029bbea6501"
+  },
+  "docs/PlanesDeTrabajo/Release_1.1.0/DT_Plan_01_Esquema_Dominio.md": {
+    "mtime": 1782749502.1960702,
+    "ast_hash": "979a31509c1ca8083adadc5cd01db3f5",
+    "semantic_hash": "979a31509c1ca8083adadc5cd01db3f5"
+  },
+  "docs/PlanesDeTrabajo/Release_1.1.0/DT_Plan_02_Estandarizacion_Prefijos.md": {
+    "mtime": 1782749502.2001953,
+    "ast_hash": "3a8383d89f2e22e9f78d4aaffcebd539",
+    "semantic_hash": "3a8383d89f2e22e9f78d4aaffcebd539"
+  },
+  "docs/PlanesDeTrabajo/Release_1.1.0/DT_Plan_03_Seguridad_Testing.md": {
+    "mtime": 1782749502.2040868,
+    "ast_hash": "c29583ba55776fbd6cc25422ffc60243",
+    "semantic_hash": "c29583ba55776fbd6cc25422ffc60243"
+  },
+  "docs/PlanesDeTrabajo/Release_1.1.0/DT_Plan_04_Cifrado_Herramientas.md": {
+    "mtime": 1782749502.2071035,
+    "ast_hash": "c7fb99c326ae03bbc9a2283b25ead335",
+    "semantic_hash": "c7fb99c326ae03bbc9a2283b25ead335"
+  },
+  "docs/PlanesDeTrabajo/Release_1.1.0/README.md": {
+    "mtime": 1782749502.2114928,
+    "ast_hash": "2efb8f278cf48068edc7a47e92303f44",
+    "semantic_hash": "2efb8f278cf48068edc7a47e92303f44"
+  },
+  "docs/Publicacion_Pro/2026-053/Alcance_1/alcance_2026_053.md": {
+    "mtime": 1782770050.386388,
+    "ast_hash": "ea3a71ff138c851e32bec36fcdf0162f",
+    "semantic_hash": "ea3a71ff138c851e32bec36fcdf0162f"
+  },
+  "docs/Publicacion_Pro/2026-053/MVP/Manual_implementacion_IIS.md": {
+    "mtime": 1782749502.2217588,
+    "ast_hash": "a049709810a33cbb5ee66a92ea82114e",
+    "semantic_hash": "a049709810a33cbb5ee66a92ea82114e"
+  },
+  "docs/Publicacion_Pro/2026-054/alcance_2026_54.md": {
+    "mtime": 1783375754.1774187,
+    "ast_hash": "7725c59c801ed3bb4a14dbe6a642f52f",
+    "semantic_hash": "7725c59c801ed3bb4a14dbe6a642f52f"
+  },
+  "docs/Tecnica/DB/Diccionario_Datos_DSH.md": {
+    "mtime": 1782414478.3104475,
+    "ast_hash": "a440d5d7f89c3a101bac9a74c4bf4f2d",
+    "semantic_hash": "a440d5d7f89c3a101bac9a74c4bf4f2d"
+  },
+  "docs/Tecnica/DB/Entidad_relacion_DSH.md": {
+    "mtime": 1782414478.3104475,
+    "ast_hash": "282c57e03569151ccfd8bd1cd5476e82",
+    "semantic_hash": "282c57e03569151ccfd8bd1cd5476e82"
+  },
+  "docs/Tecnica/DB/db_ods_01_creacion_carga_inicial.md": {
+    "mtime": 1782749502.2283926,
+    "ast_hash": "2dd74a2daa72ffacbe6ff0a637be3a70",
+    "semantic_hash": "2dd74a2daa72ffacbe6ff0a637be3a70"
+  },
+  "docs/Tecnica/DB/db_ods_02_actualizacion.md": {
+    "mtime": 1782749502.232781,
+    "ast_hash": "7591a2ea2c095f551357e5ca94f6e50e",
+    "semantic_hash": "7591a2ea2c095f551357e5ca94f6e50e"
+  },
+  "docs/Tecnica/DB/estrategia_migracion_db_ods.md": {
+    "mtime": 1782749502.235742,
+    "ast_hash": "e958b2cf8999293eac39271df9bd4970",
+    "semantic_hash": "e958b2cf8999293eac39271df9bd4970"
+  },
+  "docs/Tecnica/Dise\u00f1o/DESIGN_SYSTEM.md": {
+    "mtime": 1782414478.3133526,
+    "ast_hash": "24f5d23319454028cbd37ecf12214e9f",
+    "semantic_hash": "24f5d23319454028cbd37ecf12214e9f"
+  },
+  "docs/Tecnica/Plans/Plan_CSS_Optimizacion.md": {
+    "mtime": 1782414478.3173845,
+    "ast_hash": "2f6e5a3b7742626ee92c114ea8bb1066",
+    "semantic_hash": "2f6e5a3b7742626ee92c114ea8bb1066"
+  },
+  "docs/Tecnica/Plans/Plan_Migracion_Bootstrap.md": {
+    "mtime": 1782414478.3191502,
+    "ast_hash": "ba22185525edd650a8f596b28971d6cc",
+    "semantic_hash": "ba22185525edd650a8f596b28971d6cc"
+  },
+  "docs/Tecnica/Runbook.md": {
+    "mtime": 1782414478.3211665,
+    "ast_hash": "8f178bf19ce713c2e176c2ebebe83ab8",
+    "semantic_hash": "8f178bf19ce713c2e176c2ebebe83ab8"
+  },
+  "docs/superpowers/plans/2026-07-06-reporte-actividad-diaria-contactos.md": {
+    "mtime": 1783372856.5881636,
+    "ast_hash": "6acb61e50d997b0dfc42a1e47a5aafd9",
+    "semantic_hash": "6acb61e50d997b0dfc42a1e47a5aafd9"
+  },
+  "docs/superpowers/specs/2026-07-06-reporte-actividad-diaria-contactos-design.md": {
+    "mtime": 1783372350.3841393,
+    "ast_hash": "49bc56d240e5447834ca971b013ae4fd",
+    "semantic_hash": "49bc56d240e5447834ca971b013ae4fd"
+  },
+  "docs/vulnerabilidad/20260528_informe.md": {
+    "mtime": 1782414478.3327603,
+    "ast_hash": "730c809a75d809e6b918386f5c1cfe0c",
+    "semantic_hash": "730c809a75d809e6b918386f5c1cfe0c"
+  },
+  "docs/Tecnica/image-1.png": {
+    "mtime": 1782414478.3255045,
+    "ast_hash": "a1ee3c8b4abfc27f2642bcc782b80bb3",
+    "semantic_hash": "a1ee3c8b4abfc27f2642bcc782b80bb3"
+  },
+  "docs/Tecnica/image.png": {
+    "mtime": 1782414478.3275588,
+    "ast_hash": "4f7fc37999daaf4ec05b05058be582eb",
+    "semantic_hash": "4f7fc37999daaf4ec05b05058be582eb"
+  },
+  "docs/assets/logo.png": {
+    "mtime": 1782414478.3308463,
+    "ast_hash": "5b308289ae458660a26c4c714a69472c",
+    "semantic_hash": "5b308289ae458660a26c4c714a69472c"
+  }
+}
