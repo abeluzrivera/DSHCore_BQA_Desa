@@ -1,6 +1,6 @@
-<mxfile host="Electron" pages="5">
+<mxfile host="Electron" pages="6">
   <diagram name="Ambientes - Publicacion" id="3PWnaE2S9dJJu3BeCvfY">
-    <mxGraphModel dx="1030" dy="722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1084" dy="760" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -220,7 +220,7 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="ZcvRaPjyqSk9si3vz1-S" name="Página-4">
+  <diagram id="ZcvRaPjyqSk9si3vz1-S" name="Fases de Despliegue">
     <mxGraphModel dx="1030" dy="1891" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
@@ -261,8 +261,8 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="Z9-3X2Bo9ELN4g0s1aWM" name="Página-5">
-    <mxGraphModel dx="858" dy="602" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+  <diagram id="Z9-3X2Bo9ELN4g0s1aWM" name="Proceso de Macros de Excel">
+    <mxGraphModel dx="1030" dy="722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -344,6 +344,68 @@
         </mxCell>
         <mxCell id="tJlquOcSVaJqdclTznxL-32" parent="1" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://icons.diagrams.net/icon-cache1/Finance-2216/48-1137.svg" value="Reporte&amp;nbsp;&lt;div&gt;de cajas&lt;/div&gt;" vertex="1">
           <mxGeometry height="64" width="64" x="604" y="266" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="33kgj5d4QssH9KppGwvI" name="Arquitectura Referencia">
+    <mxGraphModel dx="896" dy="628" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7Ie40gmvZ0uLKchRNgJm-2" parent="1" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/databases/SQL_Database.svg;" value="ODS" vertex="1">
+          <mxGeometry height="64" width="48" x="170" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="7Ie40gmvZ0uLKchRNgJm-4" edge="1" parent="1" source="7Ie40gmvZ0uLKchRNgJm-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" target="7Ie40gmvZ0uLKchRNgJm-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="205.03" />
+              <mxPoint x="240" y="205.03" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9K8hBCdf0Q03FTKgKNmC-2" edge="1" parent="1" source="7Ie40gmvZ0uLKchRNgJm-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7Ie40gmvZ0uLKchRNgJm-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="205" />
+              <mxPoint x="680" y="205" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7Ie40gmvZ0uLKchRNgJm-3" parent="1" style="html=1;whiteSpace=wrap;strokeColor=none;fillColor=#0079D6;labelPosition=center;verticalLabelPosition=middle;verticalAlign=top;align=center;fontSize=12;outlineConnect=0;spacingTop=-6;fontColor=#FFFFFF;sketch=0;shape=mxgraph.sitemap.services;" value="Data Hub" vertex="1">
+          <mxGeometry height="70" width="120" x="340" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="7Ie40gmvZ0uLKchRNgJm-5" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fontSize=12;" value="&lt;span style=&quot;font-weight: 400; white-space: nowrap; background-color: rgb(255, 255, 255);&quot;&gt;192.168.250.107 : 4431&lt;/span&gt;" vertex="1">
+          <mxGeometry height="156" width="200" x="300" y="114" as="geometry" />
+        </mxCell>
+        <mxCell id="9K8hBCdf0Q03FTKgKNmC-1" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fontSize=12;" value="&lt;span style=&quot;font-weight: 400; white-space: nowrap; background-color: rgb(255, 255, 255);&quot;&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://script.google.com/a/macros/bmachala.com/s/AKfycbww98cKMoAEY2aBZOT8b5hTqfhtZy2iTsnD7WaZ8M-qoF0fJRaLmlCw3AzkZu1zX3o4MQ/exec&quot; style=&quot;-webkit-tap-highlight-color: transparent; text-decoration: none; color: rgb(41, 98, 255); font-family: Roboto, Arial, sans-serif; letter-spacing: 0.2px; text-align: start;&quot;&gt;https://script.google.com/a/macros/bmachala.com&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-weight: 400; white-space: nowrap; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;: https&lt;/span&gt;" vertex="1">
+          <mxGeometry height="156" width="357.6" x="630" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="7Ie40gmvZ0uLKchRNgJm-1" parent="9K8hBCdf0Q03FTKgKNmC-1" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.gmail;fontSize=17;" value="GMAIL Services API" vertex="1">
+          <mxGeometry height="46.800000000000004" width="64.8" x="146.39999999999998" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="9K8hBCdf0Q03FTKgKNmC-6" edge="1" parent="1" source="9K8hBCdf0Q03FTKgKNmC-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7Ie40gmvZ0uLKchRNgJm-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9K8hBCdf0Q03FTKgKNmC-7" connectable="0" parent="9K8hBCdf0Q03FTKgKNmC-6" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Redireccion a Data Hub" vertex="1">
+          <mxGeometry relative="1" x="-0.0107" y="-1" as="geometry">
+            <mxPoint y="-24" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9K8hBCdf0Q03FTKgKNmC-3" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.users;" value="" vertex="1">
+          <mxGeometry height="78" width="78" x="530" y="356" as="geometry" />
+        </mxCell>
+        <mxCell id="9K8hBCdf0Q03FTKgKNmC-4" edge="1" parent="1" source="7Ie40gmvZ0uLKchRNgJm-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="9K8hBCdf0Q03FTKgKNmC-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="808.78" y="395" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9K8hBCdf0Q03FTKgKNmC-5" connectable="0" parent="9K8hBCdf0Q03FTKgKNmC-4" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Envia notificaciones&amp;nbsp;" vertex="1">
+          <mxGeometry relative="1" x="0.1422" y="2" as="geometry">
+            <mxPoint x="42" y="-47" as="offset" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
