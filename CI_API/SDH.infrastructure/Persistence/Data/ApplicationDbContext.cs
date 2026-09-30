@@ -72,11 +72,6 @@ namespace SDH.infrastructure.Persistence.Data
                     auditable.LastModifiedBy = usuarioActual;
                 }
 
-                //if (entry.Entity is IVerificableEntity verificable)
-                //{
-                //    verificable.FechaVerificacion = fechaActual;
-                //    verificable.UsuarioVerificador = usuarioActual;
-                //}
             }
 
             // Dejamos que EF Core haga el guardado normal en la base de datos
