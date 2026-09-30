@@ -49,7 +49,7 @@
         <bounds x="276" y="240" width="120" height="55"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-8e140689822147579feee22cfac39200" archimateElement="id-ef7a331a99c443a1be900cf5888cb42d">
-        <bounds x="444" y="144" width="120" height="55"/>
+        <bounds x="444" y="108" width="120" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-f15d1bad1d7d4838a3b78c43d992d092" source="id-8e140689822147579feee22cfac39200" target="id-6ef34f5f8e184e2db387a97ab6389e76" archimateRelationship="id-b347e8a0db0041dcb1bb4e8c258119ef"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-da52a94b884a499ab11eadca8fd04756" source="id-8e140689822147579feee22cfac39200" target="id-7d7a3c27ae52450faa21c223201126e0" archimateRelationship="id-9b8a90f3943047e3b751ccc6f4f29217">
           <bendpoint startX="-156" startY="-3" endX="12" endY="-99"/>
@@ -57,6 +57,10 @@
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-3a843c18128242c9bf0f4c1e391a7d13" targetConnections="id-32f1318773c647b6992ee4390d117c01" archimateElement="id-26b79da4e2a84b4fb20854880239b0ef">
         <bounds x="612" y="336" width="133" height="55"/>
+      </child>
+      <child xsi:type="archimate:Note" id="id-2ee2d25479334bb39c9bac117b853fa2" fillColor="#ffff00">
+        <bounds x="804" y="72" width="185" height="80"/>
+        <content>notas</content>
       </child>
     </element>
   </folder>
